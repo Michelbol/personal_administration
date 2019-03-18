@@ -161,10 +161,12 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+//        Yajra\DataTables\DataTablesServiceProvider::class,
 
         /*
          * Package Service Providers...
          */
+        Collective\Html\HtmlServiceProvider::class,
 
         /*
          * Application Service Providers...

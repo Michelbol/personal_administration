@@ -18,3 +18,10 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::middleware('web')->group(function () {
+    Route::resources([
+        'bank_accounts' => 'BankAccountController',
+        'bank'          => 'BankController'
+    ]);
+});
