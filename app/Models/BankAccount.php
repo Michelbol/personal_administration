@@ -12,6 +12,7 @@ class BankAccount extends Model
         'digit_agency',
         'number_account',
         'digit_account',
+        'operation',
         'bank_id'
     ];
 

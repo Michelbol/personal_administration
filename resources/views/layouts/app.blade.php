@@ -14,6 +14,7 @@
 </head>
 <body>
     <div id="app">
+
         @include('layouts._nav')
 
         <main class="py-4">
@@ -21,6 +22,13 @@
         </main>
     </div>
     @include('layouts._scripts')
+    @if(Session::has('message'))
+        <script>
+            $(document).ready(function () {
+                notify("{!! Session::get('message')['msg']!!}", "{!! Session::get('message')['type']!!}");
+            });
+        </script>
+    @endif
 
 </body>
 

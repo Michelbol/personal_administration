@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\BankAccount;
+use App\Utilitarios;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Yajra\DataTables\DataTables;
 
 class BankAccountController extends Controller
 {
@@ -16,8 +18,7 @@ class BankAccountController extends Controller
      */
     public function index()
     {
-        $bank_accounts = BankAccount::all();
-        return view('bank_account.index', compact('bank_accounts'));
+        return view('bank_account.index');
     }
 
     /**
@@ -51,9 +52,10 @@ class BankAccountController extends Controller
             $bankAccount->save();
 
             DB::commit();
+            \Session::flash('message', ['msg' => 'Banco Salvo com sucesso', 'type' => 'success']);
             return redirect()->route('bank_accounts.index');
         }catch (\Exception $e){
-            Session::flash('message', $e->getMessage());
+            \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
             return redirect()->route('bank_accounts.index');
         }
     }
@@ -91,11 +93,17 @@ class BankAccountController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $bankaccount = BankAccount::find($id);
+        try{
+            $bankaccount = BankAccount::find($id);
 
-        $bankaccount->update($request->all());
+            $bankaccount->update($request->all());
 
-        return redirect()->route('bank_accounts.index');
+            \Session::flash('message', ['msg' => 'Banco Atualizado com sucesso', 'type' => 'success']);
+            return redirect()->route('bank_accounts.index');
+        }catch (\Exception $e){
+            \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
+            return redirect()->route('bank_accounts.index');
+        }
     }
 
     /**
@@ -106,6 +114,35 @@ class BankAccountController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try{
+            $bank_account = BankAccount::find($id);
+            $bank_account->delete();
+
+            \Session::flash('message', ['msg' => 'Banco Deletado com sucesso', 'type' => 'success']);
+            return redirect()->route('bank_accounts.index');
+        }catch (\Exception $e){
+            \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
+            return redirect()->route('bank_accounts.index');
+        }
+    }
+
+    public function get(Request $request){
+        $model = BankAccount::join('banks', 'bank_accounts.bank_id', 'banks.id')
+            ->select(['bank_accounts.id', 'bank_accounts.name','banks.name as name_bank', 'bank_accounts.agency']);
+
+        $response = DataTables::of($model)
+            ->blacklist(['actions'])
+
+            ->addColumn('actions', function ($model){
+                return Utilitarios::getBtnAction([
+                    ['type'=>'edit', 'url' => route('bank_accounts.edit',['id' => $model->id])],
+                    ['type'=>'other-a', 'url' => route('bank_account_posting.index',['id' => $model->id])],
+                    ['type'=>'delete', 'url' => route('bank_accounts.destroy',['id' => $model->id]), 'id' => $model->id]
+                ]);
+            })
+            ->rawColumns([ 'actions'])
+            ->toJson();
+
+        return $response->original;
     }
 }

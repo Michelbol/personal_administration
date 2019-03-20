@@ -11,6 +11,11 @@
             <input type="text" class="form-control" required name="agency" id="agency" maxlength="10"
                    value="{{ isset($bank_account) ?  $bank_account->agency : ''}}">
         </div>
+        <div class="col-2">
+            <label for="agency">Operação</label>
+            <input type="text" class="form-control" name="operation" id="operation" maxlength="10"
+                   value="{{ isset($bank_account) ?  $bank_account->operation : ''}}">
+        </div>
         <div class="col-1">
             <label for="digit_agency">Digito</label>
             <input type="text" class="form-control" name="digit_agency" id="digit_agency" maxlength="2"
