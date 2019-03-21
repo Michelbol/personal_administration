@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'personal-administration.com.br'),
+    'url' => env('APP_URL', 'personal-administrator.com.br'),
 
     'asset_url' => env('ASSET_URL', null),
 
