@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\BankAccount;
 use App\Models\BankAccountPosting;
 use App\Models\TypeBankAccountPosting;
+use App\Utilitarios;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Monolog\Handler\Curl\Util;
+use Yajra\DataTables\DataTables;
 
 class BankAccountPostingController extends Controller
 {
@@ -18,9 +22,9 @@ class BankAccountPostingController extends Controller
      */
     public function index($id)
     {
-        $bankAccountPostings    = BankAccountPosting::where('bank_account_id', $id)->get();
+        $filter_type_bank_account_postings = TypeBankAccountPosting::all();
         $bankAccount            = BankAccount::find($id);
-        return view('bank_account_posting.index', compact('bankAccountPostings', 'bankAccount'));
+        return view('bank_account_posting.index', compact('bankAccount', 'filter_type_bank_account_postings'));
     }
 
     /**
@@ -168,5 +172,44 @@ class BankAccountPostingController extends Controller
 
     public function file(){
         return view('bank_account_posting.file');
+    }
+
+    public function get(Request $request){
+        try{
+            $model = BankAccountPosting::where('bank_account_id', $request->id)
+                ->join('type_bank_account_postings', 'type_bank_account_postings.id', 'bank_account_postings.type_bank_account_posting_id')
+                ->select(['bank_account_postings.id', 'document','posting_date', 'amount', 'type',
+                    'type_bank_account_postings.name as type_name']);
+
+            $response = DataTables::of($model)
+                ->filter(function (Builder $query) use ($request){
+
+                    if($request->type_name > 0){
+                        $query->where('type_bank_account_postings.id', $request->type_name);
+                    }
+                    if($request->type !== "0"){
+                        $query->where('type', $request->type);
+                    }
+                    if($request->posting_date !== null){
+                        $explode = explode('-', $request->posting_date);
+                        $dt_initial = Utilitarios::formatDataCarbon(Utilitarios::formatGetData(trim($explode[0])));
+                        $dt_final = Utilitarios::formatDataCarbon(Utilitarios::formatGetData(trim($explode[1])));
+                        $query->whereBetween('posting_date', [$dt_initial, $dt_final]);
+                    }
+                })
+                ->addColumn('posting_date', function($model){
+                    return $model->posting_date = Utilitarios::formatDataCarbon($model->posting_date)->format('d/m/Y');
+                })
+                ->addColumn('amount', function($model){
+                    return $model->amount = 'R$: '.Utilitarios::getFormatReal($model->amount);
+                })
+                ->addColumn('type', function($model){
+                    return $model->type = $model->type === 'C' ? 'Crédito' : 'Débito';
+                })
+                ->toJson();
+            return $response->original;
+        }catch (\Exception $e){
+            dd('erro!'.$e->getMessage());
+        }
     }
 }

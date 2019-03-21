@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/bank_account/get', 'BankAccountController@get')->name('bank_account.get');
     Route::get('/bank_account_posting/{id}', 'BankAccountPostingController@index')->name('bank_account_posting.index');
+    Route::get('/bank_account_posting/get/{id}', 'BankAccountPostingController@get')->name('bank_account_posting.get');
     Route::get('/bank_account_posting/', 'BankAccountPostingController@file')->name('bank_account_posting.file');
     Route::post('/bank_account_posting/read_file', 'BankAccountPostingController@readFileStore')->name('bank_account_posting.read_file');
 });

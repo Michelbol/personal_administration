@@ -9,6 +9,8 @@
 namespace App;
 
 
+use Carbon\Carbon;
+
 class Utilitarios
 {
     public static function getBtnAction($botoes = []){
@@ -64,5 +66,67 @@ class Utilitarios
         $return .= '</div>';
 
         return $return;
+    }
+
+    static function formatDataCarbon($value)
+    {
+        $data = null;
+        $hora = 0;
+        $min = 0;
+
+        if (isset($value) && (!$value instanceof Carbon)) {
+            $formatodata = substr($value, 2, 1);
+            if ($formatodata == '-' || $formatodata == '/') {
+                $dia = substr($value, 0, 2);
+                $mes = substr($value, 3, 2);
+                $ano = substr($value, 6, 4);
+            } else {
+                $dia = substr($value, 8, 2);
+                $mes = substr($value, 5, 2);
+                $ano = substr($value, 0, 4);
+            }
+            $datahora = explode(' ', $value);
+            if(isset($datahora[1])){
+                $hora = substr($datahora[1], 0,2);
+                $min = substr($datahora[1], 3,2);
+            }
+
+            $data = Carbon::create($ano, $mes, $dia, $hora, $min);
+        } else if ($value instanceof Carbon) {
+            $data = $value;
+        }
+
+        return $data;
+    }
+
+    static function formatReal($value)
+    {
+        $aux = 0;
+        if ($value ) {
+            if (strpos($value, ',')){
+                $aux = str_replace(".", "", $value);
+                $aux = str_replace(",", ".", $aux);
+            }else{
+                $aux = $value;
+            }
+            $aux = str_replace("%", "", $aux);
+            $value = str_replace("-", "", $aux);
+        }
+
+        return number_format($value,2,'.','');
+    }
+
+    static function getFormatReal($value){
+        return number_format($value, 2, ',', '.');
+    }
+
+    static function formatGetData($value)
+    {
+        $data = null;
+        if (isset($value)) {
+            $data = strtotime($value);
+            $data = date('d/m/Y', $data);
+        }
+        return $data;
     }
 }
