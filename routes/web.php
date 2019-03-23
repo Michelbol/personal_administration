@@ -31,5 +31,6 @@ Route::domain(config('app.url'))->group(function(){
         Route::get('/bank_account_posting/get/{id}', 'BankAccountPostingController@get')->name('bank_account_posting.get');
         Route::get('/bank_account_posting/', 'BankAccountPostingController@file')->name('bank_account_posting.file');
         Route::post('/bank_account_posting/read_file', 'BankAccountPostingController@readFileStore')->name('bank_account_posting.read_file');
+        Route::post('/bank_account_posting', 'BankAccountPostingController@store')->name('bank_account_posting.store');
     });
 });

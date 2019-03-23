@@ -41,4 +41,11 @@
                      'name_selected' => isset($bank_account->bank_id) ? $bank_account->bank->name : null])
         @endcomponent
     </div>
+    <div class="row">
+        <div class="col-4">
+            <label for="balance">Saldo</label>
+            <input type="text" class="form-control" name="account_balance" id="account_balance" {{ isset($bank_account) ? 'disabled' : '' }}
+                   value="{{ isset($last_balance) ?  'R$: '.\App\Utilitarios::getFormatReal($last_balance) : ''}}">
+        </div>
+    </div>
 </div>

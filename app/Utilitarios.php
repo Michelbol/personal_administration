@@ -18,18 +18,18 @@ class Utilitarios
 
         for ($i = 0; $i < count($botoes); $i++ ){
             if ($botoes[$i]['type'] == 'delete'){
-                $return .= '<a 	class="btn btn-dark btn-sm"
-	                            href="'.$botoes[$i]['url'].'"
-	                            onclick="event.preventDefault();
-	                            if(confirm("Deseja excluir este item?")){
-	                            document.getElementById("form-delete-'.$botoes[$i]['id'].').submit();}">
-                                Excluir
+                $return .= "<a 	class='btn btn-dark btn-sm'
+                                  href='#'
+                                  onclick=".'"'."event.preventDefault();
+                                                        if(confirm('Deseja excluir este item?')){
+                            document.getElementById('form-delete-".$botoes[$i]['id']."').submit();}".'"'.">
+                            Excluir
                             </a>
-                            <form   action="'.$botoes[$i]['url'].'" method="post"
-                                    id="form-delete-'.$botoes[$i]['id'].'">
-                                '.csrf_field().'
-                                <input type="text" hidden name="_method" value="DELETE">
-                            </form>';
+                            <form   action='".$botoes[$i]['url']."' method='post'
+                                    id='form-delete-".$botoes[$i]["id"]."'>
+                                ".csrf_field()."
+                                <input type='text' hidden name='_method' value='DELETE'>
+                            </form>";
             }else if($botoes[$i]['type'] == 'edit'){
                 $return .= '<a href="'.$botoes[$i]['url'].'" class="btn btn-primary btn-sm">
                             Editar

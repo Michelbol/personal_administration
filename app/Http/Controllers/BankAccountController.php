@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\BankAccount;
+use App\Models\BankAccountPosting;
 use App\Utilitarios;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -51,6 +53,16 @@ class BankAccountController extends Controller
             $bankAccount->bank_id = $data['bank_id'];
             $bankAccount->save();
 
+            $bankAccountPosting = new BankAccountPosting();
+            $bankAccountPosting->document = 'Abertura Conta';
+            $bankAccountPosting->posting_date = Carbon::now();
+            $bankAccountPosting->amount = $data['account_balance'];
+            $bankAccountPosting->type = 'C';
+            $bankAccountPosting->type_bank_account_posting_id = 1;
+            $bankAccountPosting->account_balance = $data['account_balance'];
+            $bankAccountPosting->bank_account_id = $bankAccount->id;
+            $bankAccountPosting->save();
+
             DB::commit();
             \Session::flash('message', ['msg' => 'Banco Salvo com sucesso', 'type' => 'success']);
             return redirect()->route('bank_accounts.index');
@@ -80,8 +92,11 @@ class BankAccountController extends Controller
     public function edit($id)
     {
         $bank_account = BankAccount::find($id);
-
-        return view('bank_account.edit',compact('bank_account'));
+        $last_balance = BankAccountPosting::where('bank_account_id', $id)
+            ->orderBy('posting_date','desc')
+            ->orderBy('id','desc')->first();
+        $last_balance = isset($last_balance) ? $last_balance->account_balance :'0.00';
+        return view('bank_account.edit',compact('bank_account','last_balance'));
     }
 
     /**

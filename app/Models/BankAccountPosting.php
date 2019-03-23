@@ -11,7 +11,9 @@ class BankAccountPosting extends Model
         'posting_date',
         'amount',
         'type',
-        'type_bank_account_posting_id'
+        'type_bank_account_posting_id',
+        'account_balance',
+        'bank_account_id'
     ];
 
     public function bankAccount()

@@ -5,7 +5,7 @@
             <form action="{{ route('bank_account_posting.read_file') }}" method="POST" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <div class="row form-group">
-                    <input type="file" name="arquivo">
+                    <input type="file" multiple name="arquivo[]">
                 </div>
                 <div class="row">
                     <div class="float-left">
