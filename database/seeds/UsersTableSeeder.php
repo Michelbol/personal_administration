@@ -11,10 +11,13 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\User::class, 1)->create([
-            'name' => 'Michel',
-            'email' => 'michel.bolzon123@gmail.com',
-            'password' => bcrypt('123456')
-        ]);
+        if(\App\User::where('email', 'michel.bolzon123@gmail.com')->count() === 0){
+            factory(\App\User::class, 1)->create([
+                'name' => 'Michel',
+                'email' => 'michel.bolzon123@gmail.com',
+                'password' => bcrypt('123456')
+            ]);
+        }
+
     }
 }
