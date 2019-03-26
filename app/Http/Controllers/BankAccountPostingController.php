@@ -270,8 +270,8 @@ class BankAccountPostingController extends Controller
                     }
                     if($request->posting_date !== null){
                         $explode = explode('-', $request->posting_date);
-                        $dt_initial = Utilitarios::formatDataCarbon(Utilitarios::formatGetData(trim($explode[0])));
-                        $dt_final = Utilitarios::formatDataCarbon(Utilitarios::formatGetData(trim($explode[1])));
+                        $dt_initial = Utilitarios::formatDataCarbon(trim($explode[0]));
+                        $dt_final = Utilitarios::formatDataCarbon(trim($explode[1]));
                         $query->whereBetween('posting_date', [$dt_initial, $dt_final]);
                     }
                 })
