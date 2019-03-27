@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bank;
 use App\Models\BankAccount;
 use App\Models\BankAccountPosting;
 use App\Models\TypeBankAccountPosting;
+use App\Ofx;
 use App\Utilitarios;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Monolog\Handler\Curl\Util;
+use PHPUnit\Util\Type;
 use Yajra\DataTables\DataTables;
 
 class BankAccountPostingController extends Controller
@@ -51,7 +54,7 @@ class BankAccountPostingController extends Controller
             $data = $request->all();
             $bankAccountPosting->document = $data['document'];
             $bankAccountPosting->posting_date = Utilitarios::formatDataCarbon($data['posting_date']);
-            $bankAccountPosting->amount = $data['amount'];
+            $bankAccountPosting->amount = Utilitarios::formatReal($data['amount']);
             $bankAccountPosting->type = $data['type'];
             $bankAccountPosting->type_bank_account_posting_id = $data['type_bank_account_posting_id'];
             $bankAccountPosting->bank_account_id = $data['bank_account_id'];
@@ -148,9 +151,17 @@ class BankAccountPostingController extends Controller
     public function readFileStore(Request $request){
         try{
             DB::beginTransaction();
-            $files = $request->arquivo;
-            foreach($files as $file){
-                $this->readFile(file($file));
+            $filestxt = $request->arquivostxt;
+            if(isset($filestxt)){
+                foreach($filestxt as $filetxt){
+                    $this->readFileTxt(file($filetxt));
+                }
+            }
+            $filesofx = $request->arquivosofx;
+            if(isset($filesofx)){
+                foreach($filesofx as $fileofx){
+                    $this->readFileOfx($fileofx);
+                }
             }
             DB::commit();
             \Session::flash('message', ['msg' => 'Arquivo(s) Lido(s) Com Sucesso', 'type' => 'success']);
@@ -162,7 +173,60 @@ class BankAccountPostingController extends Controller
         }
     }
 
-    function readFile($file){
+    function readFileOfx($fileofx){
+        $type_bank_account_posting_not_saves = [];
+        $ofx = new Ofx($fileofx);
+        $bankAccount = $this->mountBankAccountOfx($ofx);
+        foreach($ofx->bankTranList as $transactions){
+            $typeBankAccountPosting = new TypeBankAccountPosting();
+            $bankAccountPosting = $this->mountBankAccountPostingOfx($transactions, $typeBankAccountPosting, $bankAccount);
+            if($typeBankAccountPosting->getTypeBankAccountPosting((string)$transactions->MEMO) === 0){
+                array_push($type_bank_account_posting_not_saves, $transactions->MEMO);
+                continue;
+            }
+            if(sizeof($type_bank_account_posting_not_saves) === 0){
+                $bankAccountPosting->save();
+            }
+        }
+        if(sizeof($type_bank_account_posting_not_saves) !== 0){
+            throw new \Exception('\nExistem tipos não salvos: '.implode(",", $type_bank_account_posting_not_saves));
+        }
+    }
+
+    function mountBankAccountOfx($ofx){
+        $bankAccount = new BankAccount();
+        $bank = Bank::where('number', 'like', '%'.(integer)$ofx->bankId.'%')->first();
+        $bankAccount->number_account = (string)$ofx->acctId;
+        $number_account = substr((string)$ofx->acctId, 0,8);
+        $bankAccount = BankAccount::where('bank_id', $bank->id)
+            ->where('number_account', 'like', '%'.(integer)$number_account.'%')->first();
+        return $bankAccount;
+    }
+
+    function mountBankAccountPostingOfx($transactions, TypeBankAccountPosting $typeBankAccountPosting, BankAccount $bankAccount){
+        $bankAccountPosting = new BankAccountPosting();
+        $bankAccountPosting->type_bank_account_posting_id = $typeBankAccountPosting->getTypeBankAccountPosting((string)$transactions->MEMO);
+        $date_post = $transactions->DTPOSTED;
+        $bankAccountPosting->posting_date = Carbon::create(substr($date_post, 0,4), substr($date_post, 4,2), substr($date_post, 6,2), substr($date_post, 8,2));
+        $bankAccountPosting->bank_account_id = $bankAccount->id;
+        $bankAccountPosting->document = $transactions->FITID;
+        $bankAccountPosting->amount = ((float)$transactions->TRNAMT < 0) ? -((float)$transactions->TRNAMT) : (float)$transactions->TRNAMT;
+        $bankAccountPosting->type = (string)$transactions->TRNTYPE === 'CREDIT' ? 'C' : 'D';
+        $balance = BankAccountPosting::where('bank_account_id',$bankAccountPosting->bank_account_id)
+            ->where('posting_date', '<=', $bankAccountPosting->posting_date)
+            ->orderBy('posting_date', 'desc')
+            ->orderBy('id', 'desc')->first();
+        if($balance === null){
+            $bankAccountPosting->account_balance = $bankAccountPosting->amount;
+        }else{
+            $bankAccountPosting->account_balance = $balance->account_balance +
+                ($bankAccountPosting->type === 'C' ? $bankAccountPosting->amount : (-$bankAccountPosting->amount));
+
+        }
+        return $bankAccountPosting;
+    }
+
+    function readFileTxt($file){
         $header = explode(';', $file[0]);
         $type_bank_account_posting_not_saves = [];
 
@@ -216,7 +280,6 @@ class BankAccountPostingController extends Controller
     function mountBankAccountPosting($data, BankAccount $bankAccount,TypeBankAccountPosting $typeBankAccountPosting){
         $bankAccountPosting = new BankAccountPosting();
         $bankAccountPosting->type_bank_account_posting_id = $typeBankAccountPosting->getTypeBankAccountPosting($data[3]);
-        $bankAccountPosting->document = $data[0];
         $bankAccountPosting->posting_date = Carbon::create(substr($data[1], 0,4), substr($data[1], 4,2), substr($data[1], 6,2));
         $bankAccountPosting->bank_account_id = $bankAccount->id;
         $bankAccountPosting->document = $data[2];
