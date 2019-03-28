@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BudgetFinancial;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class BudgetFinancialController extends Controller
 {
@@ -11,9 +14,20 @@ class BudgetFinancialController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('budget_financial.index');
+        $budgedFinancialYear = isset($request->year) ? $request->year : Carbon::now()->year;
+
+        $budgedFinancials = BudgetFinancial::where('year', $budgedFinancialYear)
+            ->orderBy('month', 'asc')
+            ->get();
+        while($budgedFinancials->count() === 0){
+            $this->createBudgetCurrentYear();
+            $budgedFinancials = BudgetFinancial::where('year', $budgedFinancialYear)
+                ->orderBy('month', 'asc')
+                ->get();
+        }
+        return view('budget_financial.index', compact('budgedFinancialYear', 'budgedFinancials'));
     }
 
     /**
@@ -32,9 +46,25 @@ class BudgetFinancialController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($year)
     {
-        //
+        try{
+            DB::beginTransaction();
+            for($month = 1; $month <= 12; $month++){
+                $budgetFinancial = new BudgetFinancial();
+                $budgetFinancial->year = $year;
+                $budgetFinancial->month = $month;
+                $endActualMonth = Carbon::create($year, $month)->daysInMonth;
+                if(Carbon::now()->isAfter(Carbon::create($year,$month, $endActualMonth))){
+                    $budgetFinancial->isFinalized = true;
+                }
+                $budgetFinancial->save();
+            }
+            DB::commit();
+//            \Session::flash('message', ['msg' => 'Criado meses do ano '.$year, 'type' => 'success']);
+        }catch (\Exception $e){
+            \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
+        }
     }
 
     /**
@@ -80,5 +110,9 @@ class BudgetFinancialController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function createBudgetCurrentYear(){
+        $this->store(Carbon::now()->year);
     }
 }
