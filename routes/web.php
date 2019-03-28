@@ -22,8 +22,9 @@ Route::domain(config('app.url'))->group(function(){
 
     Route::middleware('auth')->group(function () {
         Route::resources([
-            'bank_accounts' => 'BankAccountController',
-            'bank'          => 'BankController'
+            'bank_accounts'     => 'BankAccountController',
+            'bank'              => 'BankController',
+            'budget_financial'  => 'BudgetFinancialController'
         ]);
 
         Route::get('/bank_account/get', 'BankAccountController@get')->name('bank_account.get');

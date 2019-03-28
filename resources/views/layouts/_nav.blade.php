@@ -14,6 +14,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('bank_accounts.index') }}">C/C</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('budget_financial.index') }}">Orçamento Financeiro</a>
+                </li>
                 @endauth
             </ul>
 

@@ -8,6 +8,8 @@ class Bank extends Model
 {
     protected $fillable =[
         'name',
-        'number'
+        'number',
+        'title_color',
+        'body_color'
     ];
 }
