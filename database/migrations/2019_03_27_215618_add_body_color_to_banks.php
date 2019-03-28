@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBanksTable extends Migration
+class AddBodyColorToBanks extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreateBanksTable extends Migration
      */
     public function up()
     {
-        Schema::create('banks', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('number');
-            $table->timestamps();
+        Schema::table('banks', function (Blueprint $table) {
+            $table->string('body_color')->nullable();
         });
     }
 
@@ -28,6 +25,8 @@ class CreateBanksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('banks');
+        Schema::table('banks', function (Blueprint $table) {
+            $table->dropColumn('body_color');
+        });
     }
 }
