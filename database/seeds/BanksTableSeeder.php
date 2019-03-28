@@ -265,10 +265,15 @@ class BanksTableSeeder extends Seeder
             Bank::create(['Number' => '756', 'Name' => 'BANCO COOPERATIVO DO BRASIL S.A.']);
             Bank::create(['Number' => '757', 'Name' => 'BANCO KEB DO BRASIL S.A.']);
         }
-
-        Bank::where('number', '260')->first()->update(['title_color'  => '#ba4de3',
-                                             'body_color'   => '#d494ec']);
-        Bank::where('number', '104')->first()->update(['title_color'  => '#0369b9',
-                                             'body_color'   => '#f3bb5c']);
+        if(Bank::where('number', '260')->first()->title_color !== '#ba4de3'){
+            echo "\nalterou a cor do banco 260";
+            Bank::where('number', '260')->first()->update(['title_color'  => '#ba4de3',
+                'body_color'   => '#d494ec']);
+        }
+        if(Bank::where('number', '104')->first()->title_color !== '#0369b9') {
+            echo "\nalterou a cor do banco 104\n";
+            Bank::where('number', '104')->first()->update(['title_color' => '#0369b9',
+                'body_color' => '#f3bb5c']);
+        }
     }
 }
