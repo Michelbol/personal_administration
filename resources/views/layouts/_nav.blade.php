@@ -18,7 +18,7 @@
                     <a class="nav-link" href="{{ route('budget_financial.index') }}">Orçamento Financeiro</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('expenses.index') }}">Despesas</a>
+                    <a class="nav-link" href="{{ route('expense.index') }}">Despesas</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('income.index') }}">Receitas</a>

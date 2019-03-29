@@ -31,6 +31,8 @@ Route::domain(config('app.url'))->group(function(){
         Route::post('/bank_account_posting', 'BankAccountPostingController@store')->name('bank_account_posting.store');
         //=========================================INCOME=================================================================//
         Route::get('/income/get', 'IncomeController@get')->name('income.get');
+        //=========================================EXPENSE=================================================================//
+        Route::get('/expense/get', 'ExpensesController@get')->name('expense.get');
 
 
         Route::resources([
@@ -38,7 +40,7 @@ Route::domain(config('app.url'))->group(function(){
             'bank'              => 'BankController',
             'budget_financial'  => 'BudgetFinancialController',
             'income'            => 'IncomeController',
-            'expenses'          => 'ExpensesController'
+            'expense'           => 'ExpensesController'
         ]);
     });
 });
