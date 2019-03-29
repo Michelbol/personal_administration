@@ -89,14 +89,19 @@ class BankAccountController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id, Request $request)
     {
         $bank_account = BankAccount::find($id);
         $last_balance = BankAccountPosting::where('bank_account_id', $id)
             ->orderBy('posting_date','desc')
             ->orderBy('id','desc')->first();
+        $year_search = isset($request->year) ? $request->year : Carbon::now()->year;
         $last_balance = isset($last_balance) ? $last_balance->account_balance :'0.00';
-        return view('bank_account.edit',compact('bank_account','last_balance'));
+        $monthInterest = BankAccount::calcMonthlyInterest($year_search, $bank_account->id);
+        $monthInterest = collect($monthInterest)->implode(',');
+        $monthBalance = BankAccount::calcMonthlyBalance($year_search, $bank_account->id);
+        $monthBalance = collect($monthBalance)->implode(',');
+        return view('bank_account.edit',compact('bank_account','last_balance', 'monthInterest', 'year_search', 'monthBalance'));
     }
 
     /**

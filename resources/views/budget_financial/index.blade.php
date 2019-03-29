@@ -23,7 +23,7 @@
                         <div class="card-body">
                             <p class="card-text" style="">Total Receitas:</p>
                             <p class="card-text">Total Despesas:</p>
-                            <a href="#" class="btn btn-primary {!! $budgedFinancial->isFinalized ? 'disabled ">Finalizado' : '">Planejar' !!}</a>
+                            <a href="{{ route('budget_financial.edit', $budgedFinancial->id) }}" class="btn btn-primary {!! $budgedFinancial->isFinalized ? 'disabled ">Finalizado' : '">Planejar' !!}</a>
                         </div>
                     </div>
                 </div>

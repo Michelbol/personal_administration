@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BudgetFinancial;
+use App\Models\Income;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -59,6 +60,8 @@ class BudgetFinancialController extends Controller
                     $budgetFinancial->isFinalized = true;
                 }
                 $budgetFinancial->save();
+                $incomes = Income::where('isFixed', true)->get();
+
             }
             DB::commit();
 //            \Session::flash('message', ['msg' => 'Criado meses do ano '.$year, 'type' => 'success']);
@@ -86,7 +89,9 @@ class BudgetFinancialController extends Controller
      */
     public function edit($id)
     {
-        //
+        $budgetFinancial = BudgetFinancial::find($id);
+
+        return view('budget_financial.edit', compact('budgetFinancial'));
     }
 
     /**
