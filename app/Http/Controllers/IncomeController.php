@@ -45,6 +45,7 @@ class IncomeController extends Controller
             $income->name = $data['name'];
             $income->amount = Utilitarios::formatReal($data['amount']);
             $income->isFixed = isset($data['isFixed']);
+            $income->due_date = $data['due_date'];
             $income->save();
 
             DB::commit();
@@ -96,6 +97,7 @@ class IncomeController extends Controller
             $income->name = $data['name'];
             $income->amount = Utilitarios::formatReal($data['amount']);
             $income->isFixed = isset($data['isFixed']);
+            $income->due_date = $data['due_date'];
             $income->save();
 
             DB::commit();
@@ -130,7 +132,7 @@ class IncomeController extends Controller
 
     public function get(Request $request){
         try{
-            $model = Income::select(['id', 'name', 'amount', 'isFixed']);
+            $model = Income::select(['id', 'name', 'amount', 'isFixed', 'due_date']);
 
             $response = DataTables::of($model)
 //                ->filter(function (Builder $query) use ($request){

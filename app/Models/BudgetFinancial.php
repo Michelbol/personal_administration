@@ -9,7 +9,8 @@ class BudgetFinancial extends Model
     protected $fillable = [
         'month',
         'year',
-        'isFinalized'
+        'isFinalized',
+        'initial_balance'
     ];
     protected $months = [
         1   => 'Janeiro',
@@ -28,5 +29,16 @@ class BudgetFinancial extends Model
 
     public function month($index){
         return $this->months[$index];
+    }
+
+    public function budgetFinancialPostings(){
+        return $this->hasMany(BudgetFinancialPosting::class);
+    }
+
+    public function budgetFinancialPostingsIncomes(){
+        return $this->hasMany(BudgetFinancialPosting::class)->where('income_id', '>', 0);
+    }
+    public function budgetFinancialPostingsExpenses(){
+        return $this->hasMany(BudgetFinancialPosting::class)->where('expense_id', '>', 0);
     }
 }

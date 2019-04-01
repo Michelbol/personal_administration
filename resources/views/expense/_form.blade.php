@@ -22,6 +22,10 @@
             <input type="text" class="form-control money" required name="amount" id="amount" maxlength="10"
                    value="{{ isset($expense) ?  $expense->amount : ''}}">
         </div>
-
+        <div class="col-2">
+            <label for="due_date">Dia Vencimento</label>
+            <input type="number" class="form-control" required name="due_date" id="due_date"
+                   value="{{ isset($expense) ?  $expense->due_date : ''}}">
+        </div>
     </div>
 </div>

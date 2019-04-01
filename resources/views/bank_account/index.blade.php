@@ -27,17 +27,7 @@
 
 @push('scripts')
 <script>
-    $('#table_bank_account').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: '{!! route('bank_account.get') !!}',
-        columns: [
-            { data: 'id', name: 'id' },
-            { data: 'name', name: 'name' },
-            { data: 'name_bank', name: 'banks.name' },
-            { data: 'agency', name: 'agency' },
-            { data: 'actions', name: 'actions' }
-        ]
-    });
+    var url_data_table = '{!! route('bank_account.get') !!}';
 </script>
+<script src="{{ asset('js/bank_account/index.js') }}"></script>
 @endpush

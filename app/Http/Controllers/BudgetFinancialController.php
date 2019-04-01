@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\BudgetFinancial;
+use App\Models\BudgetFinancialPosting;
+use App\Models\Expenses;
 use App\Models\Income;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -28,6 +30,7 @@ class BudgetFinancialController extends Controller
                 ->orderBy('month', 'asc')
                 ->get();
         }
+
         return view('budget_financial.index', compact('budgedFinancialYear', 'budgedFinancials'));
     }
 
@@ -60,7 +63,10 @@ class BudgetFinancialController extends Controller
                     $budgetFinancial->isFinalized = true;
                 }
                 $budgetFinancial->save();
-                $incomes = Income::where('isFixed', true)->get();
+
+                $this->createIncomesFixed($budgetFinancial, $year, $month);
+
+                $this->createExpensesFixed($budgetFinancial, $year, $month);
 
             }
             DB::commit();
@@ -90,8 +96,10 @@ class BudgetFinancialController extends Controller
     public function edit($id)
     {
         $budgetFinancial = BudgetFinancial::find($id);
+        $incomes = Income::all();
+        $expenses = Expenses::all();
 
-        return view('budget_financial.edit', compact('budgetFinancial'));
+        return view('budget_financial.edit', compact('budgetFinancial', 'incomes', 'expenses'));
     }
 
     /**
@@ -119,5 +127,35 @@ class BudgetFinancialController extends Controller
 
     public function createBudgetCurrentYear(){
         $this->store(Carbon::now()->year);
+    }
+
+    public function createIncomesFixed(BudgetFinancial $budgetFinancial, $year, $month){
+        $incomes = Income::where('isFixed', true)->orderBy('due_date')->get();
+        foreach($incomes as $income){
+            $budgetFinancialPosting = new BudgetFinancialPosting();
+            $due_date = ($income->due_date > 0) ? $income->due_date : null;
+            $budgetFinancialPosting->posting_date = Carbon::create($year, $month, $due_date);
+            $budgetFinancialPosting->amount = $income->amount;
+            $budgetFinancialPosting->income_id = $income->id;
+            $budgetFinancialPosting->expense_id = null;
+            $budgetFinancialPosting->account_balance = 0;
+            $budgetFinancialPosting->budget_financial_id = $budgetFinancial->id;
+            $budgetFinancialPosting->save();
+        }
+    }
+
+    public function createExpensesFixed(BudgetFinancial $budgetFinancial, $year, $month){
+        $expenses = Expenses::where('isFixed', true)->orderBy('due_date')->get();
+        foreach($expenses as $expense){
+            $budgetFinancialPosting = new BudgetFinancialPosting();
+            $due_date = ($expense->due_date > 0) ? $expense->due_date : null;
+            $budgetFinancialPosting->posting_date = Carbon::create($year, $month, $due_date);
+            $budgetFinancialPosting->amount = $expense->amount;
+            $budgetFinancialPosting->income_id = null;
+            $budgetFinancialPosting->expense_id = $expense->id;
+            $budgetFinancialPosting->account_balance = 0;
+            $budgetFinancialPosting->budget_financial_id = $budgetFinancial->id;
+            $budgetFinancialPosting->save();
+        }
     }
 }

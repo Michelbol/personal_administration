@@ -10,6 +10,7 @@ class Income extends Model
         'id',
         'name',
         'amount',
-        'isFixed'
+        'isFixed',
+        'due_date',
     ];
 }

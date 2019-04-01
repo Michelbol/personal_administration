@@ -34,13 +34,12 @@ class Utilitarios
                 $return .= '<a href="'.$botoes[$i]['url'].'" class="btn btn-primary btn-sm">
                             Editar
                         </a>';
-            }else if($botoes[$i]['type'] == 'outros'){
+            }else if($botoes[$i]['type'] == 'others'){
                 $return .= '<button
                                 type="button"
-                                class="btn btn-default btn--icon '.$botoes[$i]['nome'].'"
-                                style="font-size: 1.2em"
                                 data-toggle="tooltip"
-                                data-original-title="'.$botoes[$i]['tooltip'].'"
+                                title="'.$botoes[$i]['tooltip'].'"
+                                class="btn btn-default '.$botoes[$i]['name'].'"
                                 '.($botoes[$i]['disabled'] === false ? 'disabled' : '').'>'.
                     '<i class="'.$botoes[$i]['class'].'"></i>'.
                     '</button>';

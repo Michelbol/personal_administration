@@ -21,8 +21,12 @@
                                 ' - Finalizado <i class="text-success fas fa-check-circle"></i>' : '')  !!} </p>
                         </div>
                         <div class="card-body">
-                            <p class="card-text" style="">Total Receitas:</p>
-                            <p class="card-text">Total Despesas:</p>
+                            <p class="card-text">
+                                Total Receitas: R$: {{ \App\Utilitarios::getFormatReal($incomeSum = $budgedFinancial->budgetFinancialPostingsIncomes()->sum('amount')) }}</p>
+                            <p class="card-text">
+                                Total Despesas: R$: {{ \App\Utilitarios::getFormatReal($expenseSum = $budgedFinancial->budgetFinancialPostingsExpenses()->sum('amount')) }}</p>
+                            <p class="card-text">
+                                Saldo: R$: {{ \App\Utilitarios::getFormatReal($incomeSum - $expenseSum) }}</p>
                             <a href="{{ route('budget_financial.edit', $budgedFinancial->id) }}" class="btn btn-primary {!! $budgedFinancial->isFinalized ? 'disabled ">Finalizado' : '">Planejar' !!}</a>
                         </div>
                     </div>
@@ -33,9 +37,3 @@
 
     </div>
 @endsection
-
-@push('scripts')
-<script>
-
-</script>
-@endpush

@@ -18,6 +18,7 @@ class CreateIncomesTable extends Migration
             $table->string('name');
             $table->boolean('isFixed')->default(false);
             $table->decimal('amount', 15,2);
+            $table->integer('due_date')->nullable();
             $table->timestamps();
         });
     }

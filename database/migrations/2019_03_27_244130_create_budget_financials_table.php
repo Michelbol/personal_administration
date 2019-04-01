@@ -18,6 +18,7 @@ class CreateBudgetFinancialsTable extends Migration
             $table->integer('month');
             $table->string('year', 6);
             $table->boolean('isFinalized')->default(false);
+            $table->decimal('initial_balance',15,2)->default(0);
             $table->timestamps();
         });
     }

@@ -1,3 +1,4 @@
+var $HTML = $('html');
 $(document).ready(function(){
     $('.date').mask('00/00/0000');
     $('.time').mask('00:00:00');
@@ -7,6 +8,8 @@ $(document).ready(function(){
     $('.cnpj').mask('00.000.000/0000-00', {reverse: true});
     $('.money').mask('000.000.000.000.000,00', {reverse: true});
     $('.percent').mask('##0,00%', {reverse: true});
+
+    $('[data-toggle="tooltip"]').tooltip()
 });
 function notify(message, type){
     $.notify({
@@ -41,7 +44,7 @@ function configDataRangePicker(){
             "monthNames": [
                 "Janeiro",
                 "Fevereiro",
-                "Março",
+                "MarÃ§o",
                 "Abril",
                 "Maio",
                 "Junho",
@@ -55,4 +58,11 @@ function configDataRangePicker(){
             "firstDay": 1
         }
     };
+}
+
+function convertBrasilianAmountToFloat(value){
+    if(typeof value === 'number'){
+        return value;
+    }
+    return parseFloat(value.replace('.', '').replace(',','.').replace(/[^0-9./-]/g,''));
 }

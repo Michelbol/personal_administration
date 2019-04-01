@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Expenses;
+use App\Models\BudgetFinancialPosting;
 use App\Utilitarios;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 
-class ExpensesController extends Controller
+class BudgetFinancialPostingController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +18,7 @@ class ExpensesController extends Controller
      */
     public function index()
     {
-        return view('expense.index');
+        //
     }
 
     /**
@@ -27,7 +28,7 @@ class ExpensesController extends Controller
      */
     public function create()
     {
-        return view('expense.create');
+        //
     }
 
     /**
@@ -40,20 +41,20 @@ class ExpensesController extends Controller
     {
         try{
             DB::beginTransaction();
-            $expense = new Expenses();
+            $budgetFinancialPosting = new BudgetFinancialPosting();
             $data = $request->all();
-            $expense->name = $data['name'];
-            $expense->amount = Utilitarios::formatReal($data['amount']);
-            $expense->isFixed = isset($data['isFixed']);
-            $expense->due_date = $data['due_date'];
-            $expense->save();
-
+            $budgetFinancialPosting->posting_date = Utilitarios::formatDataCarbon($data['posting_date']);
+            $budgetFinancialPosting->amount = Utilitarios::formatReal($data['amount']);
+            $budgetFinancialPosting->bank_account_id = $data['bank_account_id'];
+            $budgetFinancialPosting->expense_id = $data['expense_id'];
+            $budgetFinancialPosting->income_id = $data['income_id'];
+            $budgetFinancialPosting->save();
             DB::commit();
-            \Session::flash('message', ['msg' => 'Despesa Salva com sucesso', 'type' => 'success']);
-            return redirect()->route('expense.index');
+            \Session::flash('message', ['msg' => 'Lançamento Salvo com sucesso', 'type' => 'success']);
+            return redirect()->route('budget_financial.edit', $budgetFinancialPosting->budget_financia_id);
         }catch (\Exception $e){
             \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
-            return redirect()->route('expense.index');
+            return redirect()->back();
         }
     }
 
@@ -76,9 +77,7 @@ class ExpensesController extends Controller
      */
     public function edit($id)
     {
-        $expense = Expenses::find($id);
-
-        return view('expense.edit', compact('expense'));
+        //
     }
 
     /**
@@ -90,23 +89,7 @@ class ExpensesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        try{
-            DB::beginTransaction();
-            $data = $request->all();
-            $expense = Expenses::find($request['id']);
-            $expense->name = $data['name'];
-            $expense->amount = Utilitarios::formatReal($data['amount']);
-            $expense->isFixed = isset($data['isFixed']);
-            $expense->due_date = $data['due_date'];
-            $expense->save();
-
-            DB::commit();
-            \Session::flash('message', ['msg' => 'Despesas Atualizada com sucesso', 'type' => 'success']);
-            return redirect()->route('expense.index');
-        }catch (\Exception $e){
-            \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
-            return redirect()->route('expense.index');
-        }
+        //
     }
 
     /**
@@ -117,22 +100,19 @@ class ExpensesController extends Controller
      */
     public function destroy($id)
     {
-        try{
-            DB::beginTransaction();
-            Expenses::find($id)->delete();
-            DB::commit();
-            \Session::flash('message', ['msg' => 'Despesa Excluida com sucesso', 'type' => 'success']);
-            return redirect()->route('expense.index');
-        }catch (\Exception $e){
-            \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
-            return redirect()->route('expense.index');
-        }
+        //
     }
-
 
     public function get(Request $request){
         try{
-            $model = Expenses::select(['id', 'name', 'amount', 'isFixed', 'due_date']);
+            $model = BudgetFinancialPosting::where('budget_financial_id', $request->id)
+                ->leftjoin('incomes', 'incomes.id', 'budget_financial_postings.income_id')
+                ->leftjoin('expenses', 'expenses.id', 'budget_financial_postings.expense_id')
+                ->select(['budget_financial_postings.amount', 'budget_financial_postings.id',
+                    'budget_financial_postings.posting_date', 'incomes.name as incomes_name', 'incomes.id as income_id',
+                    'expenses.id as expenses_id', 'expenses.name as expenses_name', 'expenses.isFixed as expense_isFixed',
+                    'incomes.isFixed as income_isFixed'])
+                ->orderBy('budget_financial_postings.posting_date', 'asc');
 
             $response = DataTables::of($model)
 //                ->filter(function (Builder $query) use ($request){
@@ -150,16 +130,29 @@ class ExpensesController extends Controller
 //                        $query->whereBetween('posting_date', [$dt_initial, $dt_final]);
 //                    }
 //                })
+                ->addColumn('name', function($model){
+                    return isset($model->expenses_name) ? $model->expenses_name : $model->incomes_name;
+                })
+                ->addColumn('type', function($model){
+                    return isset($model->expenses_name) ? 'Despesa' : 'Receita';
+                })
                 ->addColumn('isFixed', function($model){
-                    return $model->isFixed === 1 ? '<i class="fas fa-thumbs-up"></i>' : '<i class="far fa-thumbs-down"></i>';
+                    $fixed =  '<i class="fas fa-thumbs-up"></i>';
+                    $not_fixed = '<i class="far fa-thumbs-down"></i>';
+                    return isset($model->expenses_name) ? ($model->expense_isFixed === 1 ? $fixed : $not_fixed ) :
+                        ($model->income_isFixed === 1 ? $fixed : $not_fixed);
+                })
+                ->addColumn('posting_date', function($model){
+                    return $model->posting_date = Utilitarios::formatDataCarbon($model->posting_date)->format('d/m/Y');
                 })
                 ->addColumn('amount', function($model){
-                    return 'R$: '.Utilitarios::getFormatReal($model->amount);
+                    return isset($model->expenses_name) ? $model->amount = '-R$: '.Utilitarios::getFormatReal($model->amount) :
+                        $model->amount = 'R$: '.Utilitarios::getFormatReal($model->amount) ;
                 })
-                ->addColumn('actions', function ($model){
+                ->addColumn('actions', function($model){
                     return Utilitarios::getBtnAction([
-                        ['type'=>'edit', 'url' => route('expense.edit',['id' => $model->id])],
-                        ['type'=>'delete', 'url' => route('expense.destroy',['id' => $model->id]), 'id' => $model->id]
+                        ['type'=>'others', 'name' => 'open-modal-budget-financial-posting', 'class' => 'fa fa-edit', 'disabled' => true,
+                        'tooltip' => 'Editar'],
                     ]);
                 })
                 ->rawColumns(['actions', 'isFixed'])

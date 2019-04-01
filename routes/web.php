@@ -33,6 +33,8 @@ Route::domain(config('app.url'))->group(function(){
         Route::get('/income/get', 'IncomeController@get')->name('income.get');
         //=========================================EXPENSE=================================================================//
         Route::get('/expense/get', 'ExpensesController@get')->name('expense.get');
+        //=========================================BUDGET FINANCIAL POSTING=================================================================//
+        Route::get('/budget_financial_posting/get/{id}', 'BudgetFinancialPostingController@get')->name('budget_financial_posting.get');
 
 
         Route::resources([

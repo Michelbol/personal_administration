@@ -14,6 +14,7 @@
                 <th>Nome</th>
                 <th>Fixa</th>
                 <th>Valor</th>
+                <th>Dia Vencimento</th>
                 <th>Ação</th>
             </tr>
             </thead>
@@ -35,6 +36,7 @@
             { data: 'name', name: 'name' },
             { data: 'isFixed', name: 'isFixed' },
             { data: 'amount', name: 'amount' },
+            { data: 'due_date', name: 'due_date' },
             { data: 'actions', name: 'actions' }
         ],
         columnDefs:[
