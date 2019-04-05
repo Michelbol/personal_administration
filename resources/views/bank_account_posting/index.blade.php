@@ -56,7 +56,7 @@
 
 @push('scripts')
 <script>
-    var url_data_table = '{!! route('bank_account_posting.get', ['id' => $bankAccount->id]) !!}';
+    var url_data_table = '{!! routeTenant('bank_account_posting.get', ['id' => $bankAccount->id]) !!}';
 </script>
 <script src="{{ asset('js/bank_account_posting/index.js') }}"></script>
 @endpush

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBudgetFinancialsTable extends Migration
+class CreateUserTenantsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreateBudgetFinancialsTable extends Migration
      */
     public function up()
     {
-        Schema::create('budget_financials', function (Blueprint $table) {
+        Schema::create('user_tenants', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('month');
-            $table->string('year', 6);
-            $table->boolean('isFinalized')->default(false);
-            $table->decimal('initial_balance',15,2)->default(0);
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
             $table->timestamps();
             $table->unsignedBigInteger('tenant_id');
 
@@ -33,6 +34,6 @@ class CreateBudgetFinancialsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('budget_financials');
+        Schema::dropIfExists('user_tenants');
     }
 }

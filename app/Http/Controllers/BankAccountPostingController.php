@@ -23,7 +23,7 @@ class BankAccountPostingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+    public function index($tenant, $id)
     {
         $filter_type_bank_account_postings = TypeBankAccountPosting::all();
         $bankAccount            = BankAccount::find($id);
@@ -73,7 +73,7 @@ class BankAccountPostingController extends Controller
             $this->recalcSaldo($bankAccountPosting->posting_date, $bankAccountPosting->bank_account_id);
             DB::commit();
             \Session::flash('message', ['msg' => 'Lançamento Salvo com sucesso', 'type' => 'success']);
-            return redirect()->route('bank_account_posting.index', $bankAccountPosting->bank_account_id);
+            return redirect()->routeTenant('bank_account_posting.index', [$bankAccountPosting->bank_account_id]);
         }catch (\Exception $e){
             \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
             return redirect()->back();
@@ -109,7 +109,7 @@ class BankAccountPostingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($tenant, Request $request, $id)
     {
         //
     }
@@ -144,7 +144,7 @@ class BankAccountPostingController extends Controller
         }catch(\Exception $e){
             DB::rollBack();
             \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
-            return redirect()->route('bank_account_posting.file');
+            return redirect()->routeTenant('bank_account_posting.file');
         }
     }
 
@@ -165,11 +165,11 @@ class BankAccountPostingController extends Controller
             }
             DB::commit();
             \Session::flash('message', ['msg' => 'Arquivo(s) Lido(s) Com Sucesso', 'type' => 'success']);
-            return redirect()->route('bank_account_posting.file');
+            return redirect()->routeTenant('bank_account_posting.file');
         }catch(\Exception $e){
             DB::rollBack();
             \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
-            return redirect()->route('bank_account_posting.file');
+            return redirect()->routeTenant('bank_account_posting.file');
         }
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Scopes\TenantModels;
 use App\Utilitarios;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -9,6 +10,8 @@ use Illuminate\Support\Facades\DB;
 
 class BankAccount extends Model
 {
+    use TenantModels;
+
     protected $fillable = [
         'name',
         'agency',

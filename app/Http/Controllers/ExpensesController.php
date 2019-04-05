@@ -50,10 +50,10 @@ class ExpensesController extends Controller
 
             DB::commit();
             \Session::flash('message', ['msg' => 'Despesa Salva com sucesso', 'type' => 'success']);
-            return redirect()->route('expense.index');
+            return redirect()->routeTenant('expense.index');
         }catch (\Exception $e){
             \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
-            return redirect()->route('expense.index');
+            return redirect()->routeTenant('expense.index');
         }
     }
 
@@ -74,7 +74,7 @@ class ExpensesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($tenant, $id)
     {
         $expense = Expenses::find($id);
 
@@ -102,10 +102,10 @@ class ExpensesController extends Controller
 
             DB::commit();
             \Session::flash('message', ['msg' => 'Despesas Atualizada com sucesso', 'type' => 'success']);
-            return redirect()->route('expense.index');
+            return redirect()->routeTenant('expense.index');
         }catch (\Exception $e){
             \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
-            return redirect()->route('expense.index');
+            return redirect()->routeTenant('expense.index');
         }
     }
 
@@ -115,17 +115,17 @@ class ExpensesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($tenant, $id)
     {
         try{
             DB::beginTransaction();
             Expenses::find($id)->delete();
             DB::commit();
             \Session::flash('message', ['msg' => 'Despesa Excluida com sucesso', 'type' => 'success']);
-            return redirect()->route('expense.index');
+            return redirect()->routeTenant('expense.index');
         }catch (\Exception $e){
             \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
-            return redirect()->route('expense.index');
+            return redirect()->routeTenant('expense.index');
         }
     }
 
@@ -158,8 +158,8 @@ class ExpensesController extends Controller
                 })
                 ->addColumn('actions', function ($model){
                     return Utilitarios::getBtnAction([
-                        ['type'=>'edit', 'url' => route('expense.edit',['id' => $model->id])],
-                        ['type'=>'delete', 'url' => route('expense.destroy',['id' => $model->id]), 'id' => $model->id]
+                        ['type'=>'edit', 'url' => routeTenant('expense.edit',['id' => $model->id])],
+                        ['type'=>'delete', 'url' => routeTenant('expense.destroy',['id' => $model->id]), 'id' => $model->id]
                     ]);
                 })
                 ->rawColumns(['actions', 'isFixed'])

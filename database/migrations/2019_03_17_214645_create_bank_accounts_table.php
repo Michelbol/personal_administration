@@ -23,7 +23,9 @@ class CreateBankAccountsTable extends Migration
             $table->integer('digit_account')->nullable();
             $table->unsignedBigInteger('bank_id');
             $table->timestamps();
+            $table->unsignedBigInteger('tenant_id');
 
+            $table->foreign('tenant_id')->references('id')->on('tenants');
             $table->foreign('bank_id')->references('id')->on('banks');
         });
     }

@@ -6,6 +6,7 @@ use App\Models\BudgetFinancial;
 use App\Models\BudgetFinancialPosting;
 use App\Models\Expenses;
 use App\Models\Income;
+use App\Utilitarios;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -17,18 +18,25 @@ class BudgetFinancialController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index($tenant, Request $request)
     {
         $budgedFinancialYear = isset($request->year) ? $request->year : Carbon::now()->year;
-
-        $budgedFinancials = BudgetFinancial::where('year', $budgedFinancialYear)
-            ->orderBy('month', 'asc')
-            ->get();
-        while($budgedFinancials->count() === 0){
-            $this->createBudgetCurrentYear();
+        if(Income::where('id', '>', 0)->count() > 0 || Expenses::where('id', '>', 0)->count() > 0){
             $budgedFinancials = BudgetFinancial::where('year', $budgedFinancialYear)
                 ->orderBy('month', 'asc')
                 ->get();
+            while($budgedFinancials->count() === 0){
+                $this->createBudgetCurrentYear($tenant);
+                $budgedFinancials = BudgetFinancial::where('year', $budgedFinancialYear)
+                    ->orderBy('month', 'asc')
+                    ->get();
+            }
+        }else{
+            $index_expenses = routeTenant('expense.index');
+            $index_incomes = routeTenant('income.index');
+            \Session::flash('message', [
+                'msg' => "Para planejar seu orçamento, crie suas <a href='$index_expenses'>Despesas</a>/<a href='$index_incomes'>Receitas</a>",
+                'type' => 'danger']);
         }
 
         return view('budget_financial.index', compact('budgedFinancialYear', 'budgedFinancials'));
@@ -50,7 +58,7 @@ class BudgetFinancialController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($year)
+    public function store($tenant, $year)
     {
         try{
             DB::beginTransaction();
@@ -62,6 +70,7 @@ class BudgetFinancialController extends Controller
                 if(Carbon::now()->isAfter(Carbon::create($year,$month, $endActualMonth))){
                     $budgetFinancial->isFinalized = true;
                 }
+                $budgetFinancial->initial_balance = 0;
                 $budgetFinancial->save();
 
                 $this->createIncomesFixed($budgetFinancial, $year, $month);
@@ -93,7 +102,7 @@ class BudgetFinancialController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($tenant, $id)
     {
         $budgetFinancial = BudgetFinancial::find($id);
         $incomes = Income::all();
@@ -125,20 +134,42 @@ class BudgetFinancialController extends Controller
         //
     }
 
-    public function createBudgetCurrentYear(){
-        $this->store(Carbon::now()->year);
+    public function updateInitialBalance(Request $request, $tenant, $id){
+        try{
+            DB::beginTransaction();
+            $data = $request->all();
+            $budgetFinancial = BudgetFinancial::find($id);
+            $budgetFinancial->update(['initial_balance' => Utilitarios::formatReal($data['initial_balance'])]);
+            BudgetFinancialPosting::recalcBalance($budgetFinancial);
+            DB::commit();
+            \Session::flash('message', ['msg' => 'Atualizado Saldo com sucesso', 'type' => 'success']);
+            return redirect()->routeTenant('budget_financial.edit', [$budgetFinancial->id]);
+        }catch (\Exception $e){
+            dd($e->getMessage());
+            \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
+        }
+    }
+
+    public function createBudgetCurrentYear($tenant){
+        $this->store($tenant, Carbon::now()->year);
     }
 
     public function createIncomesFixed(BudgetFinancial $budgetFinancial, $year, $month){
         $incomes = Income::where('isFixed', true)->orderBy('due_date')->get();
-        foreach($incomes as $income){
+        foreach($incomes as $index => $income){
             $budgetFinancialPosting = new BudgetFinancialPosting();
             $due_date = ($income->due_date > 0) ? $income->due_date : null;
             $budgetFinancialPosting->posting_date = Carbon::create($year, $month, $due_date);
             $budgetFinancialPosting->amount = $income->amount;
             $budgetFinancialPosting->income_id = $income->id;
             $budgetFinancialPosting->expense_id = null;
-            $budgetFinancialPosting->account_balance = 0;
+            $balance = BudgetFinancialPosting::where('budget_financial_id', $budgetFinancial->id)
+                ->where('posting_date', '<=', $budgetFinancialPosting->posting_date)
+                ->orderBy('posting_date', 'desc')
+                ->orderBy('id', 'desc')->first();
+            $budgetFinancialPosting->account_balance = isset($balance) ?
+                    $balance->account_balance + $budgetFinancialPosting->amount :
+                    $budgetFinancial->initial_balance + $budgetFinancialPosting->amount;
             $budgetFinancialPosting->budget_financial_id = $budgetFinancial->id;
             $budgetFinancialPosting->save();
         }
@@ -146,14 +177,20 @@ class BudgetFinancialController extends Controller
 
     public function createExpensesFixed(BudgetFinancial $budgetFinancial, $year, $month){
         $expenses = Expenses::where('isFixed', true)->orderBy('due_date')->get();
-        foreach($expenses as $expense){
+        foreach($expenses as $index => $expense){
             $budgetFinancialPosting = new BudgetFinancialPosting();
             $due_date = ($expense->due_date > 0) ? $expense->due_date : null;
             $budgetFinancialPosting->posting_date = Carbon::create($year, $month, $due_date);
             $budgetFinancialPosting->amount = $expense->amount;
             $budgetFinancialPosting->income_id = null;
             $budgetFinancialPosting->expense_id = $expense->id;
-            $budgetFinancialPosting->account_balance = 0;
+            $balance = BudgetFinancialPosting::where('budget_financial_id', $budgetFinancial->id)
+                ->where('posting_date', '<=', $budgetFinancialPosting->posting_date)
+                ->orderBy('posting_date', 'desc')
+                ->orderBy('id', 'desc')->first();
+            $budgetFinancialPosting->account_balance = isset($balance) ?
+                $balance->account_balance - $budgetFinancialPosting->amount :
+                $budgetFinancial->initial_balance - $budgetFinancialPosting->amount;
             $budgetFinancialPosting->budget_financial_id = $budgetFinancial->id;
             $budgetFinancialPosting->save();
         }

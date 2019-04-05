@@ -65,10 +65,10 @@ class BankAccountController extends Controller
 
             DB::commit();
             \Session::flash('message', ['msg' => 'Banco Salvo com sucesso', 'type' => 'success']);
-            return redirect()->route('bank_accounts.index');
+            return redirect()->routeTenant('bank_accounts.index');
         }catch (\Exception $e){
             \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
-            return redirect()->route('bank_accounts.index');
+            return redirect()->routeTenant('bank_accounts.index');
         }
     }
 
@@ -89,7 +89,7 @@ class BankAccountController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id, Request $request)
+    public function edit($tenant, $id, Request $request)
     {
         $bank_account = BankAccount::find($id);
         $last_balance = BankAccountPosting::where('bank_account_id', $id)
@@ -111,7 +111,7 @@ class BankAccountController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($tenant, Request $request, $id)
     {
         try{
             $bankaccount = BankAccount::find($id);
@@ -119,10 +119,10 @@ class BankAccountController extends Controller
             $bankaccount->update($request->all());
 
             \Session::flash('message', ['msg' => 'Banco Atualizado com sucesso', 'type' => 'success']);
-            return redirect()->route('bank_accounts.index');
+            return redirect()->routeTenant('bank_accounts.index');
         }catch (\Exception $e){
             \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
-            return redirect()->route('bank_accounts.index');
+            return redirect()->routeTenant('bank_accounts.index');
         }
     }
 
@@ -132,17 +132,17 @@ class BankAccountController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($tenant, $id)
     {
         try{
             $bank_account = BankAccount::find($id);
             $bank_account->delete();
 
             \Session::flash('message', ['msg' => 'Banco Deletado com sucesso', 'type' => 'success']);
-            return redirect()->route('bank_accounts.index');
+            return redirect()->routeTenant('bank_accounts.index');
         }catch (\Exception $e){
             \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
-            return redirect()->route('bank_accounts.index');
+            return redirect()->routeTenant('bank_accounts.index');
         }
     }
 
@@ -155,9 +155,9 @@ class BankAccountController extends Controller
 
             ->addColumn('actions', function ($model){
                 return Utilitarios::getBtnAction([
-                    ['type'=>'edit', 'url' => route('bank_accounts.edit',['id' => $model->id])],
-                    ['type'=>'other-a', 'url' => route('bank_account_posting.index',['id' => $model->id])],
-                    ['type'=>'delete', 'url' => route('bank_accounts.destroy',['id' => $model->id]), 'id' => $model->id]
+                    ['type'=>'edit', 'url' => routeTenant('bank_accounts.edit',['id' => $model->id])],
+                    ['type'=>'other-a', 'url' => routeTenant('bank_account_posting.index',['id' => $model->id])],
+                    ['type'=>'delete', 'url' => routeTenant('bank_accounts.destroy',['id' => $model->id]), 'id' => $model->id]
                 ]);
             })
             ->rawColumns([ 'actions'])

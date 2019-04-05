@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
+        'guard' => 'web_tenant',
         'passwords' => 'users',
     ],
 
@@ -46,6 +46,10 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+        'web_tenant' => [
+            'driver' => 'session',
+            'provider' => 'user_tenant'
+        ]
     ],
 
     /*
@@ -69,6 +73,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
+        ],
+        'user_tenant' => [
+            'driver' => 'eloquent',
+            'model' => \App\Models\UserTenant::class,
         ],
 
         // 'users' => [

@@ -4,7 +4,7 @@
     <div class="container">
         <h3>Despesas</h3>
 
-        <a href="{{ route('expense.create') }}" class="btn btn-info">Nova Despesa</a>
+        <a href="{{ routeTenant('expense.create') }}" class="btn btn-info">Nova Despesa</a>
         <br><br>
 
         <table id="table_expense" class="table table-bordered table-striped" width="100%">
@@ -30,7 +30,7 @@
     $('#table_expense').DataTable({
         processing: true,
         serverSide: true,
-        ajax: '{!! route('expense.get') !!}',
+        ajax: '{!! routeTenant('expense.get') !!}',
         columns: [
             { data: 'id', name: 'id' },
             { data: 'name', name: 'name' },

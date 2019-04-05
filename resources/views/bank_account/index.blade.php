@@ -4,8 +4,8 @@
     <div class="container">
         <h3>Conta Corrente</h3>
 
-        <a href="{{ route('bank_accounts.create') }}" class="btn btn-info">Nova Conta Corrente</a>
-        <a href="{{ route('bank_account_posting.file') }}" class="btn btn-primary">Leitura de Arquivos</a>
+        <a href="{{ routeTenant('bank_accounts.create') }}" class="btn btn-info">Nova Conta Corrente</a>
+        <a href="{{ routeTenant('bank_account_posting.file') }}" class="btn btn-primary">Leitura de Arquivos</a>
         <br><br>
 
         <table id="table_bank_account" class="table table-bordered table-striped" width="100%">
@@ -27,7 +27,7 @@
 
 @push('scripts')
 <script>
-    var url_data_table = '{!! route('bank_account.get') !!}';
+    var url_data_table = '{!! routeTenant('bank_account.get') !!}';
 </script>
 <script src="{{ asset('js/bank_account/index.js') }}"></script>
 @endpush

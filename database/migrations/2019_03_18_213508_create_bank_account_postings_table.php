@@ -19,6 +19,7 @@ class CreateBankAccountPostingsTable extends Migration
             $table->dateTime('posting_date');
             $table->decimal('amount',15,2);
             $table->enum('type',['C', 'D']);
+            $table->decimal('account_balance', 15,2);
             $table->unsignedBigInteger('bank_account_id');
             $table->unsignedBigInteger('type_bank_account_posting_id');
             $table->timestamps();

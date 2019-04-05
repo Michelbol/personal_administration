@@ -20,6 +20,9 @@ class CreateExpensesTable extends Migration
             $table->decimal('amount', 15,2);
             $table->integer('due_date')->nullable();
             $table->timestamps();
+            $table->unsignedBigInteger('tenant_id');
+
+            $table->foreign('tenant_id')->references('id')->on('tenants');
         });
     }
 

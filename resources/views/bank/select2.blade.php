@@ -9,7 +9,7 @@
 
         $("#{{ $id_bank }}").select2({
             ajax: {
-                url: "{{ route('bank.index') }}",
+                url: "{{ routeTenant('bank.index') }}",
                 dataType: 'json',
                 data: function (params) {
                     return {

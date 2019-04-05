@@ -18,7 +18,8 @@ class BankAccountTableSeeder extends Seeder
                 'agency' => '0001',
                 'number_account' => "8229254",
                 'digit_account' => "4",
-                'bank_id' => 96
+                'bank_id' => 96,
+                'tenant_id' => 1
             ]);
         }
         if(BankAccount::where('name', 'Caixa Kakogawa')->count() === 0) {
@@ -28,7 +29,8 @@ class BankAccountTableSeeder extends Seeder
                 'operation' => '013',
                 'number_account' => "5093",
                 'digit_account' => "5",
-                'bank_id' => 33
+                'bank_id' => 33,
+                'tenant_id' => 1
             ]);
         }
         if(BankAccount::where('name', 'Caixa Grevilha')->count() === 0) {
@@ -38,7 +40,8 @@ class BankAccountTableSeeder extends Seeder
                 'operation' => '013',
                 'number_account' => "18747",
                 'digit_account' => "9",
-                'bank_id' => 33
+                'bank_id' => 33,
+                'tenant_id' => 1
             ]);
         }
     }

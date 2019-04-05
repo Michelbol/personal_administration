@@ -14,8 +14,8 @@ class UsersTableSeeder extends Seeder
         if(\App\User::where('email', 'michel.bolzon123@gmail.com')->count() === 0){
             factory(\App\User::class, 1)->create([
                 'name' => 'Michel',
-                'email' => 'michel.bolzon123@gmail.com',
-                'password' => bcrypt('123456')
+                'email' => 'master@master.com',
+                'password' => bcrypt('master')
             ]);
         }
 

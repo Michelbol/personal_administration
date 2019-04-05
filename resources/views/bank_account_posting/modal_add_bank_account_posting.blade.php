@@ -9,7 +9,7 @@
             </div>
             <div class="modal-body" >
                 <div class="container-fluid">
-                    <form action="{{ route('bank_account_posting.store') }}" method="post" id="form_bank_acount_posting">
+                    <form action="{{ routeTenant('bank_account_posting.store') }}" method="post" id="form_bank_acount_posting">
                         {{csrf_field()}}
                         <div class="row">
                             <input type="hidden" id="bank_account_id" name="bank_account_id" value="{{$bankAccount->id}}">

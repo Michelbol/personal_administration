@@ -50,10 +50,10 @@ class IncomeController extends Controller
 
             DB::commit();
             \Session::flash('message', ['msg' => 'Receita Salva com sucesso', 'type' => 'success']);
-            return redirect()->route('income.index');
+            return redirect()->routeTenant('income.index');
         }catch (\Exception $e){
             \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
-            return redirect()->route('income.index');
+            return redirect()->routeTenant('income.index');
         }
     }
 
@@ -74,7 +74,7 @@ class IncomeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($tenant, $id)
     {
         $income = Income::find($id);
 
@@ -88,7 +88,7 @@ class IncomeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $tenant, $id)
     {
         try{
             DB::beginTransaction();
@@ -102,10 +102,10 @@ class IncomeController extends Controller
 
             DB::commit();
             \Session::flash('message', ['msg' => 'Receita Atualizada com sucesso', 'type' => 'success']);
-            return redirect()->route('income.index');
+            return redirect()->routeTenant('income.index');
         }catch (\Exception $e){
             \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
-            return redirect()->route('income.index');
+            return redirect()->routeTenant('income.index');
         }
     }
 
@@ -115,17 +115,17 @@ class IncomeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($tenant, $id)
     {
         try{
             DB::beginTransaction();
             Income::find($id)->delete();
             DB::commit();
             \Session::flash('message', ['msg' => 'Receita Excluida com sucesso', 'type' => 'success']);
-            return redirect()->route('income.index');
+            return redirect()->routeTenant('income.index');
         }catch (\Exception $e){
             \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
-            return redirect()->route('income.index');
+            return redirect()->routeTenant('income.index');
         }
     }
 
@@ -158,8 +158,8 @@ class IncomeController extends Controller
                 })
                 ->addColumn('actions', function ($model){
                     return Utilitarios::getBtnAction([
-                        ['type'=>'edit', 'url' => route('income.edit',['id' => $model->id])],
-                        ['type'=>'delete', 'url' => route('income.destroy',['id' => $model->id]), 'id' => $model->id]
+                        ['type'=>'edit', 'url' => routeTenant('income.edit',['id' => $model->id])],
+                        ['type'=>'delete', 'url' => routeTenant('income.destroy',['id' => $model->id]), 'id' => $model->id]
                     ]);
                 })
                 ->rawColumns(['actions', 'isFixed'])

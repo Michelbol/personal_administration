@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
     <div class="container">
-        <a class="navbar-brand" href="{{ url('/home') }}">
+        <a class="navbar-brand" href="{{ routeTenant('home') }}">
             {{ config('app.name', 'Laravel') }}
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -12,16 +12,16 @@
             <ul class="navbar-nav mr-auto">
                 @auth
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('bank_accounts.index') }}">C/C</a>
+                    <a class="nav-link" href="{{ routeTenant('bank_accounts.index') }}">C/C</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('budget_financial.index') }}">Orçamento Financeiro</a>
+                    <a class="nav-link" href="{{ routeTenant('budget_financial.index') }}">Orçamento Financeiro</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('expense.index') }}">Despesas</a>
+                    <a class="nav-link" href="{{ routeTenant('expense.index') }}">Despesas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('income.index') }}">Receitas</a>
+                    <a class="nav-link" href="{{ routeTenant('income.index') }}">Receitas</a>
                 </li>
                 @endauth
             </ul>
@@ -31,11 +31,11 @@
                 <!-- Authentication Links -->
                 @guest
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                    <a class="nav-link" href="{{ routeTenant('login') }}">{{ __('Login') }}</a>
                 </li>
                 @if (Route::has('register'))
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                        <a class="nav-link" href="{{ routeTenant('register') }}">{{ __('Register') }}</a>
                     </li>
                 @endif
                 @else
@@ -45,13 +45,13 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('logout') }}"
+                            <a class="dropdown-item" href="{{ routeTenant('logout') }}"
                                onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                 {{ __('Logout') }}
                             </a>
 
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            <form id="logout-form" action="{{ routeTenant('logout') }}" method="POST" style="display: none;">
                                 @csrf
                             </form>
                         </div>

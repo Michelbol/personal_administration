@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Scopes\TenantModels;
 use Illuminate\Database\Eloquent\Model;
 
 class BudgetFinancial extends Model
 {
+    use TenantModels;
+
     protected $fillable = [
         'month',
         'year',

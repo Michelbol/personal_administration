@@ -2,7 +2,7 @@
 
 @section('content')
         <div class="container">
-            <form action="{{ route('bank_account_posting.read_file') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ routeTenant('bank_account_posting.read_file') }}" method="POST" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <h3>Arquivos .txt</h3>
                 <div class="row form-group">
