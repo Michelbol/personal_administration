@@ -46,13 +46,13 @@ function configDataRangePicker(){
             "customRangeLabel": "Custom",
             "weekLabel": "W",
             "daysOfWeek": [
+                "Do",
                 "Se",
                 "Te",
                 "Qua",
                 "Qui",
                 "Sex",
-                "Sa",
-                "Do"
+                "Sa"
             ],
             "monthNames": [
                 "Janeiro",
