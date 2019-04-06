@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'personal-administrator.com.br'),
+    'url' => env('APP_URL', '35.185.25.201'),
 
     'asset_url' => env('ASSET_URL', null),
 
