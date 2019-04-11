@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 <link rel="stylesheet" href="{{ asset('plugin/bootstrap/dist/css/bootstrap.min.css') }}"/>
 <link rel="stylesheet" href="{{ asset('plugin/bootstrap/dist/css/bootstrap-grid.min.css') }}"/>
-<link rel="stylesheet" href="{{ asset('plugin/datatables/datatables-1.10.18/css/datatables.bootstrap4.min.css') }}"/>
+<link rel="stylesheet" href="{{ asset('plugin/datatables/DataTables-1.10.18/css/dataTables.bootstrap4.min.css') }}"/>
 {{--<link rel="stylesheet" href="{{ asset('plugin/datatables/datatables-1.10.18/css/jquery.dataTables.min.css') }}"/>--}}
 <link rel="stylesheet" href="{{ asset('plugin/daterangepicker/daterangepicker.css') }}" />
 <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
