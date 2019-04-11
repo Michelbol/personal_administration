@@ -13,7 +13,8 @@ class BudgetFinancial extends Model
         'month',
         'year',
         'isFinalized',
-        'initial_balance'
+        'initial_balance',
+        'user_id'
     ];
     protected $months = [
         1   => 'Janeiro',

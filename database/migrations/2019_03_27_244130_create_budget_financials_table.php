@@ -19,10 +19,12 @@ class CreateBudgetFinancialsTable extends Migration
             $table->string('year', 6);
             $table->boolean('isFinalized')->default(false);
             $table->decimal('initial_balance',15,2)->default(0);
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
             $table->unsignedBigInteger('tenant_id');
 
             $table->foreign('tenant_id')->references('id')->on('tenants');
+            $table->foreign('user_id')->references('id')->on('user_tenants');
         });
     }
 

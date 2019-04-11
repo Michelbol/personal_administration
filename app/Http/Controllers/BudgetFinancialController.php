@@ -6,9 +6,11 @@ use App\Models\BudgetFinancial;
 use App\Models\BudgetFinancialPosting;
 use App\Models\Expenses;
 use App\Models\Income;
+use App\Models\UserTenant;
 use App\Utilitarios;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class BudgetFinancialController extends Controller
@@ -20,26 +22,37 @@ class BudgetFinancialController extends Controller
      */
     public function index($tenant, Request $request)
     {
-        $budgedFinancialYear = isset($request->year) ? $request->year : Carbon::now()->year;
-        if(Income::where('id', '>', 0)->count() > 0 || Expenses::where('id', '>', 0)->count() > 0){
-            $budgedFinancials = BudgetFinancial::where('year', $budgedFinancialYear)
-                ->orderBy('month', 'asc')
-                ->get();
-            while($budgedFinancials->count() === 0){
-                $this->createBudgetCurrentYear($tenant);
+        try{
+            $data = $request->all();
+            $selected_user = isset($data['user_id']) ? UserTenant::find($data['user_id']) : Auth::user();
+            $selected_user_id = (isset($selected_user) ? $selected_user->id : Auth::user()->id);
+            $budgedFinancialYear = isset($request->year) ? $request->year : Carbon::now()->year;
+            if(Income::where('id', '>', 0)->count() > 0 || Expenses::where('id', '>', 0)->count() > 0){
                 $budgedFinancials = BudgetFinancial::where('year', $budgedFinancialYear)
+                    ->where('user_id', $selected_user_id)
                     ->orderBy('month', 'asc')
                     ->get();
+                while($budgedFinancials->count() === 0){
+                    $this->createBudgetCurrentYear($tenant, $selected_user_id);
+                    $budgedFinancials = BudgetFinancial::where('year', $budgedFinancialYear)
+                        ->where('user_id', $selected_user_id)
+                        ->orderBy('month', 'asc')
+                        ->get();
+                }
+            }else{
+                $index_expenses = routeTenant('expense.index');
+                $index_incomes = routeTenant('income.index');
+                \Session::flash('message', [
+                    'msg' => "Para planejar seu orçamento, crie suas <a href='$index_expenses'>Despesas</a>/<a href='$index_incomes'>Receitas</a>",
+                    'type' => 'danger']);
             }
-        }else{
-            $index_expenses = routeTenant('expense.index');
-            $index_incomes = routeTenant('income.index');
-            \Session::flash('message', [
-                'msg' => "Para planejar seu orçamento, crie suas <a href='$index_expenses'>Despesas</a>/<a href='$index_incomes'>Receitas</a>",
-                'type' => 'danger']);
+            $users = UserTenant::all();
+        }catch(\Exception $e){
+            \Session::flash('message', ['msg' => "Erro ao acessa a página".$e->getMessage(), 'type' => 'danger']);
+            return redirect()->back();
         }
 
-        return view('budget_financial.index', compact('budgedFinancialYear', 'budgedFinancials'));
+        return view('budget_financial.index', compact('budgedFinancialYear', 'budgedFinancials', 'users', 'selected_user'));
     }
 
     /**
@@ -58,7 +71,7 @@ class BudgetFinancialController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($tenant, $year)
+    public function store($tenant, $year, $selected_user_id)
     {
         try{
             DB::beginTransaction();
@@ -70,7 +83,9 @@ class BudgetFinancialController extends Controller
                 if(Carbon::now()->isAfter(Carbon::create($year,$month, $endActualMonth))){
                     $budgetFinancial->isFinalized = true;
                 }
+                $budgetFinancial->user_id = (isset($selected_user_id) ? $selected_user_id : Auth::user()->id);
                 $budgetFinancial->initial_balance = 0;
+
                 $budgetFinancial->save();
 
                 $this->createIncomesFixed($budgetFinancial, $year, $month);
@@ -150,8 +165,12 @@ class BudgetFinancialController extends Controller
         }
     }
 
-    public function createBudgetCurrentYear($tenant){
-        $this->store($tenant, Carbon::now()->year);
+    public function createBudgetCurrentYear($tenant, $selected_user_id){
+        try{
+            $this->store($tenant, Carbon::now()->year, $selected_user_id);
+        }catch(\Exception $e){
+
+        }
     }
 
     public function createIncomesFixed(BudgetFinancial $budgetFinancial, $year, $month){
