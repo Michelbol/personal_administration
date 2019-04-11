@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', '35.185.25.201'),
+    'url' => env('APP_URL', 'souzareiscorretor.com.br'),
 
     'asset_url' => env('ASSET_URL', null),
 
