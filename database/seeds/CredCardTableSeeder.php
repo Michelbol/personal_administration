@@ -11,11 +11,13 @@ class CredCardTableSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\CreditCard::create([
-            'name'  => 'Nu Bank',
-            'limit' => 6750,
-            'default_closing_date' => 1,
-            'bank_id' => 96
-        ]);
+        if(\App\Models\CreditCard::whereName('Nu Bank')->count() === 0){
+            \App\Models\CreditCard::create([
+                'name'  => 'Nu Bank',
+                'limit' => 6750,
+                'default_closing_date' => 1,
+                'bank_id' => 96
+            ]);
+        }
     }
 }
