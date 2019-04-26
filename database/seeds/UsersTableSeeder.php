@@ -11,7 +11,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        if(\App\User::where('email', 'michel.bolzon123@gmail.com')->count() === 0){
+        if(\App\User::where('email', 'master@master.com')->count() === 0){
             factory(\App\User::class, 1)->create([
                 'name' => 'Michel',
                 'email' => 'master@master.com',
