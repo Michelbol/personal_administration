@@ -56,9 +56,9 @@ class Utilitarios
                     '</a>';
             }
             else if($botoes[$i]['type'] == 'other-a'){
-                $return .= '<a href="'.$botoes[$i]['url'].'" class="btn btn-danger btn-sm">
-                            Lançamentos
-                        </a>';
+                $return .= '<a href="'.$botoes[$i]['url'].'" class="btn btn-danger btn-sm">';
+                $return .= isset($botoes[$i]['name']) ? $botoes[$i]['name'] : "Lançamentos";
+                $return .='</a>';
             }
 
         }

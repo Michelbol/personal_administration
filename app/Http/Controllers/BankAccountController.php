@@ -52,17 +52,17 @@ class BankAccountController extends Controller
             $bankAccount->digit_account = $data['digit_account'];
             $bankAccount->bank_id = $data['bank_id'];
             $bankAccount->save();
-
-            $bankAccountPosting = new BankAccountPosting();
-            $bankAccountPosting->document = 'Abertura Conta';
-            $bankAccountPosting->posting_date = Carbon::now();
-            $bankAccountPosting->amount = $data['account_balance'];
-            $bankAccountPosting->type = 'C';
-            $bankAccountPosting->type_bank_account_posting_id = 1;
-            $bankAccountPosting->account_balance = $data['account_balance'];
-            $bankAccountPosting->bank_account_id = $bankAccount->id;
-            $bankAccountPosting->save();
-
+            if(isset($data['account_balance'])){
+                $bankAccountPosting = new BankAccountPosting();
+                $bankAccountPosting->document = 'Abertura Conta';
+                $bankAccountPosting->posting_date = Carbon::now();
+                $bankAccountPosting->amount = $data['account_balance'];
+                $bankAccountPosting->type = 'C';
+                $bankAccountPosting->type_bank_account_posting_id = 1;
+                $bankAccountPosting->account_balance = $data['account_balance'];
+                $bankAccountPosting->bank_account_id = $bankAccount->id;
+                $bankAccountPosting->save();
+            }
             DB::commit();
             \Session::flash('message', ['msg' => 'Banco Salvo com sucesso', 'type' => 'success']);
             return redirect()->routeTenant('bank_accounts.index');

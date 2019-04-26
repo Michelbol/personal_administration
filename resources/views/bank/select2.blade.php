@@ -1,7 +1,7 @@
 
 <div class="{{ $col }}">
     <label for="{{ $id_bank }}">Banco</label>
-    <select name="{{ $id_bank }}" id="{{ $id_bank }}" class="form-control select2"></select>
+    <select required="{{ $required }}" name="{{ $id_bank }}" id="{{ $id_bank }}" class="form-control select2"></select>
 </div>
 
 @section('scripts')

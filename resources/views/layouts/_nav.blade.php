@@ -23,6 +23,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ routeTenant('income.index') }}">Receitas</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ routeTenant('cred_card.index') }}">Cartões de Crédito</a>
+                </li>
                 @endauth
             </ul>
 

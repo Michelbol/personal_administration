@@ -42,15 +42,25 @@ Route::prefix("{{$tenantParam}}")
             Route::post('/budget_financial/updateinitialbalance/{id}', 'BudgetFinancialController@updateInitialBalance')->name('budget_financial.updateinitialbalance');
             //=========================================BUDGET FINANCIAL POSTING=================================================================//
             Route::get('/budget_financial_posting/get/{id}', 'BudgetFinancialPostingController@get')->name('budget_financial_posting.get');
-
-
+        //=========================================CREDCARD=================================================================//
+        Route::prefix('cred_card')->name('cred_card.')->group(function(){
+            $controller = 'CredCardController';
+            Route::get('/',             $controller.'@index')       ->name('index');
+            Route::post('/',            $controller.'@store')       ->name('store');
+            Route::get('/create',       $controller.'@create')      ->name('create');
+            Route::get('/get',          $controller.'@get')         ->name('get');
+            Route::get('/{id}',         $controller.'@show')        ->name('show');
+            Route::put('/{id}',         $controller.'@update')      ->name('update');
+            Route::delete('/{id}',      $controller.'@destroy')     ->name('destroy');
+            Route::get('/{id}/edit',    $controller.'@edit')        ->name('edit');
+        });
             Route::resources([
                 'bank_accounts'             => 'BankAccountController',
                 'bank'                      => 'BankController',
                 'budget_financial'          => 'BudgetFinancialController',
                 'budget_financial_posting'  => 'BudgetFinancialPostingController',
                 'income'                    => 'IncomeController',
-                'expense'                   => 'ExpensesController'
+                'expense'                   => 'ExpensesController',
             ]);
         });
     });
