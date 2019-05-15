@@ -35,7 +35,7 @@ var datatable = $('#table_expense').DataTable({
                     return convertBrasilianAmountToFloat(a) + convertBrasilianAmountToFloat(b);
                 }, 0 );
 
-            $( api.column( 4 ).footer() ).html("R$: "+$('.money').masked(amountTotal));
+            $( api.column( 4 ).footer() ).html("R$: "+$('.money').masked(amountTotal.toFixed(2)));
             }
         });
 
