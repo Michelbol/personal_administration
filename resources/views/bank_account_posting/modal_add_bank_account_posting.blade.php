@@ -13,6 +13,7 @@
                         {{csrf_field()}}
                         <div class="row">
                             <input type="hidden" id="bank_account_id" name="bank_account_id" value="{{$bankAccount->id}}">
+                            <input type="hidden" id="id" name="id" value="">
                             <div class="col-4 form-group">
                                 <label for="document">Documento</label>
                                 <input type="text" class="form-control" id="document" name="document" maxlength="15-">
@@ -35,7 +36,7 @@
                             <div class="col-4 form-group">
                                 <label for="type_bank_account_posting_id">Tipo de Lançamento</label>
                                 <select name="type_bank_account_posting_id" id="type_bank_account_posting_id" class="form-control">
-                                    <option value="0">Informe um tipo</option>
+                                    <option value="">Informe um tipo</option>
                                     @foreach($filter_type_bank_account_postings as $type_bank_account_postings)
                                         <option value="{{$type_bank_account_postings->id}}">{{$type_bank_account_postings->name}}</option>
                                     @endforeach

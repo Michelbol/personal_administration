@@ -44,6 +44,7 @@
                 <th>Tipo</th>
                 <th>Tipo de Lançamento</th>
                 <th>Saldo</th>
+                <th>Ações</th>
             </tr>
             </thead>
             <tbody>

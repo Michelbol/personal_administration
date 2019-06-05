@@ -30,6 +30,7 @@ Route::prefix("{{$tenantParam}}")
             Route::get('/bank_account/get', 'BankAccountController@get')->name('bank_account.get');
             //=========================================BANK ACCOUNT POSTING===================================================//
             Route::get('/bank_account_posting/{id}', 'BankAccountPostingController@index')->name('bank_account_posting.index');
+            Route::get('/bank_account_posting/show/{id}', 'BankAccountPostingController@show')->name('bank_account_posting.show');
             Route::get('/bank_account_posting/get/{id}', 'BankAccountPostingController@get')->name('bank_account_posting.get');
             Route::get('/bank_account_posting/', 'BankAccountPostingController@file')->name('bank_account_posting.file');
             Route::post('/bank_account_posting/read_file', 'BankAccountPostingController@readFileStore')->name('bank_account_posting.read_file');

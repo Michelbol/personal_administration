@@ -6,6 +6,21 @@ $('#dates').on('cancel.daterangepicker', function(ev, picker) {
     $('#dates').val('');
 });
 
+$('html').on('click', '.modal-edit', function(){
+    let request = $.ajax({
+        url: URLBASE()+"/bank_account_posting/show/"+$(this).attr('data-id'),
+        method: "GET"
+    });
+    request.done(function (data) {
+       console.log(data);
+       fillModal(data.bankAccountPosting);
+        $('#add_bank_account_posting').modal('show');
+    });
+});
+$('#add_bank_account_posting').on('hide.bs.modal', function(){
+    cleanModal();
+});
+
 
 let config = configDataRangePicker();
 config.singleDatePicker = true;
@@ -34,7 +49,8 @@ var datatable = $('#table_bank_account_posting').DataTable({
     { data: 'amount', name: 'amount' },
     { data: 'type', name: 'type' },
     { data: 'type_name', name: 'type_bank_account_postings.name' },
-    { data: 'account_balance', name: 'account_balance' }
+    { data: 'account_balance', name: 'account_balance' },
+    { data: 'actions', name: 'actions' }
 ],
     createdRow: function( row, data, dataIndex ) {
     if ( data['type'] === "Crédito" ) {
@@ -48,3 +64,21 @@ var datatable = $('#table_bank_account_posting').DataTable({
 $('#search').on('click', function () {
     datatable.draw();
 });
+
+function fillModal(bank_account_posting){
+    $('#id')                            .val(bank_account_posting.id);
+    $('#document')                      .val(bank_account_posting.document);
+    $('#posting_date')                  .val(moment(bank_account_posting.posting_date, "YYYY-MM-DD HH:mm:ss").format('DD/MM/YYYY HH:mm'));
+    $('#amount')                        .val(bank_account_posting.amount);
+    $('#type')                          .val(bank_account_posting.type);
+    $('#type_bank_account_posting_id')  .val(bank_account_posting.type_bank_account_posting_id);
+}
+
+function cleanModal(){
+    $('#id').val('');
+    $('#document').val('');
+    $('#posting_date').val(moment().format('DD/MM/YYYY HH:mm'));
+    $('#amount').val('');
+    $('#type').val('C');
+    $('#type_bank_account_posting_id').val('');
+}

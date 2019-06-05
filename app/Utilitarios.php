@@ -17,6 +17,13 @@ class Utilitarios
         $return = '<div class="btn-group">';
 
         for ($i = 0; $i < count($botoes); $i++ ){
+            $botoes[$i]['type'] = $botoes[$i]['type'] ?? "";
+            $botoes[$i]['id'] = $botoes[$i]['id'] ?? "";
+            $botoes[$i]['name'] = isset($botoes[$i]['name']) ? $botoes[$i]['name'] : "Lançamentos";
+            $botoes[$i]['url'] = $botoes[$i]['url'] ?? "";
+            $botoes[$i]['tooltip'] = $botoes[$i]['tooltip'] ?? "";
+            $botoes[$i]['disabled'] = isset($botoes[$i]['disabled']) ? ($botoes[$i]['disabled'] === false ? 'disabled' : '') : '';
+            $botoes[$i]['class'] = $botoes[$i]['class'] ?? "";
             if ($botoes[$i]['type'] == 'delete'){
                 $return .= "<a 	class='btn btn-dark btn-sm'
                                   href='#'
@@ -31,7 +38,7 @@ class Utilitarios
                                 <input type='text' hidden name='_method' value='DELETE'>
                             </form>";
             }else if($botoes[$i]['type'] == 'edit'){
-                $return .= '<a href="'.$botoes[$i]['url'].'" class="btn btn-primary btn-sm">
+                $return .= '<a href="'.$botoes[$i]['url'].'" data-id="'.$botoes[$i]['id'].'" class="btn btn-primary btn-sm modal-edit" id="form-edit-'.$botoes[$i]["id"].'">
                             Editar
                         </a>';
             }else if($botoes[$i]['type'] == 'others'){
@@ -40,7 +47,7 @@ class Utilitarios
                                 data-toggle="tooltip"
                                 title="'.$botoes[$i]['tooltip'].'"
                                 class="btn btn-default '.$botoes[$i]['name'].'"
-                                '.($botoes[$i]['disabled'] === false ? 'disabled' : '').'>'.
+                                '.$botoes[$i]['disabled'].'>'.
                     '<i class="'.$botoes[$i]['class'].'"></i>'.
                     '</button>';
             }else if($botoes[$i]['type'] == 'print'){
@@ -57,7 +64,7 @@ class Utilitarios
             }
             else if($botoes[$i]['type'] == 'other-a'){
                 $return .= '<a href="'.$botoes[$i]['url'].'" class="btn btn-danger btn-sm">';
-                $return .= isset($botoes[$i]['name']) ? $botoes[$i]['name'] : "Lançamentos";
+                $return .= $botoes[$i]['name'];
                 $return .='</a>';
             }
 

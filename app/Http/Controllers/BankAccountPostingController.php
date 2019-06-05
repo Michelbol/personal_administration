@@ -50,24 +50,30 @@ class BankAccountPostingController extends Controller
     {
         try{
             DB::beginTransaction();
-            $bankAccountPosting = new BankAccountPosting();
             $data = $request->all();
+            $where_balance = [];
+            if(isset($data['id']) && $data['id'] > 0){
+                $bankAccountPosting = BankAccountPosting::find($data['id']);
+                array_push($where_balance, ['id', '!=', $data['id']]);
+            }else{
+                $bankAccountPosting = new BankAccountPosting();
+            }
             $bankAccountPosting->document = $data['document'];
             $bankAccountPosting->posting_date = Utilitarios::formatDataCarbon($data['posting_date']);
+            array_push($where_balance, ['posting_date', '<=', $bankAccountPosting->posting_date]);
             $bankAccountPosting->amount = Utilitarios::formatReal($data['amount']);
             $bankAccountPosting->type = $data['type'];
             $bankAccountPosting->type_bank_account_posting_id = $data['type_bank_account_posting_id'];
             $bankAccountPosting->bank_account_id = $data['bank_account_id'];
             $balance = BankAccountPosting::where('bank_account_id', $bankAccountPosting->bank_account_id)
-                ->where('posting_date', '<=', $bankAccountPosting->posting_date)
+                ->where($where_balance)
                 ->orderBy('posting_date', 'desc')
                 ->orderBy('id', 'desc')->first();
+            $amount = ($bankAccountPosting->type === 'C' ? $bankAccountPosting->amount : (-$bankAccountPosting->amount));
             if($balance === null){
-                $bankAccountPosting->account_balance = $bankAccountPosting->amount;
+                $bankAccountPosting->account_balance = $amount;
             }else{
-                $bankAccountPosting->account_balance = $balance->account_balance +
-                    ($bankAccountPosting->type === 'C' ? $bankAccountPosting->amount : (-$bankAccountPosting->amount));
-
+                $bankAccountPosting->account_balance = $balance->account_balance + $amount;
             }
             $bankAccountPosting->save();
             $this->recalcSaldo($bankAccountPosting->posting_date, $bankAccountPosting->bank_account_id);
@@ -86,9 +92,10 @@ class BankAccountPostingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($tenant, $id)
     {
-        //
+        $bankAccountPosting = BankAccountPosting::find($id);
+        return response()->json(["result"=> true, "bankAccountPosting"=> $bankAccountPosting], 200);
     }
 
     /**
@@ -348,7 +355,13 @@ class BankAccountPostingController extends Controller
                     return $model->type = $model->type === 'C' ? 'Crédito' : 'Débito';
                 })->addColumn('account_balance', function($model){
                     return $model->amount = 'R$: '.Utilitarios::getFormatReal($model->account_balance);
+                })->addColumn('actions', function($model){
+                    return Utilitarios::getBtnAction([
+                        ['type'=>'edit', 'url'=>'#', 'id' => $model->id],
+                        ['type'=>'delete', 'url' => '', 'id' => $model->id]
+                    ]);
                 })
+                ->rawColumns(['actions'])
                 ->toJson();
             return $response->original;
         }catch (\Exception $e){
