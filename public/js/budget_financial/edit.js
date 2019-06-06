@@ -34,8 +34,8 @@ var datatable = $('#table_expense').DataTable({
                 .reduce( function (a, b) {
                     return convertBrasilianAmountToFloat(a) + convertBrasilianAmountToFloat(b);
                 }, 0 );
-
-            $( api.column( 4 ).footer() ).html("R$: "+$('.money').masked(amountTotal.toFixed(2)));
+            let sinal = amountTotal > 0 ? "" : "- ";
+            $( api.column( 4 ).footer() ).html(sinal+"R$: "+$('.money').masked(amountTotal.toFixed(2)));
             }
         });
 
