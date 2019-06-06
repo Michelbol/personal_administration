@@ -52,7 +52,7 @@ class BudgetFinancialPostingController extends Controller
             if(isset($data['new_expense'])){
                 $expense = Expenses::create([
                     'name' => $data['new_expense'],
-                    'amount' => $data['amount']
+                    'amount' => Utilitarios::formatReal($data['amount'])
                 ]);
                 $data['expense_id'] = $expense->id;
             }
@@ -60,7 +60,7 @@ class BudgetFinancialPostingController extends Controller
             if(isset($data['new_income'])){
                 $income = Income::create([
                     'name' => $data['new_income'],
-                    'amount' => $data['amount']
+                    'amount' => Utilitarios::formatReal($data['amount'])
                 ]);
                 $data['income_id'] = $income->id;
             }
