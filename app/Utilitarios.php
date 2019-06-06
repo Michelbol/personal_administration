@@ -25,12 +25,17 @@ class Utilitarios
             $botoes[$i]['disabled'] = isset($botoes[$i]['disabled']) ? ($botoes[$i]['disabled'] === false ? 'disabled' : '') : '';
             $botoes[$i]['class'] = $botoes[$i]['class'] ?? "";
             if ($botoes[$i]['type'] == 'delete'){
-                $return .= "<a 	class='btn btn-dark btn-sm'
+                $botoes[$i]['class'] = $botoes[$i]['class'] === '' ? 'btn btn-dark btn-sm' : $botoes[$i]['class'];
+//                dd($botoes[$i]['name']);
+                $botoes[$i]['name'] = $botoes[$i]['name'] === "Lançamentos" ? "Excluir" : $botoes[$i]['name'];
+                $return .= "<a 	class='".$botoes[$i]["class"]."'
+                                data-toggle='tooltip'
+                                title='".$botoes[$i]['tooltip']."'
                                   href='#'
                                   onclick=".'"'."event.preventDefault();
                                                         if(confirm('Deseja excluir este item?')){
                             document.getElementById('form-delete-".$botoes[$i]['id']."').submit();}".'"'.">
-                            Excluir
+                            ".$botoes[$i]['name']."
                             </a>
                             <form   action='".$botoes[$i]['url']."' method='post'
                                     id='form-delete-".$botoes[$i]["id"]."'>
