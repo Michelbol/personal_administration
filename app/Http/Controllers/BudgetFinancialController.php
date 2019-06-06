@@ -173,6 +173,36 @@ class BudgetFinancialController extends Controller
             \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
         }
     }
+    public function lastMonth($tenant, $id){
+        try{
+            DB::beginTransaction();
+            $budgetFinancial = BudgetFinancial::find($id);
+            if($budgetFinancial->month === 1){
+                $month = 12;
+                $year = $budgetFinancial->year-1;
+            }else{
+                $month = $budgetFinancial->month-1;
+                $year = $budgetFinancial->year;
+            }
+            $budgetFinancialLastMonth = BudgetFinancial::where('month', $month)
+                                                        ->where('year', $year)->first();
+            if(isset($budgetFinancialLastMonth)){
+                $income = $budgetFinancialLastMonth->budgetFinancialPostingsIncomes()->sum('amount');
+                $expense = $budgetFinancialLastMonth->budgetFinancialPostingsExpenses()->sum('amount');
+                $balance = $income-$expense+$budgetFinancialLastMonth->initial_balance;
+            }else{
+                $balance = 0;
+            }
+            $budgetFinancial->update(['initial_balance' => $balance]);
+            BudgetFinancialPosting::recalcBalance($budgetFinancial);
+            DB::commit();
+            \Session::flash('message', ['msg' => 'Atualizado Saldo com sucesso', 'type' => 'success']);
+            return redirect()->routeTenant('budget_financial.edit', [$budgetFinancial->id]);
+        }catch (\Exception $e){
+            dd($e->getMessage());
+            \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
+        }
+    }
 
     public function createBudgetCurrentYear($tenant, $selected_user_id){
         try{
