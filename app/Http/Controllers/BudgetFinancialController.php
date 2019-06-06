@@ -30,8 +30,17 @@ class BudgetFinancialController extends Controller
             if(Income::where('id', '>', 0)->count() > 0 || Expenses::where('id', '>', 0)->count() > 0){
                 $budgedFinancials = BudgetFinancial::where('year', $budgedFinancialYear)
                     ->where('user_id', $selected_user_id)
+                    ->orderBy('month', 'asc')->get();
+                $budgedFinancialsOpen = BudgetFinancial::where('year', $budgedFinancialYear)
+                    ->where('user_id', $selected_user_id)
                     ->orderBy('month', 'asc')
-                    ->get();
+                    ->where('isFinalized', false)->get();
+                foreach ($budgedFinancialsOpen as $budget){
+                    if(Carbon::now()->month> $budget->month){
+                        $budget->isFinalized = true;
+                        $budget->save();
+                    }
+                }
                 while($budgedFinancials->count() === 0){
                     $this->createBudgetCurrentYear($tenant, $selected_user_id);
                     $budgedFinancials = BudgetFinancial::where('year', $budgedFinancialYear)
