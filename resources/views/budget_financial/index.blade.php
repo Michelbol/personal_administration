@@ -40,7 +40,7 @@
                             <p class="card-text">
                                 Total Despesas: R$: {{ \App\Utilitarios::getFormatReal($expenseSum = $budgedFinancial->budgetFinancialPostingsExpenses()->sum('amount')) }}</p>
                             <p class="card-text">
-                                Saldo: R$: {{ \App\Utilitarios::getFormatReal($incomeSum - $expenseSum) }}</p>
+                                Saldo: R$: {{ \App\Utilitarios::getFormatReal($budgedFinancial->initial_balance + $incomeSum - $expenseSum) }}</p>
                             <a href="{{ routeTenant('budget_financial.edit', [$budgedFinancial->id]) }}" class="btn btn-primary">{!! $budgedFinancial->isFinalized ? 'Finalizado' : 'Planejar' !!}</a>
                         </div>
                     </div>
