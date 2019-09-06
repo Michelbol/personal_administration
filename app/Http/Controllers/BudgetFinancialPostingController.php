@@ -214,7 +214,7 @@ class BudgetFinancialPostingController extends Controller
                 ->addColumn('actions', function($model){
                     return Utilitarios::getBtnAction([
                         ['type'=>'others', 'name' => 'open-modal-budget-financial-posting', 'class' => 'fa fa-edit', 'disabled' => true,'tooltip' => 'Editar'],
-                        ['url' => routeTenant('budget_financial_posting.destroy', ['id' => $model->id]),'type'=>'delete', 'name' => '<i class="fa fa-times"></i>', 'class' => 'btn', 'disabled' => true,'tooltip' => 'Excluir'],
+                        ['url' => routeTenant('budget_financial_posting.destroy', ['id' => $model->id]), 'id' => $model->id,'type'=>'delete', 'name' => '<i class="fa fa-times"></i>', 'class' => 'btn', 'disabled' => true,'tooltip' => 'Excluir'],
                     ]);
                 })
                 ->rawColumns(['actions', 'isFixed'])
