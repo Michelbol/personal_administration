@@ -10,6 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/bios', 'BiosController@index')->name('bios.index');
+
 $tenantParam = config('tenant.route_param');
 
 
