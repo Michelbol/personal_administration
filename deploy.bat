@@ -1,7 +1,8 @@
-cd ../prod
 git checkout dev
 git pull
 git checkout master
+git pull
 git merge dev
 git push
-cd ../dev
+git checkout dev
+git push
