@@ -2,8 +2,36 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
+/**
+ * App\Models\BudgetFinancialPosting
+ *
+ * @property int $id
+ * @property string $posting_date
+ * @property float $amount
+ * @property float $account_balance
+ * @property int|null $income_id
+ * @property int|null $expense_id
+ * @property int $budget_financial_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @method static Builder|BudgetFinancialPosting newModelQuery()
+ * @method static Builder|BudgetFinancialPosting newQuery()
+ * @method static Builder|BudgetFinancialPosting query()
+ * @method static Builder|BudgetFinancialPosting whereAccountBalance($value)
+ * @method static Builder|BudgetFinancialPosting whereAmount($value)
+ * @method static Builder|BudgetFinancialPosting whereBudgetFinancialId($value)
+ * @method static Builder|BudgetFinancialPosting whereCreatedAt($value)
+ * @method static Builder|BudgetFinancialPosting whereExpenseId($value)
+ * @method static Builder|BudgetFinancialPosting whereId($value)
+ * @method static Builder|BudgetFinancialPosting whereIncomeId($value)
+ * @method static Builder|BudgetFinancialPosting wherePostingDate($value)
+ * @method static Builder|BudgetFinancialPosting whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class BudgetFinancialPosting extends Model
 {
     protected $fillable = [

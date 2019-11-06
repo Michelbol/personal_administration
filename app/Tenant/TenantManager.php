@@ -7,6 +7,8 @@
  */
 namespace App\Tenant;
 
+use Illuminate\Support\Facades\Cache;
+
 class TenantManager{
 
     private $tenant;
@@ -23,10 +25,12 @@ class TenantManager{
 
     public function getTenant(){
         if(!$this->tenant){
-            $model = config('tenant.model');
-            $this->tenant = $model
-                ::where(config('tenant.field_name'),$this->routeParam())
-                ->first();
+            $this->tenant = Cache::remember('tenant'.$this->routeParam(), 604800, function(){
+                $model = config('tenant.model');
+                return $model
+                    ::where(config('tenant.field_name'),$this->routeParam())
+                    ->first();
+            });
         }
         return $this->tenant;
     }

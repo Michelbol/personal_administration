@@ -7,7 +7,7 @@
 
 <script type="text/javascript" src="{{ asset('plugin/moment/min/moment.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('plugin/daterangepicker/daterangepicker.js') }}"></script>
-<script type="text/javascript" src="{{ asset('plugin/jquery-mask/dist/jquery.mask.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('plugin/jquery-mask/jquery.mask.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('plugin/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 {{--<script src="{{ asset('js/app.js') }}" defer></script>--}}
 <script type="text/javascript" src="{{ asset('/js/utils.js') }}"></script>

@@ -4,6 +4,9 @@
 /public/storage
 /storage/*.key
 /vendor
+/storage/debugbar
+.phpstorm.meta.php
+_ide_helper.php
 .env
 composer.lock
 .phpunit.result.cache

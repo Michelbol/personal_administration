@@ -3,8 +3,43 @@
 namespace App\Models;
 
 use App\Scopes\TenantModels;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
+/**
+ * App\Models\BudgetFinancial
+ *
+ * @property int $id
+ * @property int $month
+ * @property string $year
+ * @property int $isFinalized
+ * @property float $initial_balance
+ * @property int $user_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property int $tenant_id
+ * @property-read Collection|BudgetFinancialPosting[] $budgetFinancialPostings
+ * @property-read int|null $budget_financial_postings_count
+ * @property-read Collection|BudgetFinancialPosting[] $budgetFinancialPostingsExpenses
+ * @property-read int|null $budget_financial_postings_expenses_count
+ * @property-read Collection|BudgetFinancialPosting[] $budgetFinancialPostingsIncomes
+ * @property-read int|null $budget_financial_postings_incomes_count
+ * @method static Builder|BudgetFinancial newModelQuery()
+ * @method static Builder|BudgetFinancial newQuery()
+ * @method static Builder|BudgetFinancial query()
+ * @method static Builder|BudgetFinancial whereCreatedAt($value)
+ * @method static Builder|BudgetFinancial whereId($value)
+ * @method static Builder|BudgetFinancial whereInitialBalance($value)
+ * @method static Builder|BudgetFinancial whereIsFinalized($value)
+ * @method static Builder|BudgetFinancial whereMonth($value)
+ * @method static Builder|BudgetFinancial whereTenantId($value)
+ * @method static Builder|BudgetFinancial whereUpdatedAt($value)
+ * @method static Builder|BudgetFinancial whereUserId($value)
+ * @method static Builder|BudgetFinancial whereYear($value)
+ * @mixin \Eloquent
+ */
 class BudgetFinancial extends Model
 {
     use TenantModels;

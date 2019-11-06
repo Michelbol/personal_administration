@@ -36,9 +36,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
-        DB::listen(function($query){
-            Log::info($query->sql);
-            Log::info($query->bindings);
-        });
+        if ($this->app->environment() !== 'production') {
+            DB::listen(function($query){
+                Log::info($query->sql);
+                Log::info($query->bindings);
+            });
+            $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
+            $this->app->register(\Barryvdh\Debugbar\ServiceProvider::class);
+        }
     }
 }
