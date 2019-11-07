@@ -59,13 +59,25 @@ Route::prefix("{{$tenantParam}}")
             Route::delete('/{id}',      $controller.'@destroy')     ->name('destroy');
             Route::get('/{id}/edit',    $controller.'@edit')        ->name('edit');
         });
-        //=========================================CREDCARD=================================================================//
+        //=========================================CAR=================================================================//
         Route::prefix('car')->name('car.')->group(function(){
             $controller = 'CarController';
             Route::get('/',             $controller.'@index')       ->name('index');
             Route::post('/',            $controller.'@store')       ->name('store');
             Route::get('/create',       $controller.'@create')      ->name('create');
             Route::get('/get',          $controller.'@get')         ->name('get');
+            Route::get('/{id}',         $controller.'@show')        ->name('show');
+            Route::put('/{id}',         $controller.'@update')      ->name('update');
+            Route::delete('/{id}',      $controller.'@destroy')     ->name('destroy');
+            Route::get('/{id}/edit',    $controller.'@edit')        ->name('edit');
+        });
+        //=========================================CARSUPPLIES=================================================================//
+        Route::prefix('car_supply')->name('car_supply.')->group(function(){
+            $controller = 'CarSupplyController';
+            Route::get('/{car_id}',     $controller.'@index')       ->name('index');
+            Route::post('/',            $controller.'@store')       ->name('store');
+            Route::get('/create/{car_id}',$controller.'@create')    ->name('create');
+            Route::get('/get/{car_id}', $controller.'@get')         ->name('get');
             Route::get('/{id}',         $controller.'@show')        ->name('show');
             Route::put('/{id}',         $controller.'@update')      ->name('update');
             Route::delete('/{id}',      $controller.'@destroy')     ->name('destroy');

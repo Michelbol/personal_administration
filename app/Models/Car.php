@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Utilitarios;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * App\Models\Car
@@ -27,6 +29,8 @@ use Illuminate\Database\Eloquent\Builder;
  * @method static Builder|Car whereLicensePlate($value)
  * @method static Builder|Car whereModel($value)
  * @method static Builder|Car whereUpdatedAt($value)
+ * @property-read Collection|CarSupply[] $carSupplies
+ * @property-read int|null $car_supplies_count
  */
 class Car extends Model
 {
@@ -56,15 +60,17 @@ class Car extends Model
 
     public function setAnnualInsuranceAttribute($value){
         if($value){
-            $value = strtotime($value);
-            $this->attributes['annual_insurance'] = date('Y-m-d', $value);
+            $this->attributes['annual_insurance'] = Utilitarios::formatDataCarbon($value);
         }
     }
 
     public function setAnnualLicensingAttribute($value){
         if($value){
-            $value = strtotime($value);
-            $this->attributes['annual_licensing'] = date('Y-m-d', $value);
+            $this->attributes['annual_licensing'] = Utilitarios::formatDataCarbon($value);
         }
+    }
+
+    public function carSupplies(){
+        return $this->hasMany(CarSupply::class);
     }
 }

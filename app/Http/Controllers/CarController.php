@@ -81,8 +81,9 @@ class CarController extends Controller
             $response = DataTables::of($model)
                 ->addColumn('actions', function ($model){
                     return Utilitarios::getBtnAction([
-                        ['type'=>'edit', 'url' => routeTenant('car.edit',['id' => $model->id])],
-                        ['type'=>'delete', 'url' => routeTenant('car.destroy',['id' => $model->id]), 'id' => $model->id]
+                        ['type'=>'edit',    'url' => routeTenant('car.edit',['id' => $model->id])],
+                        ['type'=>'other-a', 'url' => routeTenant('car_supply.index',['car_id' => $model->id]), 'name' => 'Abastencimentos'],
+                        ['type'=>'delete',  'url' => routeTenant('car.destroy',['id' => $model->id]), 'id' => $model->id]
                     ]);
                 })
                 ->rawColumns(['actions'])
