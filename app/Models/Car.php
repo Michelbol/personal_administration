@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Scopes\TenantModels;
 use App\Utilitarios;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -31,9 +32,13 @@ use Illuminate\Database\Eloquent\Collection;
  * @method static Builder|Car whereUpdatedAt($value)
  * @property-read Collection|CarSupply[] $carSupplies
  * @property-read int|null $car_supplies_count
+ * @property int $tenant_id
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Car whereTenantId($value)
  */
 class Car extends Model
 {
+    use TenantModels;
+
     protected $fillable = [
         'id',
         'model',

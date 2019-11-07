@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Enum\FuelEnum;
 use \Exception;
 use App\Models\Car;
 use App\Utilitarios;
@@ -25,6 +26,7 @@ class CarSupplyController extends Controller
         $validData = $request->validate([
             'car_id' => 'required',
             'date' => 'date_format:d/m/Y',
+            'gas_station' => 'max:150'
         ]);
         $carSupply = new CarSupply();
         $carSupply->car_id        = $validData['car_id'];
@@ -32,6 +34,8 @@ class CarSupplyController extends Controller
         $carSupply->liters        = $request->get('liters', null);
         $carSupply->total_paid    = $request->get('total_paid', null);
         $carSupply->date          = $validData['date'];
+        $carSupply->fuel          = $request->get('fuel', FuelEnum::Gasolina);
+        $carSupply->gas_station   = $validData['gas_station'];
         $carSupply->save();
         Session::flash('message', ['msg' => 'Abastecimento incluido com sucesso', 'type' => 'success']);
         return redirect()->routeTenant('car_supply.index',['car_id' => $carSupply->car_id]);
@@ -47,6 +51,7 @@ class CarSupplyController extends Controller
         $validData = $request->validate([
             'car_id' => 'required',
             'date' => 'date_format:d/m/Y',
+            'gas_station' => 'max:150'
         ]);
         $carSupply = CarSupply::findOrFail($id);
         $carSupply->car_id        = $validData['car_id'];
@@ -54,6 +59,8 @@ class CarSupplyController extends Controller
         $carSupply->liters        = $request->get('liters', null);
         $carSupply->total_paid    = $request->get('total_paid', null);
         $carSupply->date          = $validData['date'];
+        $carSupply->fuel          = $request->get('fuel', FuelEnum::Gasolina);
+        $carSupply->gas_station   = $validData['gas_station'];
         $carSupply->save();
         Session::flash('message', ['msg' => 'Abastecimento Atualizado com sucesso', 'type' => 'success']);
         return redirect()->routeTenant('car_supply.index',['car_id' => $carSupply->car_id]);
@@ -73,7 +80,7 @@ class CarSupplyController extends Controller
 
     public function get(){
         try{
-            $model = CarSupply::select(['id', 'kilometer', 'liters', 'total_paid', 'date']);
+            $model = CarSupply::select(['id', 'kilometer', 'liters', 'total_paid', 'date', 'fuel', 'gas_station']);
 
             $response = DataTables::of($model)
                 ->addColumn('actions', function ($model){

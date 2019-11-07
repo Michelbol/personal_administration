@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Utilitarios;
+use App\Models\Enum\FuelEnum;
+use App\Scopes\TenantModels;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -30,16 +32,26 @@ use Illuminate\Database\Eloquent\Builder;
  * @method static Builder|CarSupply whereTotalPaid($value)
  * @method static Builder|CarSupply whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $fuel
+ * @property string|null $gas_station
+ * @property int|null $tenant_id
+ * @method static Builder|CarSupply whereFuel($value)
+ * @method static Builder|CarSupply whereGasStation($value)
+ * @method static Builder|CarSupply whereTenantId($value)
  */
 class CarSupply extends Model
 {
+    use TenantModels;
+
     protected $fillable = [
         'id',
+        'date',
+        'fuel',
+        'liters',
         'car_id',
         'kilometer',
-        'liters',
         'total_paid',
-        'date',
+        'gas_station',
     ];
 
     public function setKilometerAttribute($value){
@@ -78,6 +90,17 @@ class CarSupply extends Model
             return Utilitarios::getFormatReal($value);
         }
         return Utilitarios::getFormatReal(0);
+    }
+
+    public function getFuelAttribute($value){
+        return FuelEnum::getName($value);
+    }
+
+    public function setFuelAttribute($value){
+        $this->attributes['fuel'] = $value;
+        if(FuelEnum::isValidName($value)){
+            $this->attributes['fuel'] = FuelEnum::getValue($value);
+        }
     }
 
     public function getDateAttribute($value){
