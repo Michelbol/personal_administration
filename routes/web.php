@@ -63,6 +63,7 @@ Route::prefix("{{$tenantParam}}")
         Route::prefix('car')->name('car.')->group(function(){
             $controller = 'CarController';
             Route::get('/',             $controller.'@index')       ->name('index');
+            Route::get('/profile/{id}', $controller.'@profile')     ->name('profile');
             Route::post('/',            $controller.'@store')       ->name('store');
             Route::get('/create',       $controller.'@create')      ->name('create');
             Route::get('/get',          $controller.'@get')         ->name('get');

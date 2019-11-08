@@ -93,4 +93,9 @@ class CarController extends Controller
             dd('erro!'.$e->getMessage());
         }
     }
+
+    public function profile($tenant, $id){
+        $carSupply = collect([1,2,3,4,5,6,7,8,9,10,11,12]);
+        return view('car.profile', compact('carSupply'));
+    }
 }

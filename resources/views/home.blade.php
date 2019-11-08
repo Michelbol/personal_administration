@@ -22,5 +22,20 @@
             </div>
             @endforeach
     </div>
+    <hr>
+    <div class="row justify-content-center">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-title">
+                    <p class="card-header">Carros Registrados {{ $total_cars }}</p>
+                </div>
+                <div class="card-body">
+                    @foreach($cars as $car)
+                        <a href="">{{ $car->model.' - '.$car->license_plate }}</a>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection

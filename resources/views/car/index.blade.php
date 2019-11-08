@@ -11,8 +11,8 @@
             <thead>
             <tr>
                 <th>ID</th>
-                <th>Placa</th>
                 <th>Modelo</th>
+                <th>Placa</th>
                 <th>Vencimento Licensiamento Anual</th>
                 <th>Seguro Obrigatório Anual</th>
                 <th>Ação</th>
