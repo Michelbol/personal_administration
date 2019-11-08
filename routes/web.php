@@ -17,12 +17,10 @@ $tenantParam = config('tenant.route_param');
 
 
 Route::domain(config('app.url'))->group(function() use($tenantParam){
-Route::prefix("{tenant}")
+Route::prefix("{{$tenantParam}}")
     ->middleware('tenant')
     ->group(function() {
-        Route::get('/', function () {
-            return view('welcome');
-        });
+        Route::get('/', 'WelcomeController@index')->name('welcome');
 
         Auth::routes();
 
