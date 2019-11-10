@@ -187,7 +187,7 @@ class CarSupply extends Model
                 ->first(['kilometer']);
             if(isset($lastSupply)){
                 $km = $lastSupply->getOriginal('kilometer');
-                if(isset($km)){
+                if(isset($km) && $km > 0){
                     $this->traveled_kilometers = floatval($this->attributes['kilometer']) - floatval($km);
                     return $this->traveled_kilometers;
                 }
