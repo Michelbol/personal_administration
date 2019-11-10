@@ -33,7 +33,7 @@ use Illuminate\Database\Eloquent\Collection;
  * @property-read Collection|CarSupply[] $carSupplies
  * @property-read int|null $car_supplies_count
  * @property int $tenant_id
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Car whereTenantId($value)
+ * @method static Builder|Car whereTenantId($value)
  */
 class Car extends Model
 {

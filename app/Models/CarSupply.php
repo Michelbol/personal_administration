@@ -39,6 +39,8 @@ use Illuminate\Support\Facades\DB;
  * @method static Builder|CarSupply whereFuel($value)
  * @method static Builder|CarSupply whereGasStation($value)
  * @method static Builder|CarSupply whereTenantId($value)
+ * @property float|null $traveled_kilometers
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\CarSupply whereTraveledKilometers($value)
  */
 class CarSupply extends Model
 {
@@ -178,15 +180,20 @@ class CarSupply extends Model
         return $totalTraveledKilometers;
     }
 
-    function calcTraveledKilometers($year, $car_id){
-        $totalTraveledKilometers = [];
-        for($i = 1; $i <=12; $i++){
-            $totalTraveledKilometers[$i] = DB::table('car_supplies')
-                ->whereBetween('date', [Carbon::create($year, $i, 1),Carbon::create($year,$i)->endOfMonth()])
-                ->where('car_id', $car_id)
-                ->get(['kilometer']);
-
+    function calcTraveledKilometer(){
+        if(isset($this->kilometer)){
+            $lastSupply = CarSupply::where('date', '<', $this->attributes['date'])
+                ->orderByDesc('date')
+                ->first(['kilometer']);
+            if(isset($lastSupply)){
+                $km = $lastSupply->getOriginal('kilometer');
+                if(isset($km)){
+                    $this->traveled_kilometers = floatval($this->kilometer) - floatval($km);
+                    return $this->traveled_kilometers;
+                }
+            }
         }
-        return $totalTraveledKilometers;
+        $this->traveled_kilometers = 0;
+        return $this->traveled_kilometers;
     }
 }
