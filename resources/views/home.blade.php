@@ -31,7 +31,7 @@
                 </div>
                 <div class="card-body">
                     @foreach($cars as $car)
-                        <a href="">{{ $car->model.' - '.$car->license_plate }}</a>
+                        <a href="{{ routeTenant('car.profile', ['id' => $car->id]) }}">{{ $car->model.' - '.$car->license_plate }}</a>
                     @endforeach
                 </div>
             </div>
