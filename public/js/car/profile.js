@@ -1,5 +1,7 @@
-var ctx = document.getElementById('myChart').getContext('2d');
-var myChart = new Chart(ctx, {
+var carSupplyJs = document.getElementById('car-supply').getContext('2d');
+var carLitersJs = document.getElementById('car-litters').getContext('2d');
+var carAveragesJs = document.getElementById('car-averages').getContext('2d');
+var graphCarSupply = new Chart(carSupplyJs, {
     type: 'line',
     data: {
         labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
@@ -14,9 +16,29 @@ var myChart = new Chart(ctx, {
             ],
             borderWidth: 1
         },
+
+        ],
+
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});
+
+var graphCarLiters = new Chart(carLitersJs, {
+    type: 'line',
+    data: {
+        labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+        datasets: [
             {
-                label: ['Saldo / 100'],
-                data: balance,
+                label: ['Litros Abastecidos'],
+                data: liters,
                 backgroundColor: [
                     'rgba(54, 162, 235, 0.2)',
                 ],
@@ -25,6 +47,35 @@ var myChart = new Chart(ctx, {
                 ],
                 borderWidth: 1
             }
+        ],
+
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});
+var graphCarAverages = new Chart(carAveragesJs, {
+    type: 'line',
+    data: {
+        labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+        datasets: [
+            {
+                label: ['Média'],
+                data: averages,
+                backgroundColor: [
+                    'rgba(153, 102, 255, 0.2)',
+                ],
+                borderColor: [
+                    'rgb(153, 102, 255, 1)',
+                ],
+                borderWidth: 1
+            },
         ],
 
     },

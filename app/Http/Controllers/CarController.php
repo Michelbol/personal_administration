@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CarSupply;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use \Session;
 use \Exception;
 use App\Models\Car;
@@ -95,7 +98,14 @@ class CarController extends Controller
     }
 
     public function profile($tenant, $id){
-        $carSupply = collect([1,2,3,4,5,6,7,8,9,10,11,12]);
-        return view('car.profile', compact('carSupply'));
+        $year = Carbon::now()->year;
+        $totalPaid = CarSupply::calcMonthlyTotalPaid($year, $id);
+        $totalPaid = collect($totalPaid)->implode(',');
+        $liters = CarSupply::calcMonthlyLiters($year, $id);
+        $liters = collect($liters)->implode(',');
+        $averages = CarSupply::calcMonthlyAverage($year, $id);
+        $averages = collect($averages)->implode(',');
+        
+        return view('car.profile', compact('totalPaid', 'liters', 'averages'));
     }
 }

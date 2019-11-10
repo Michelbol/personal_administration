@@ -8,6 +8,7 @@ use App\Scopes\TenantModels;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 /**
  * App\Models\CarSupply
@@ -52,6 +53,7 @@ class CarSupply extends Model
         'kilometer',
         'total_paid',
         'gas_station',
+        'traveled_kilometers'
     ];
 
     public function setKilometerAttribute($value){
@@ -72,6 +74,12 @@ class CarSupply extends Model
             $this->attributes['total_paid'] = Utilitarios::formatReal($value);
         }
     }
+    public function setTraveledKilometersAttribute($value){
+        $this->attributes['traveled_kilometers'] = 0;
+        if(isset($value)){
+            $this->attributes['traveled_kilometers'] = Utilitarios::formatReal($value);
+        }
+    }
 
     public function getKilometerAttribute($value){
         if(isset($value)){
@@ -86,6 +94,12 @@ class CarSupply extends Model
         return Utilitarios::getFormatReal(0);
     }
     public function getTotalPaidAttribute($value){
+        if(isset($value)){
+            return Utilitarios::getFormatReal($value);
+        }
+        return Utilitarios::getFormatReal(0);
+    }
+    public function getTraveledKilometersAttribute($value){
         if(isset($value)){
             return Utilitarios::getFormatReal($value);
         }
@@ -115,5 +129,64 @@ class CarSupply extends Model
         if($value){
             $this->attributes['date'] = Utilitarios::formatDataCarbon($value);
         }
+    }
+
+    /**
+     * @param $year
+     * @param $car_id
+     * @return array
+     */
+    static function calcMonthlyTotalPaid($year, $car_id){
+        $totalPaidMonthly = [];
+        for($i = 1; $i <=12; $i++){
+            $totalPaidMonthly[$i] = DB::table('car_supplies')
+                ->whereBetween('date', [Carbon::create($year, $i, 1),Carbon::create($year,$i)->endOfMonth()])
+                ->where('car_id', $car_id)
+                ->sum('total_paid');
+        }
+        return $totalPaidMonthly;
+    }
+    /**
+     * @param $year
+     * @param $car_id
+     * @return array
+     */
+    static function calcMonthlyLiters($year, $car_id){
+        $totalLiters = [];
+        for($i = 1; $i <=12; $i++){
+            $totalLiters[$i] = DB::table('car_supplies')
+                ->whereBetween('date', [Carbon::create($year, $i, 1),Carbon::create($year,$i)->endOfMonth()])
+                ->where('car_id', $car_id)
+                ->sum('liters');
+        }
+        return $totalLiters;
+    }
+    /**
+     * @param $year
+     * @param $car_id
+     * @return array
+     */
+    static function calcMonthlyAverage($year, $car_id){
+        $totalTraveledKilometers = [];
+        for($i = 1; $i <=12; $i++){
+            $totalTraveledKilometers[$i] = DB::table('car_supplies')
+                ->whereBetween('date', [Carbon::create($year, $i, 1),Carbon::create($year,$i)->endOfMonth()])
+                ->where('car_id', $car_id)
+                ->sum('traveled_kilometers');
+
+        }
+        return $totalTraveledKilometers;
+    }
+
+    function calcTraveledKilometers($year, $car_id){
+        $totalTraveledKilometers = [];
+        for($i = 1; $i <=12; $i++){
+            $totalTraveledKilometers[$i] = DB::table('car_supplies')
+                ->whereBetween('date', [Carbon::create($year, $i, 1),Carbon::create($year,$i)->endOfMonth()])
+                ->where('car_id', $car_id)
+                ->get(['kilometer']);
+
+        }
+        return $totalTraveledKilometers;
     }
 }

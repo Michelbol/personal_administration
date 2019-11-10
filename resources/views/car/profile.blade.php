@@ -4,12 +4,16 @@
 <div class="container">
     <div class="chart-container" style="position: relative; height:40vh; width:80vw">
         <canvas id="car-supply"></canvas>
+        <canvas id="car-litters"></canvas>
+        <canvas id="car-averages"></canvas>
     </div>
 </div>
 @endsection
 @push('scripts')
     <script>
-        var carSupply = [{!! $carSupply !!}];
+        let carSupply = [{!! $totalPaid !!}];
+        let liters = [{!! $liters !!}];
+        let averages = [{!! $averages !!}];
     </script>
     <script src="{{ asset('js/car/profile.js') }}"></script>
 @endpush

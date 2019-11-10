@@ -36,6 +36,7 @@ class CarSupplyController extends Controller
         $carSupply->date          = $validData['date'];
         $carSupply->fuel          = $request->get('fuel', FuelEnum::Gasolina);
         $carSupply->gas_station   = $validData['gas_station'];
+        $carSupply->calcTraveledKilometer();
         $carSupply->save();
         Session::flash('message', ['msg' => 'Abastecimento incluido com sucesso', 'type' => 'success']);
         return redirect()->routeTenant('car_supply.index',['car_id' => $carSupply->car_id]);
@@ -61,6 +62,7 @@ class CarSupplyController extends Controller
         $carSupply->date          = $validData['date'];
         $carSupply->fuel          = $request->get('fuel', FuelEnum::Gasolina);
         $carSupply->gas_station   = $validData['gas_station'];
+        $carSupply->calcTraveledKilometer();
         $carSupply->save();
         Session::flash('message', ['msg' => 'Abastecimento Atualizado com sucesso', 'type' => 'success']);
         return redirect()->routeTenant('car_supply.index',['car_id' => $carSupply->car_id]);
