@@ -168,7 +168,7 @@ class CarSupply extends Model
      * @param $car_id
      * @return array
      */
-    static function calcMonthlyAverage($year, $car_id){
+    static function calcMonthlyTraveledKilometers($year, $car_id){
         $totalTraveledKilometers = [];
         for($i = 1; $i <=12; $i++){
             $totalTraveledKilometers[$i] = DB::table('car_supplies')

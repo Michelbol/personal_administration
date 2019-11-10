@@ -99,13 +99,21 @@ class CarController extends Controller
 
     public function profile($tenant, $id){
         $year = Carbon::now()->year;
-        $totalPaid = CarSupply::calcMonthlyTotalPaid($year, $id);
-        $totalPaid = collect($totalPaid)->implode(',');
         $liters = CarSupply::calcMonthlyLiters($year, $id);
+        $totalPaid = CarSupply::calcMonthlyTotalPaid($year, $id);
+        $traveledKilometers = CarSupply::calcMonthlyTraveledKilometers($year, $id);
+        $averages = [];
+        foreach ($liters as $index => $liter){
+            $averages[$index] = 0;
+            if($liter > 0){
+                $averages[$index] = $traveledKilometers[$index] / $liter;
+            }
+        }
         $liters = collect($liters)->implode(',');
-        $averages = CarSupply::calcMonthlyAverage($year, $id);
         $averages = collect($averages)->implode(',');
-        
-        return view('car.profile', compact('totalPaid', 'liters', 'averages'));
+        $totalPaid = collect($totalPaid)->implode(',');
+        $traveledKilometers = collect($traveledKilometers)->implode(',');
+
+        return view('car.profile', compact('totalPaid', 'liters', 'traveledKilometers', 'averages'));
     }
 }
