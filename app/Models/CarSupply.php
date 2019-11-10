@@ -181,14 +181,14 @@ class CarSupply extends Model
     }
 
     function calcTraveledKilometer(){
-        if(isset($this->kilometer)){
+        if(isset($this->attributes['kilometer'])){
             $lastSupply = CarSupply::where('date', '<', $this->attributes['date'])
                 ->orderByDesc('date')
                 ->first(['kilometer']);
             if(isset($lastSupply)){
                 $km = $lastSupply->getOriginal('kilometer');
                 if(isset($km)){
-                    $this->traveled_kilometers = floatval($this->kilometer) - floatval($km);
+                    $this->traveled_kilometers = floatval($this->attributes['kilometer']) - floatval($km);
                     return $this->traveled_kilometers;
                 }
             }
