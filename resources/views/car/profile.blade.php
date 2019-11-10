@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <div class="chart-container" style="position: relative; height:40vh; width:80vw">
+    <div class="chart-container" style="position: relative; height:20vh; width:40vw">
         <canvas id="car-supply"></canvas>
         <canvas id="car-litters"></canvas>
         <canvas id="car-traveled-kilometers"></canvas>
