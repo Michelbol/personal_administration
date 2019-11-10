@@ -42,7 +42,9 @@ class TypeBankAccountPosting extends Model
         'ES DB ACC'     => 1,
         'SAQUE ATM'     => 8,
         'SAQ CARTAO'    => 8,
-        'SEGURADORA'    => 9
+        'SEGURADORA'    => 9,
+        'CRED FGTS'     => 10,
+        'ABONO PIS'     => 11,
     ];
     protected $fillable = [
         'name'
