@@ -45,7 +45,9 @@ class BankAccountPosting extends Model
         'type',
         'type_bank_account_posting_id',
         'account_balance',
-        'bank_account_id'
+        'bank_account_id',
+        'income_id',
+        'expense_id',
     ];
 
     public function bankAccount()

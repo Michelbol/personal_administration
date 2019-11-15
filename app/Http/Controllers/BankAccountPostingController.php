@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Bank;
 use App\Models\BankAccount;
 use App\Models\BankAccountPosting;
+use App\Models\Expenses;
+use App\Models\Income;
 use App\Models\TypeBankAccountPosting;
 use App\Ofx;
 use App\Utilitarios;
@@ -25,9 +27,17 @@ class BankAccountPostingController extends Controller
      */
     public function index($tenant, $id)
     {
-        $filter_type_bank_account_postings = TypeBankAccountPosting::all();
+        $filterTypeBankAccountPostings = TypeBankAccountPosting::all();
         $bankAccount            = BankAccount::find($id);
-        return view('bank_account_posting.index', compact('bankAccount', 'filter_type_bank_account_postings'));
+        $incomes                = Income::all(['id', 'name']);
+        $expenses               = Expenses::all(['id', 'name']);
+        $variables = [
+          'bankAccount' => $bankAccount,
+          'filterTypeBankAccountPostings' => $filterTypeBankAccountPostings,
+          'incomes' => $incomes,
+          'expenses' => $expenses
+        ];
+        return view('bank_account_posting.index', $variables);
     }
 
     /**
@@ -65,6 +75,8 @@ class BankAccountPostingController extends Controller
             $bankAccountPosting->type = $data['type'];
             $bankAccountPosting->type_bank_account_posting_id = $data['type_bank_account_posting_id'];
             $bankAccountPosting->bank_account_id = $data['bank_account_id'];
+            $bankAccountPosting->income_id = $request->get('income_id', null);
+            $bankAccountPosting->expense_id = $request->get('expense_id', null);
             $balance = BankAccountPosting::where('bank_account_id', $bankAccountPosting->bank_account_id)
                 ->where($where_balance)
                 ->orderBy('posting_date', 'desc')

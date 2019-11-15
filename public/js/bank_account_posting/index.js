@@ -82,3 +82,15 @@ function cleanModal(){
     $('#type').val('C');
     $('#type_bank_account_posting_id').val('');
 }
+
+$('#type').on('change', function () {
+    if($(this).val() === 'C'){
+        $('#income_id_div').css('display', 'block');
+        $('#expense_id_div').css('display', 'none');
+        $('#expense_id').val(null);
+    }else{
+        $('#income_id_div').css('display', 'none');
+        $('#expense_id_div').css('display', 'block');
+        $('#income_id').val(null);
+    }
+});

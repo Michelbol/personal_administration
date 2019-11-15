@@ -49,6 +49,7 @@ class BudgetFinancialController extends Controller
                         ->get();
                 }
             }else{
+                $budgedFinancials = [];
                 $index_expenses = routeTenant('expense.index');
                 $index_incomes = routeTenant('income.index');
                 \Session::flash('message', [
