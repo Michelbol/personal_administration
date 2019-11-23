@@ -1,9 +1,10 @@
 var $MODAL_BUDGET_FINANCIAL_POSTING = $('#add_budget_financial_posting');
+var datatable;
 
 $(document).ready(function(){
-    $('#initial_balance').trigger('input')
-});
-var datatable = $('#table_expense').DataTable({
+    $('#initial_balance').trigger('input');
+
+    datatable = $('#table_expense').DataTable({
         processing: true,
         serverSide: true,
         searching: false,
@@ -36,8 +37,9 @@ var datatable = $('#table_expense').DataTable({
                 }, 0 );
             let sinal = amountTotal >= 0 ? "" : "- ";
             $( api.column( 4 ).footer() ).html(sinal+"R$: "+$('.money').masked(amountTotal.toFixed(2)));
-            }
-        });
+        }
+    });
+});
 
 $HTML.on('click', '.open-modal-budget-financial-posting', function(){
     let budgetfinancialposting = datatable.row($(this).closest('tr')[0]).data();

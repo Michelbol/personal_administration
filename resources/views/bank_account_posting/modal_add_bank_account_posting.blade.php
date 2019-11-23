@@ -37,10 +37,34 @@
                                 <label for="type_bank_account_posting_id">Tipo de Lançamento</label>
                                 <select name="type_bank_account_posting_id" id="type_bank_account_posting_id" class="form-control">
                                     <option value="">Informe um tipo</option>
-                                    @foreach($filter_type_bank_account_postings as $type_bank_account_postings)
-                                        <option value="{{$type_bank_account_postings->id}}">{{$type_bank_account_postings->name}}</option>
+                                    @foreach($filterTypeBankAccountPostings as $typeBankAccountPosting)
+                                        <option value="{{$typeBankAccountPosting->id}}">{{$typeBankAccountPosting->name}}</option>
                                     @endforeach
                                 </select>
+                            </div>
+                            <div class="col-4 form-group" id="income_id_div">
+                                <label for="income_id">Receitas
+                                    <a href="#" id="add_new_income"><i class="fas fa-plus-circle"></i>Nova Receita</a></label>
+                                <select class="form-control" id="income_id" name="income_id">
+                                    <option value="">Informe uma receita</option>
+                                    @foreach($incomes as $income)
+                                        <option value="{{ $income->id }}"> {{ $income->name }}</option>
+                                    @endforeach
+                                </select>
+                                <input class="form-control" placeholder="Digite o nome da receita" type="text"
+                                       id="new_income" name="new_income" style="display: none">
+                            </div>
+                            <div class="col-4 form-group" id="expense_id_div" style="display: none">
+                                <label for="expense_id">Despesas
+                                    <a href="#" id="add_new_expense"><i class="fas fa-plus-circle"></i>Nova Despesa</a></label>
+                                <select class="form-control" id="expense_id" name="expense_id">
+                                    <option value="">Informe uma despesa</option>
+                                    @foreach($expenses as $expense)
+                                        <option value="{{ $expense->id }}"> {{ $expense->name }}</option>
+                                    @endforeach
+                                </select>
+                                <input class="form-control" placeholder="Digite o nome da despesa" type="text"
+                                       id="new_expense" name="new_expense" style="display: none">
                             </div>
                         </div>
                     </form>

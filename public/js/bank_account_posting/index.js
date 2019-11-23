@@ -1,9 +1,12 @@
-$('input[name="dates"]').daterangepicker(configDataRangePicker());
-$('#dates').val(null);
+let $DATES = $('#dates');
+let $TYPE = $('#type');
 
-$('#dates').on('cancel.daterangepicker', function(ev, picker) {
+$('input[name="dates"]').daterangepicker(configDataRangePicker());
+$DATES.val(null);
+
+$DATES.on('cancel.daterangepicker', function(ev, picker) {
     //do something, like clearing an input
-    $('#dates').val('');
+    $DATES.val('');
 });
 
 $('html').on('click', '.modal-edit', function(){
@@ -12,7 +15,6 @@ $('html').on('click', '.modal-edit', function(){
         method: "GET"
     });
     request.done(function (data) {
-       console.log(data);
        fillModal(data.bankAccountPosting);
         $('#add_bank_account_posting').modal('show');
     });
@@ -70,8 +72,10 @@ function fillModal(bank_account_posting){
     $('#document')                      .val(bank_account_posting.document);
     $('#posting_date')                  .val(moment(bank_account_posting.posting_date, "YYYY-MM-DD HH:mm:ss").format('DD/MM/YYYY HH:mm'));
     $('#amount')                        .val(bank_account_posting.amount);
-    $('#type')                          .val(bank_account_posting.type);
+    $TYPE                               .val(bank_account_posting.type).change();
     $('#type_bank_account_posting_id')  .val(bank_account_posting.type_bank_account_posting_id);
+    $('#expense_id')                    .val(bank_account_posting.expense_id);
+    $('#income_id')                     .val(bank_account_posting.income_id);
 }
 
 function cleanModal(){
@@ -79,6 +83,29 @@ function cleanModal(){
     $('#document').val('');
     $('#posting_date').val(moment().format('DD/MM/YYYY HH:mm'));
     $('#amount').val('');
-    $('#type').val('C');
+    $TYPE.val('C');
     $('#type_bank_account_posting_id').val('');
+    $('income_id').val(null);
+    $('expense_id').val(null);
 }
+
+$TYPE.on('change', function () {
+    if($(this).val() === 'C'){
+        $('#income_id_div').css('display', 'block');
+        $('#expense_id_div').css('display', 'none');
+        $('#expense_id').val(null);
+    }else{
+        $('#income_id_div').css('display', 'none');
+        $('#expense_id_div').css('display', 'block');
+        $('#income_id').val(null);
+    }
+});
+
+$('#add_new_income').on('click', function(){
+    $('#income_id').toggle();
+    $('#new_income').toggle();
+});
+$('#add_new_expense').on('click', function(){
+    $('#expense_id').toggle();
+    $('#new_expense').toggle();
+});

@@ -49,5 +49,5 @@
 </div>
 
 @push('scripts')
-    <script src="{{ asset('js/car/supply/scripts.js') }}"></script>
+    <script src="{{ asset('js/car/supply/form.js') }}"></script>
 @endpush
