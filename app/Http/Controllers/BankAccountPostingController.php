@@ -2,35 +2,62 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Bank;
-use App\Models\BankAccount;
-use App\Models\BankAccountPosting;
-use App\Models\Expenses;
-use App\Models\Income;
-use App\Models\TypeBankAccountPosting;
+use \Session;
 use App\Ofx;
-use App\Utilitarios;
+use \Exception;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
+use App\Utilitarios;
+use App\Models\Bank;
+use App\Models\Income;
+use App\Models\Expenses;
+use App\Models\BankAccount;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Monolog\Handler\Curl\Util;
-use PHPUnit\Util\Type;
+use Illuminate\Http\Response;
 use Yajra\DataTables\DataTables;
+use App\Models\BankAccountPosting;
+use Illuminate\Support\Facades\DB;
+use App\Models\TypeBankAccountPosting;
+use Illuminate\Database\Eloquent\Builder;
 
 class BankAccountPostingController extends Controller
 {
+
+    protected $db;
+    protected $income;
+    protected $session;
+    protected $expenses;
+    protected $bankAccount;
+    protected $utilitarios;
+    protected $bankAccountPosting;
+    protected $typeBankAccountPosting;
+
+    public function __construct(TypeBankAccountPosting $typeBankAccountPosting, DB $db, BankAccount $bankAccount,
+                                Income $income, Expenses $expenses, BankAccountPosting $bankAccountPosting,
+                                Utilitarios $utilitarios, Session $session)
+    {
+        $this->db = $db;
+        $this->income = $income;
+        $this->session = $session;
+        $this->expenses = $expenses;
+        $this->bankAccount = $bankAccount;
+        $this->utilitarios = $utilitarios;
+        $this->bankAccountPosting = $bankAccountPosting;
+        $this->typeBankAccountPosting = $typeBankAccountPosting;
+    }
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param $tenant
+     * @param $id
+     * @return Response
      */
     public function index($tenant, $id)
     {
-        $filterTypeBankAccountPostings = TypeBankAccountPosting::all();
-        $bankAccount            = BankAccount::find($id);
-        $incomes                = Income::all(['id', 'name']);
-        $expenses               = Expenses::all(['id', 'name']);
+        $filterTypeBankAccountPostings = $this->typeBankAccountPosting::all();
+        $bankAccount            = $this->bankAccount::find($id);
+        $incomes                = $this->income::all(['id', 'name']);
+        $expenses               = $this->expenses::all(['id', 'name']);
         $variables = [
           'bankAccount' => $bankAccount,
           'filterTypeBankAccountPostings' => $filterTypeBankAccountPostings,
@@ -41,43 +68,48 @@ class BankAccountPostingController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
+     * @throws Exception
      */
     public function store(Request $request)
     {
         try{
-            DB::beginTransaction();
+            $this->db::beginTransaction();
             $data = $request->all();
             $where_balance = [];
             if(isset($data['id']) && $data['id'] > 0){
-                $bankAccountPosting = BankAccountPosting::find($data['id']);
+                $bankAccountPosting = $this->bankAccountPosting::find($data['id']);
                 array_push($where_balance, ['id', '!=', $data['id']]);
             }else{
-                $bankAccountPosting = new BankAccountPosting();
+                $bankAccountPosting = new $this->bankAccountPosting();
+            }
+            if(isset($data['new_income'])){
+                $income = $this->income::create([
+                    'name' => $data['new_income'],
+                    'amount' => $this->utilitarios::formatReal($data['amount'])
+                ]);
+                $data['income_id'] = $income->id;
+            }
+            if(isset($data['new_expense'])){
+                $expense = $this->expenses::create([
+                    'name' => $data['new_expense'],
+                    'amount' => $this->utilitarios::formatReal($data['amount'])
+                ]);
+                $data['expense_id'] = $expense->id;
             }
             $bankAccountPosting->document = $data['document'];
-            $bankAccountPosting->posting_date = Utilitarios::formatDataCarbon($data['posting_date']);
+            $bankAccountPosting->posting_date = $this->utilitarios::formatDataCarbon($data['posting_date']);
             array_push($where_balance, ['posting_date', '<=', $bankAccountPosting->posting_date]);
-            $bankAccountPosting->amount = Utilitarios::formatReal($data['amount']);
+            $bankAccountPosting->amount = $this->utilitarios::formatReal($data['amount']);
             $bankAccountPosting->type = $data['type'];
             $bankAccountPosting->type_bank_account_posting_id = $data['type_bank_account_posting_id'];
             $bankAccountPosting->bank_account_id = $data['bank_account_id'];
-            $bankAccountPosting->income_id = $request->get('income_id', null);
-            $bankAccountPosting->expense_id = $request->get('expense_id', null);
-            $balance = BankAccountPosting::where('bank_account_id', $bankAccountPosting->bank_account_id)
+            $bankAccountPosting->income_id = $data['income_id'];
+            $bankAccountPosting->expense_id = $data['expense_id'];
+            $balance = $this->bankAccountPosting::where('bank_account_id', $bankAccountPosting->bank_account_id)
                 ->where($where_balance)
                 ->orderBy('posting_date', 'desc')
                 ->orderBy('id', 'desc')->first();
@@ -89,11 +121,12 @@ class BankAccountPostingController extends Controller
             }
             $bankAccountPosting->save();
             $this->recalcSaldo($bankAccountPosting->posting_date, $bankAccountPosting->bank_account_id);
-            DB::commit();
-            \Session::flash('message', ['msg' => 'Lançamento Salvo com sucesso', 'type' => 'success']);
+            $this->db::commit();
+            $this->session::flash('message', ['msg' => 'Lançamento Salvo com sucesso', 'type' => 'success']);
             return redirect()->routeTenant('bank_account_posting.index', [$bankAccountPosting->bank_account_id]);
-        }catch (\Exception $e){
-            \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
+        }catch (Exception $e){
+            $this->db::rollBack();
+            $this->session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
             return redirect()->back();
         }
     }
@@ -102,7 +135,7 @@ class BankAccountPostingController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show($tenant, $id)
     {
@@ -114,7 +147,7 @@ class BankAccountPostingController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit($id)
     {
@@ -124,9 +157,9 @@ class BankAccountPostingController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update($tenant, Request $request, $id)
     {
@@ -137,7 +170,7 @@ class BankAccountPostingController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($id)
     {
@@ -160,9 +193,9 @@ class BankAccountPostingController extends Controller
                 $item->save();
             }
             DB::commit();
-        }catch(\Exception $e){
+        }catch(Exception $e){
             DB::rollBack();
-            \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
+            Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
             return redirect()->routeTenant('bank_account_posting.file');
         }
     }
@@ -183,11 +216,11 @@ class BankAccountPostingController extends Controller
                 }
             }
             DB::commit();
-            \Session::flash('message', ['msg' => 'Arquivo(s) Lido(s) Com Sucesso', 'type' => 'success']);
+            Session::flash('message', ['msg' => 'Arquivo(s) Lido(s) Com Sucesso', 'type' => 'success']);
             return redirect()->routeTenant('bank_account_posting.file');
-        }catch(\Exception $e){
+        }catch(Exception $e){
             DB::rollBack();
-            \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
+            Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
             return redirect()->routeTenant('bank_account_posting.file');
         }
     }
@@ -208,7 +241,7 @@ class BankAccountPostingController extends Controller
             }
         }
         if(sizeof($type_bank_account_posting_not_saves) !== 0){
-            throw new \Exception('\nExistem tipos não salvos: '.implode(",", $type_bank_account_posting_not_saves));
+            throw new Exception('\nExistem tipos não salvos: '.implode(",", $type_bank_account_posting_not_saves));
         }
     }
 
@@ -268,7 +301,7 @@ class BankAccountPostingController extends Controller
             }
         }
         if(sizeof($type_bank_account_posting_not_saves) !== 0){
-            throw new \Exception('\nExistem tipos não salvos: '.implode(",", $type_bank_account_posting_not_saves));
+            throw new Exception('\nExistem tipos não salvos: '.implode(",", $type_bank_account_posting_not_saves));
         }
     }
 
@@ -280,7 +313,7 @@ class BankAccountPostingController extends Controller
             $header[4] === '"Valor"' &&
             str_replace("\n", '', $header[5]) === '"Deb_Cred"'){
         }else{
-            throw new \Exception('Arquivo inválido');
+            throw new Exception('Arquivo inválido');
         }
     }
     function mountBankAccount($data){
@@ -376,7 +409,7 @@ class BankAccountPostingController extends Controller
                 ->rawColumns(['actions'])
                 ->toJson();
             return $response->original;
-        }catch (\Exception $e){
+        }catch (Exception $e){
             dd('erro!'.$e->getMessage());
         }
     }

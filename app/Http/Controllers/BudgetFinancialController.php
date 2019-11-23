@@ -254,4 +254,9 @@ class BudgetFinancialController extends Controller
             $budgetFinancialPosting->save();
         }
     }
+
+    public function closeMonth($tenant, $id)
+    {
+
+    }
 }

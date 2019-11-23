@@ -37,8 +37,8 @@
                                 <label for="type_bank_account_posting_id">Tipo de Lançamento</label>
                                 <select name="type_bank_account_posting_id" id="type_bank_account_posting_id" class="form-control">
                                     <option value="">Informe um tipo</option>
-                                    @foreach($filterTypeBankAccountPostings as $type_bank_account_postings)
-                                        <option value="{{$typeBankAccountPostings->id}}">{{$typeBankAccountPostings->name}}</option>
+                                    @foreach($filterTypeBankAccountPostings as $typeBankAccountPosting)
+                                        <option value="{{$typeBankAccountPosting->id}}">{{$typeBankAccountPosting->name}}</option>
                                     @endforeach
                                 </select>
                             </div>

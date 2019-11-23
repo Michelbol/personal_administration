@@ -14,11 +14,11 @@ class AddColumnsToBankAccountPostings extends Migration
     public function up()
     {
         Schema::table('bank_account_postings', function (Blueprint $table) {
-            $table->unsignedBigInteger('income_id');
-            $table->unsignedBigInteger('expense_id');
+            $table->unsignedBigInteger('income_id')->nullable();
+            $table->unsignedBigInteger('expense_id')->nullable();
 
             $table->foreign('income_id')->references('id')->on('incomes');
-            $table->foreign('expense_id')->references('id')->on('incomes');
+            $table->foreign('expense_id')->references('id')->on('expenses');
         });
     }
 
