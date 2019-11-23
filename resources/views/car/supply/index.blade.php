@@ -28,24 +28,8 @@
 @endsection
 
 @push('scripts')
-<script>
-    $('#table_car_supplies').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: '{!! routeTenant('car_supply.get', ['car_id' => $car->id]) !!}',
-        columns: [
-            { data: 'id', name: 'id' },
-            { data: 'kilometer', name: 'kilometer' },
-            { data: 'liters', name: 'liters' },
-            { data: 'total_paid', name: 'total_paid' },
-            { data: 'date', name: 'date' },
-            { data: 'fuel', name: 'fuel' },
-            { data: 'gas_station', name: 'gas_station' },
-            { data: 'actions', name: 'actions' }
-        ],
-        columnDefs:[
-            { className: 'text-center', targets: [2] }
-        ]
-    });
-</script>
+    <script>
+        let carSuppliesUrlDataTables = '{!! routeTenant('car_supply.get', ['car_id' => $car->id]) !!}';
+    </script>
+    <script src="{{ asset('js/car/supply/index.js') }}"></script>
 @endpush

@@ -49,6 +49,7 @@ class BudgetFinancialController extends Controller
                         ->get();
                 }
             }else{
+                $budgedFinancials = [];
                 $index_expenses = routeTenant('expense.index');
                 $index_incomes = routeTenant('income.index');
                 \Session::flash('message', [
@@ -252,5 +253,10 @@ class BudgetFinancialController extends Controller
             $budgetFinancialPosting->budget_financial_id = $budgetFinancial->id;
             $budgetFinancialPosting->save();
         }
+    }
+
+    public function closeMonth($tenant, $id)
+    {
+
     }
 }

@@ -26,7 +26,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $bankAccounts = BankAccount::all();
+        $bankAccounts = BankAccount::with('bank:id,title_color,body_color')->get(['id', 'name', 'bank_id']);
         $cars = Car::all(['id', 'license_plate', 'model']);
         $total_cars = Car::count();
         return view('home', compact('bankAccounts', 'total_cars', 'cars'));

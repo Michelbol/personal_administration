@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model as Eloquent;
 
 /**
  * App\Models\BankAccountPosting
@@ -34,7 +35,8 @@ use Illuminate\Database\Eloquent\Builder;
  * @method static Builder|BankAccountPosting whereType($value)
  * @method static Builder|BankAccountPosting whereTypeBankAccountPostingId($value)
  * @method static Builder|BankAccountPosting whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
+ * @mixin Builder
  */
 class BankAccountPosting extends Model
 {
@@ -45,7 +47,9 @@ class BankAccountPosting extends Model
         'type',
         'type_bank_account_posting_id',
         'account_balance',
-        'bank_account_id'
+        'bank_account_id',
+        'income_id',
+        'expense_id',
     ];
 
     public function bankAccount()
