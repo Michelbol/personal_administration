@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
  * App\Models\BankAccountPosting
  *
  * @property int $id
+ * @property int|null $income_id
+ * @property int|null $expense_id
  * @property string $document
  * @property string $posting_date
  * @property float $amount
@@ -35,6 +37,8 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
  * @method static Builder|BankAccountPosting whereType($value)
  * @method static Builder|BankAccountPosting whereTypeBankAccountPostingId($value)
  * @method static Builder|BankAccountPosting whereUpdatedAt($value)
+ * @method static Builder|BankAccountPosting whereExpenseId($value)
+ * @method static Builder|BankAccountPosting whereIncomeId($value)
  * @mixin Eloquent
  * @mixin Builder
  */

@@ -2,23 +2,41 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BudgetFinancial;
-use App\Models\BudgetFinancialPosting;
-use App\Models\Expenses;
-use App\Models\Income;
-use App\Models\UserTenant;
+use App\Models\BankAccountPosting;
+use App\Models\Enum\SessionEnum;
+use \Session;
+use \Exception;
 use App\Utilitarios;
+use App\Models\Income;
+use App\Models\Expenses;
+use Illuminate\View\View;
+use App\Models\UserTenant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
+use App\Models\BudgetFinancial;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\View\Factory;
+use App\Models\BudgetFinancialPosting;
 
 class BudgetFinancialController extends Controller
 {
+    protected $budgetFinancial;
+    protected $bankAccountPosting;
+    protected $budgetFinancialPosting;
+
+    public function __construct(BudgetFinancial $budgetFinancial, BankAccountPosting $bankAccountPosting, BudgetFinancialPosting $budgetFinancialPosting)
+    {
+        $this->budgetFinancial = $budgetFinancial;
+        $this->bankAccountPosting = $bankAccountPosting;
+        $this->budgetFinancialPosting = $budgetFinancialPosting;
+    }
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse|Factory|View
      */
     public function index($tenant, Request $request)
     {
@@ -125,7 +143,7 @@ class BudgetFinancialController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Factory|View
      */
     public function edit($tenant, $id)
     {
@@ -255,8 +273,42 @@ class BudgetFinancialController extends Controller
         }
     }
 
-    public function closeMonth($tenant, $id)
+    /**
+     * @param $tenant
+     * @param $id
+     * @return RedirectResponse
+     */
+    public function budgetFinancialMonthByBankAccount($tenant, $id)
     {
-
+        /**
+         * @var $budgetFinancialPosting BudgetFinancialPosting
+         * @var $budgetFinancial BudgetFinancial
+         */
+        $budgetFinancial = $this->budgetFinancial::findOrFail($id, ['id', 'month', 'year']);
+        $budgetFinancialPostings = $budgetFinancial->budgetFinancialPostings;
+        try{
+            foreach ($budgetFinancialPostings as $budgetFinancialPosting){
+                $budgetFinancialPosting->delete();
+            }
+        }catch (Exception $e){
+            Session::flash('message', ['msg' => 'Erro para resetar o orçamento.', 'type' => SessionEnum::error]);
+            return redirect()->back();
+        }
+        $startMonth = Carbon::create($budgetFinancial->year, $budgetFinancial->month)->firstOfMonth();
+        $endMonth = Carbon::create($budgetFinancial->year, $budgetFinancial->month)->lastOfMonth();
+        $bankAccountPostings = $this->bankAccountPosting->whereBetween('posting_date', [$startMonth, $endMonth])->get();
+        foreach ($bankAccountPostings as $bankAccountPosting){
+            $budgetFinancialPosting = new $this->budgetFinancialPosting();
+            $budgetFinancialPosting->budget_financial_id = $budgetFinancial->id;
+            $budgetFinancialPosting->income_id = $bankAccountPosting->income_id;
+            $budgetFinancialPosting->expense_id = $bankAccountPosting->expense_id;
+            $budgetFinancialPosting->posting_date = $bankAccountPosting->posting_date;
+            $budgetFinancialPosting->amount = $bankAccountPosting->amount;
+            $budgetFinancialPosting->account_balance = 0;
+            $budgetFinancialPosting->save();
+        }
+        $budgetFinancialPosting::recalcBalance($budgetFinancial);
+        Session::flash('message', ['msg' => 'Orçamento reiniciado com sucesso!', 'type' => SessionEnum::success]);
+        return redirect()->routeTenant('budget_financial.edit', ['id' => $budgetFinancial->id]);
     }
 }
