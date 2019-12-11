@@ -18,6 +18,7 @@
                 <div class="input-group-btn" style="padding-top: 30px ;">
                     <button class="btn btn-primary" id="save_initial_balance" disabled>Aplicar Saldo Informado</button>
                     <a class="btn btn-info" href="{{ routeTenant('budget_financial.last_month' , ['id' => $budgetFinancial->id]) }}">Aplicar Saldo do mês anterior</a>
+                    <a class="btn btn-dark" href="{{ routeTenant('budget_financial.restart' , ['id' => $budgetFinancial->id]) }}">Reiniciar</a>
                 </div>
 
             </div>
