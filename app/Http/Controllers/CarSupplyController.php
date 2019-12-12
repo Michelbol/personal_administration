@@ -82,7 +82,7 @@ class CarSupplyController extends Controller
 
     public function get(){
         try{
-            $model = CarSupply::select(['id', 'kilometer', 'liters', 'total_paid', 'date', 'fuel', 'gas_station']);
+            $model = CarSupply::select(['id', 'kilometer', 'liters', 'total_paid', 'date', 'fuel', 'gas_station'])->orderByDesc('date');
 
             $response = DataTables::of($model)
                 ->addColumn('actions', function ($model){
