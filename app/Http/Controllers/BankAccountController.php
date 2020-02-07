@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Enum\SessionEnum;
-use \Session;
 use \Exception;
 use Carbon\Carbon;
-use App\Utilitarios;
 use Illuminate\View\View;
 use App\Models\BankAccount;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Yajra\DataTables\DataTables;
+use App\Models\Enum\SessionEnum;
 use Illuminate\Support\Facades\DB;
 use App\Models\BankAccountPosting;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Support\Facades\Session;
 
 class BankAccountController extends Controller
 {
