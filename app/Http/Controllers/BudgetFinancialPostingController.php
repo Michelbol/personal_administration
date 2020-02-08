@@ -70,7 +70,7 @@ class BudgetFinancialPostingController extends Controller
             BudgetFinancialPosting::recalcBalance(BudgetFinancial::find($budgetFinancialPosting->budget_financial_id));
             DB::commit();
             \Session::flash('message', ['msg' => 'Lançamento Salvo com sucesso', 'type' => 'success']);
-            return redirect()->routeTenant('budget_financial.edit', ['id' => $budgetFinancialPosting->budget_financial_id]);
+            return redirect()->routeTenant('budget_financial.edit', ['budget_financial' => $budgetFinancialPosting->budget_financial_id]);
         }catch (\Exception $e){
             \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
             return redirect()->back();
@@ -135,7 +135,7 @@ class BudgetFinancialPostingController extends Controller
             BudgetFinancialPosting::recalcBalance(BudgetFinancial::find($budgetFinancialPosting->budget_financial_id));
             DB::commit();
             \Session::flash('message', ['msg' => 'Lançamento Atualizado com sucesso', 'type' => 'success']);
-            return redirect()->routeTenant('budget_financial.edit', ['id' => $budgetFinancialPosting->budget_financial_id]);
+            return redirect()->routeTenant('budget_financial.edit', ['budget_financial' => $budgetFinancialPosting->budget_financial_id]);
         }catch (\Exception $e){
             \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
             return redirect()->back();
@@ -155,7 +155,7 @@ class BudgetFinancialPostingController extends Controller
             $budget_financial_posting->delete();
             BudgetFinancialPosting::recalcBalance(BudgetFinancial::find($budget_financial_posting->budget_financial_id));
             \Session::flash('message', ['msg' => 'Lançamento deletado com sucesso', 'type' => 'success']);
-            return redirect()->routeTenant('budget_financial.edit', ['id' => $budget_financial_posting->budget_financial_id]);
+            return redirect()->routeTenant('budget_financial.edit', ['budget_financial' => $budget_financial_posting->budget_financial_id]);
         }catch (\Exception $e){
             \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
             return redirect()->back();
@@ -214,7 +214,7 @@ class BudgetFinancialPostingController extends Controller
                 ->addColumn('actions', function($model){
                     return Utilitarios::getBtnAction([
                         ['type'=>'others', 'name' => 'open-modal-budget-financial-posting', 'class' => 'fa fa-edit', 'disabled' => true,'tooltip' => 'Editar'],
-                        ['url' => routeTenant('budget_financial_posting.destroy', ['id' => $model->id]), 'id' => $model->id,'type'=>'delete', 'name' => '<i class="fa fa-times"></i>', 'class' => 'btn', 'disabled' => true,'tooltip' => 'Excluir'],
+                        ['url' => routeTenant('budget_financial_posting.destroy', ['budget_financial_posting' => $model->id]), 'id' => $model->id,'type'=>'delete', 'name' => '<i class="fa fa-times"></i>', 'class' => 'btn', 'disabled' => true,'tooltip' => 'Excluir'],
                     ]);
                 })
                 ->rawColumns(['actions', 'isFixed'])

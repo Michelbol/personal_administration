@@ -158,8 +158,8 @@ class IncomeController extends Controller
                 })
                 ->addColumn('actions', function ($model){
                     return Utilitarios::getBtnAction([
-                        ['type'=>'edit', 'url' => routeTenant('income.edit',['id' => $model->id])],
-                        ['type'=>'delete', 'url' => routeTenant('income.destroy',['id' => $model->id]), 'id' => $model->id]
+                        ['type'=>'edit', 'url' => routeTenant('income.edit',['income' => $model->id])],
+                        ['type'=>'delete', 'url' => routeTenant('income.destroy',['income' => $model->id]), 'id' => $model->id]
                     ]);
                 })
                 ->rawColumns(['actions', 'isFixed'])

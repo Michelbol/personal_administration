@@ -171,9 +171,9 @@ class BankAccountController extends Controller
                 ->blacklist(['actions'])
                 ->addColumn('actions', function ($model){
                     return getBtnAction([
-                        ['type'=>'edit', 'url' => routeTenant('bank_accounts.edit',['id' => $model->id])],
+                        ['type'=>'edit', 'url' => routeTenant('bank_accounts.edit',['bank_account' => $model->id])],
                         ['type'=>'other-a', 'url' => routeTenant('bank_account_posting.index',['id' => $model->id])],
-                        ['type'=>'delete', 'url' => routeTenant('bank_accounts.destroy',['id' => $model->id]), 'id' => $model->id]
+                        ['type'=>'delete', 'url' => routeTenant('bank_accounts.destroy',['bank_account' => $model->id]), 'id' => $model->id]
                     ]);
                 })
                 ->rawColumns([ 'actions'])
