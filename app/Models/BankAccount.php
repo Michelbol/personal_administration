@@ -60,9 +60,11 @@ class BankAccount extends Model
         return $this->belongsTo(Bank::class);
     }
 
-    static function calcAnnualInterest($bankAccountId){
+    static function calcAnnualInterest($bankAccountId, $year){
+        $firstDayYear = Carbon::create($year)->firstOfYear();
+        $endOfYear = Carbon::create($year)->lastOfYear();
         return Utilitarios::getFormatReal(DB::table('bank_account_postings')
-            ->whereBetween('posting_date', [Carbon::parse('first day of january'),Carbon::now()])
+            ->whereBetween('posting_date', [$firstDayYear,$endOfYear])
             ->where('type_bank_account_posting_id', 1)
             ->where('type', 'C')
             ->where('bank_account_id', $bankAccountId)

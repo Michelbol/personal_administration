@@ -24,11 +24,12 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
+        $year = $request->get('year', Carbon::now()->year);
         $bankAccounts = BankAccount::with('bank:id,title_color,body_color')->get(['id', 'name', 'bank_id']);
         $cars = Car::all(['id', 'license_plate', 'model']);
         $total_cars = Car::count();
-        return view('home', compact('bankAccounts', 'total_cars', 'cars'));
+        return view('home', compact('bankAccounts', 'total_cars', 'cars', 'year'));
     }
 }
