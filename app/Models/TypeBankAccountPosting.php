@@ -45,6 +45,7 @@ class TypeBankAccountPosting extends Model
         'SEGURADORA'    => 9,
         'CRED FGTS'     => 10,
         'ABONO PIS'     => 11,
+        'DP DINH AG'    => 4,
     ];
     protected $fillable = [
         'name'
