@@ -38,4 +38,15 @@
             </div>
         </div>
     </div>
+    <div class="container">
+        <form action="{{ routeTenant('home') }}">
+            <div class="col-2">
+                <label for="year">Year</label>
+                <input type="text" id="year" name="year" class="form-control" value="{{ $year }}">
+                <button class="btn btn-info" type="submit">Mudar o Ano</button>
+            </div>
+            <div class="col-2">
+            </div>
+        </form>
+    </div>
 @endsection
