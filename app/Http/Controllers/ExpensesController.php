@@ -158,8 +158,8 @@ class ExpensesController extends Controller
                 })
                 ->addColumn('actions', function ($model){
                     return Utilitarios::getBtnAction([
-                        ['type'=>'edit', 'url' => routeTenant('expense.edit',['id' => $model->id])],
-                        ['type'=>'delete', 'url' => routeTenant('expense.destroy',['id' => $model->id]), 'id' => $model->id]
+                        ['type'=>'edit', 'url' => routeTenant('expense.edit',['expense' => $model->id])],
+                        ['type'=>'delete', 'url' => routeTenant('expense.destroy',['expense' => $model->id]), 'id' => $model->id]
                     ]);
                 })
                 ->rawColumns(['actions', 'isFixed'])

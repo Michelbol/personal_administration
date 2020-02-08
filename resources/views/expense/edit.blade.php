@@ -4,7 +4,7 @@
     <div class="container">
         <h3>Editar Despesa</h3>
 
-        <form action="{{ routeTenant('expense.update', ['id' => $expense->id]) }}" method="POST">
+        <form action="{{ routeTenant('expense.update', ['expense' => $expense->id]) }}" method="POST">
             {{ csrf_field() }}
             <input type="hidden" name="_method" value="PUT">
             @include('expense._form')
