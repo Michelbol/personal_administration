@@ -309,6 +309,6 @@ class BudgetFinancialController extends Controller
         }
         $budgetFinancialPosting::recalcBalance($budgetFinancial);
         Session::flash('message', ['msg' => 'Orçamento reiniciado com sucesso!', 'type' => SessionEnum::success]);
-        return redirect()->routeTenant('budget_financial.edit', ['id' => $budgetFinancial->id]);
+        return redirect()->routeTenant('budget_financial.edit', ['budget_financial' => $budgetFinancial->id]);
     }
 }
