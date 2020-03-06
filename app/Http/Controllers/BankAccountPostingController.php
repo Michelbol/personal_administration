@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\KeyFileTypeBankAccountPosting;
 use \Session;
 use App\Ofx;
 use \Exception;
@@ -258,6 +259,12 @@ class BankAccountPostingController extends Controller
     function mountBankAccountPostingOfx($transactions, TypeBankAccountPosting $typeBankAccountPosting, BankAccount $bankAccount){
         $bankAccountPosting = new BankAccountPosting();
         $keyFileTypeBankAccountPosting = $typeBankAccountPosting->getType((string)$transactions->MEMO);
+        if($keyFileTypeBankAccountPosting === 0){
+            $keyFileTypeBankAccountPosting = new KeyFileTypeBankAccountPosting();
+            $keyFileTypeBankAccountPosting->type_id = 0;
+            $keyFileTypeBankAccountPosting->expense_id = 0;
+            $keyFileTypeBankAccountPosting->income_id = 0;
+        }
         $bankAccountPosting->type_bank_account_posting_id = $keyFileTypeBankAccountPosting->type_id;
         $date_post = $transactions->DTPOSTED;
         $bankAccountPosting->posting_date = Carbon::create(substr($date_post, 0,4), substr($date_post, 4,2), substr($date_post, 6,2), substr($date_post, 8,2));
