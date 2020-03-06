@@ -232,7 +232,7 @@ class BankAccountPostingController extends Controller
         foreach($ofx->bankTranList as $transactions){
             $typeBankAccountPosting = new TypeBankAccountPosting();
             $bankAccountPosting = $this->mountBankAccountPostingOfx($transactions, $typeBankAccountPosting, $bankAccount);
-            if($typeBankAccountPosting->getTypeBankAccountPosting((string)$transactions->MEMO) === 0){
+            if($typeBankAccountPosting->getType((string)$transactions->MEMO) === 0){
                 array_push($type_bank_account_posting_not_saves, $transactions->MEMO);
                 continue;
             }
@@ -293,7 +293,7 @@ class BankAccountPostingController extends Controller
             }
             $data = $this->clearStringFile($posting);
             $typeBankAccountPosting = new TypeBankAccountPosting();
-            if($typeBankAccountPosting->getTypeBankAccountPosting($data[3]) === 0){
+            if($typeBankAccountPosting->getType($data[3]) === 0){
                 array_push($type_bank_account_posting_not_saves, $data[3]);
                 continue;
             }
@@ -334,7 +334,10 @@ class BankAccountPostingController extends Controller
 
     function mountBankAccountPosting($data, BankAccount $bankAccount,TypeBankAccountPosting $typeBankAccountPosting){
         $bankAccountPosting = new BankAccountPosting();
-        $bankAccountPosting->type_bank_account_posting_id = $typeBankAccountPosting->getTypeBankAccountPosting($data[3]);
+        $keyFileTypeBankAccountPosting = $typeBankAccountPosting->getType($data[3]);
+        $bankAccountPosting->type_bank_account_posting_id = $keyFileTypeBankAccountPosting->type_id;
+        $bankAccountPosting->expense_id = $keyFileTypeBankAccountPosting->expense_id;
+        $bankAccountPosting->income_id = $keyFileTypeBankAccountPosting->income_id;
         $bankAccountPosting->posting_date = Carbon::create(substr($data[1], 0,4), substr($data[1], 4,2), substr($data[1], 6,2));
         $bankAccountPosting->bank_account_id = $bankAccount->id;
         $bankAccountPosting->document = $data[2];
