@@ -12,71 +12,28 @@ class TypeBankAccountPostingTableSeeder extends Seeder
      */
     public function run()
     {
-        if(TypeBankAccountPosting::where('name', 'Juros Creditados')->count() === 0){
+        $this->saveTypeBankAccountPosting('Juros Creditados',1);
+        $this->saveTypeBankAccountPosting('Trasnferências P/ Outra Conta', 3);
+        $this->saveTypeBankAccountPosting('Depósitos', 4);
+        $this->saveTypeBankAccountPosting('Pagamentos de Boleto', 5);
+        $this->saveTypeBankAccountPosting('Compras Cartão Débito', 6);
+        $this->saveTypeBankAccountPosting('Salário', 7);
+        $this->saveTypeBankAccountPosting('Saque', 8);
+        $this->saveTypeBankAccountPosting('Seguradora', 9);
+        $this->saveTypeBankAccountPosting('FGTS', 10);
+        $this->saveTypeBankAccountPosting('PIS', 11);
+    }
+
+    public function saveTypeBankAccountPosting($name, $id = null){
+        if(TypeBankAccountPosting::whereName($name)->count() === 0) {
             TypeBankAccountPosting::create([
-                'id'    => 1,
-                'name'  => 'Juros Creditados'
+                'id'    => $id,
+                'name'  => $name,
             ]);
+            return;
         }
-        if(TypeBankAccountPosting::where('name', 'Juros Debitados')->count() === 0) {
-            TypeBankAccountPosting::create([
-                'id' => 2,
-                'name' => 'Juros Debitados'
-            ]);
-        }
-        if(TypeBankAccountPosting::where('name', 'Trasnferências P/ Outra Conta')->count() === 0) {
-            TypeBankAccountPosting::create([
-                'id' => 3,
-                'name' => 'Trasnferências P/ Outra Conta'
-            ]);
-        }
-        if(TypeBankAccountPosting::where('name', 'Depósitos')->count() === 0) {
-            TypeBankAccountPosting::create([
-                'id' => 4,
-                'name' => 'Depósitos'
-            ]);
-        }
-        if(TypeBankAccountPosting::where('name', 'Pagamentos de Boleto')->count() === 0) {
-            TypeBankAccountPosting::create([
-                'id' => 5,
-                'name' => 'Pagamentos de Boleto'
-            ]);
-        }
-        if(TypeBankAccountPosting::where('name', 'Compras Cartão Débito')->count() === 0) {
-            TypeBankAccountPosting::create([
-                'id' => 6,
-                'name' => 'Compras Cartão Débito'
-            ]);
-        }
-        if(TypeBankAccountPosting::where('name', 'Salário')->count() === 0) {
-            TypeBankAccountPosting::create([
-                'id' => 7,
-                'name' => 'Salário'
-            ]);
-        }
-        if(TypeBankAccountPosting::where('name', 'Saque')->count() === 0) {
-            TypeBankAccountPosting::create([
-                'id' => 8,
-                'name' => 'Saque'
-            ]);
-        }
-        if(TypeBankAccountPosting::where('name', 'Seguradora')->count() === 0) {
-            TypeBankAccountPosting::create([
-                'id' => 9,
-                'name' => 'Seguradora'
-            ]);
-        }
-        if(TypeBankAccountPosting::where('name', 'FGTS')->count() === 0) {
-            TypeBankAccountPosting::create([
-                'id' => 10,
-                'name' => 'FGTS'
-            ]);
-        }
-        if(TypeBankAccountPosting::where('name', 'PIS')->count() === 0) {
-            TypeBankAccountPosting::create([
-                'id' => 11,
-                'name' => 'PIS'
-            ]);
-        }
+        $typeBankAccountPosting = TypeBankAccountPosting::whereName($name)->first();
+        $typeBankAccountPosting->name = $name;
+        $typeBankAccountPosting->save();
     }
 }

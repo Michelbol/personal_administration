@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
          $this->call(BankAccountTableSeeder::class);
          $this->call(TypeBankAccountPostingTableSeeder::class);
          $this->call(CredCardTableSeeder::class);
+         $this->call(KeyFileTypeBankAccountPostingTableSeeder::class);
     }
 }

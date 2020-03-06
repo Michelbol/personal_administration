@@ -257,13 +257,16 @@ class BankAccountPostingController extends Controller
 
     function mountBankAccountPostingOfx($transactions, TypeBankAccountPosting $typeBankAccountPosting, BankAccount $bankAccount){
         $bankAccountPosting = new BankAccountPosting();
-        $bankAccountPosting->type_bank_account_posting_id = $typeBankAccountPosting->getTypeBankAccountPosting((string)$transactions->MEMO);
+        $keyFileTypeBankAccountPosting = $typeBankAccountPosting->getType((string)$transactions->MEMO);
+        $bankAccountPosting->type_bank_account_posting_id = $keyFileTypeBankAccountPosting->type_id;
         $date_post = $transactions->DTPOSTED;
         $bankAccountPosting->posting_date = Carbon::create(substr($date_post, 0,4), substr($date_post, 4,2), substr($date_post, 6,2), substr($date_post, 8,2));
         $bankAccountPosting->bank_account_id = $bankAccount->id;
         $bankAccountPosting->document = $transactions->FITID;
         $bankAccountPosting->amount = ((float)$transactions->TRNAMT < 0) ? -((float)$transactions->TRNAMT) : (float)$transactions->TRNAMT;
-        $bankAccountPosting->type = (string)$transactions->TRNTYPE === 'CREDIT' ? 'C' : 'D';
+        $bankAccountPosting->type = (string)$transactions->TRNTYPE === ofxCredit ? credit : debit;
+        $bankAccountPosting->expense_id = $keyFileTypeBankAccountPosting->expense_id;
+        $bankAccountPosting->income_id = $keyFileTypeBankAccountPosting->income_id;
         $balance = BankAccountPosting::where('bank_account_id',$bankAccountPosting->bank_account_id)
             ->where('posting_date', '<=', $bankAccountPosting->posting_date)
             ->orderBy('posting_date', 'desc')
