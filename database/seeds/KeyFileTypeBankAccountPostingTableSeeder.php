@@ -39,6 +39,7 @@ class KeyFileTypeBankAccountPostingTableSeeder extends Seeder
 
         $this->saveKeyFileTypeBankAccountPosting(4, 'CRED TEV', null, $incomeTransference);
         $this->saveKeyFileTypeBankAccountPosting(4, 'CRED TED', null, $incomeTransference);
+        $this->saveKeyFileTypeBankAccountPosting(4, 'DP DINH AG', null, $incomeTransference);
 
         $this->saveKeyFileTypeBankAccountPosting(5, 'PAG FONE', $tim);
         $this->saveKeyFileTypeBankAccountPosting(5, 'PAG BOLETO', $billet);
