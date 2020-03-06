@@ -20,6 +20,8 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
  * @property float $account_balance
  * @property int $bank_account_id
  * @property int $type_bank_account_posting_id
+ * @property int $income_id
+ * @property int $expense_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read BankAccount $bankAccount
