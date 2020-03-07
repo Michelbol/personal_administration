@@ -38,8 +38,7 @@ pipelines:
           - cd ~/.ssh/
           - ls
           - cat config
-          - cd config
-          - ls
+          - cat /opt/atlassian/pipelines/agent/ssh/id_rsa
           - ssh -i ~/.ssh/config $ip
           - cd /var/www/personal_administration
           - git pull
