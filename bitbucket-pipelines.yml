@@ -35,6 +35,8 @@ pipelines:
           - echo "Deploying to test environment"
           - apt-get update
           - apt-get install -y ssh
+          - cd ~/.ssh/
+          - ls
           - ssh -i ~/.ssh/my_ssh_key $ip
           - cd /var/www/personal_administration
           - git pull
