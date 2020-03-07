@@ -8,6 +8,7 @@ image: php:7.2-fpm
 pipelines:
   default:
     - step:
+        name: Build
         caches:
           - composer
         script:
@@ -26,11 +27,12 @@ pipelines:
           - rm -rf /tmp/pear/
           - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
           - composer install
+    - step:
+        name: Run tests
+        script:
           - vendor/bin/phpunit
-  deployment:
     - step:
         name: Deploy to test
-        deployment: test
-        # trigger: manual  # Uncomment to make this a manual deployment.
         script:
           - echo "Deploying to test environment"
+
