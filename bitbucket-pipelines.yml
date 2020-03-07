@@ -27,9 +27,10 @@ pipelines:
           - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
           - composer install
           - vendor/bin/phpunit
-  - step:
-      name: Deploy to test
-      deployment: test
-      # trigger: manual  # Uncomment to make this a manual deployment.
-      script:
-        - echo "Deploying to test environment"
+  deployment:
+    - step:
+        name: Deploy to test
+        deployment: test
+        # trigger: manual  # Uncomment to make this a manual deployment.
+        script:
+          - echo "Deploying to test environment"
