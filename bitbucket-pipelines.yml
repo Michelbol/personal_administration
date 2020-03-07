@@ -37,7 +37,7 @@ pipelines:
           - apt-get install -y ssh
           - cd ~/.ssh/
           - ls
-          - ssh -i ~/.ssh/my_ssh_key $ip
+          - ssh -i ~/.ssh/config $ip
           - cd /var/www/personal_administration
           - git pull
           - composer dumpautoload
