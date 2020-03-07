@@ -35,5 +35,10 @@ pipelines:
           - echo "Deploying to test environment"
           - apt-get update
           - apt-get install -y ssh
-          - echo $ip
+          - ssh -i ~/.ssh/my_ssh_key $ip
+          - cd /var/www/personal_administration
+          - git pull
+          - composer dumpautoload
+          - php artisan optimize
+          - php artisan migrate --seed
 
