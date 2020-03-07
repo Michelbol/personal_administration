@@ -38,6 +38,8 @@ pipelines:
           - cd ~/.ssh/
           - ls
           - cat config
+          - cd config
+          - ls
           - ssh -i ~/.ssh/config $ip
           - cd /var/www/personal_administration
           - git pull
