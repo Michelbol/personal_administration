@@ -36,7 +36,9 @@ pipelines:
           - apt-get update
           - apt-get install -y ssh
           - ssh -i /opt/atlassian/pipelines/agent/ssh/id_rsa bitbucket@$ip
-          - cd /var/www/personal_administration
+          - ls
+          - cd /var/www/personal-administration
+          - sudo sue
           - git pull
           - composer dumpautoload
           - php artisan optimize
