@@ -35,7 +35,7 @@ pipelines:
           - echo "Deploying to test environment"
           - apt-get update
           - apt-get install -y ssh
-          - ssh -i /opt/atlassian/pipelines/agent/ssh/id_rsa $ip
+          - sudo ssh -i /opt/atlassian/pipelines/agent/ssh/id_rsa $ip
           - cd /var/www/personal_administration
           - git pull
           - composer dumpautoload
