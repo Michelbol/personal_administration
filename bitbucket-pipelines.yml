@@ -50,7 +50,8 @@ pipelines:
 #            - rm -rf /tmp/pear/
 #            - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 #            - composer install
-#            - vendor/bin/phpunit
+#            - vendor/bin/phpunit --coverage-text=coverage.txt
+#            - php artisan coverage:analysis coverage.txt
       - step:
           name: Deploy to test
           deployment: Production
