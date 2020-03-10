@@ -7,7 +7,7 @@ image: php:7.2-fpm
 
 pipelines:
   branches:
-    - master:
+    master:
       - step:
           name: Build and Run tests
           caches:
