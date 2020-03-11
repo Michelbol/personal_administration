@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'souzareiscorretor.com.br'),
+    'url' => env('APP_URL', 'michelbolzon.com.br'),
 
     'asset_url' => env('ASSET_URL', null),
 
