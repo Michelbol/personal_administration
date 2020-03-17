@@ -20,6 +20,20 @@ if(!function_exists('routeTenant')){
         return route($name, $params+[ config('tenant.route_param') => $tenantManager->routeParam() ], $absolute);
     }
 }
+if(!function_exists('getClass')){
+    /**
+     * Generate the URL to a named route.
+     *
+     * @param $object
+     * @return string
+     */
+    function getClass($object){
+        $explode = explode('\\',get_class($object));
+        return $explode[count($explode)-1];
+    }
+}
+
+
 if(!function_exists('getBtnAction')) {
     function getBtnAction($botoes = [])
     {

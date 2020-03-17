@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\BankAccountService;
 use \Exception;
 use Carbon\Carbon;
 use Illuminate\View\View;
@@ -15,84 +16,23 @@ use App\Models\BankAccountPosting;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Session;
 
-class BankAccountController extends Controller
+class BankAccountController extends CrudController
 {
     protected $db;
     protected $carbon;
     protected $session;
     protected $bankAccount;
     protected $bankAccountPosting;
+    protected $msgStore = 'Banco Salvo com sucesso';
 
-    public function __construct(DB $db, BankAccount $bankAccount, BankAccountPosting $bankAccountPosting, Carbon $carbon, Session $session)
+    public function __construct(DB $db, BankAccount $bankAccount, BankAccountPosting $bankAccountPosting, Carbon $carbon, Session $session, BankAccountService $service)
     {
+        parent::__construct($service, $bankAccount);
         $this->db = $db;
         $this->carbon = $carbon;
         $this->session = $session;
         $this->bankAccount = $bankAccount;
         $this->bankAccountPosting = $bankAccountPosting;
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Factory|View
-     */
-    public function index()
-    {
-        return view('bank_account.index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Factory|View
-     */
-    public function create()
-    {
-        return view('bank_account.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  Request  $request
-     * @return Response
-     */
-    public function store(Request $request)
-    {
-        /**
-         * @var $bankAccount BankAccount
-         * @var $bankAccountPosting BankAccountPosting
-         */
-        try{
-            $this->db::beginTransaction();
-            $bankAccount = new $this->bankAccount();
-            $data = $request->all();
-            $bankAccount->name = $data['name'];
-            $bankAccount->agency = $data['agency'];
-            $bankAccount->digit_agency = $data['digit_agency'];
-            $bankAccount->number_account = $data['number_account'];
-            $bankAccount->digit_account = $data['digit_account'];
-            $bankAccount->bank_id = $data['bank_id'];
-            $bankAccount->save();
-            if(isset($data['account_balance'])){
-                $bankAccountPosting = new $this->bankAccountPosting();
-                $bankAccountPosting->document = 'Abertura Conta';
-                $bankAccountPosting->posting_date = $this->carbon::now();
-                $bankAccountPosting->amount = $data['account_balance'];
-                $bankAccountPosting->type = 'C';
-                $bankAccountPosting->type_bank_account_posting_id = 1;
-                $bankAccountPosting->account_balance = $data['account_balance'];
-                $bankAccountPosting->bank_account_id = $bankAccount->id;
-                $bankAccountPosting->save();
-            }
-            $this->db::commit();
-            $this->session::flash('message', ['msg' => 'Banco Salvo com sucesso', 'type' => 'success']);
-            return redirect()->routeTenant('bank_accounts.index');
-        }catch (Exception $e){
-            $this->session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
-            return redirect()->routeTenant('bank_accounts.index');
-        }
     }
 
     /**

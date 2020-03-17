@@ -25,7 +25,8 @@ use Illuminate\Database\Eloquent\Builder;
  * @method static Builder|Bank whereNumber($value)
  * @method static Builder|Bank whereTitleColor($value)
  * @method static Builder|Bank whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin Model
+ * @mixin Builder
  */
 class Bank extends Model
 {
