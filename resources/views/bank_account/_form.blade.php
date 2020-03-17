@@ -12,7 +12,7 @@
                    value="{{ old('agency') ?? (isset($bank_account) ?  $bank_account->agency : '')}}">
         </div>
         <div class="col-2">
-            <label for="agency">Operação</label>
+            <label for="operation">Operação</label>
             <input type="text" class="form-control number" name="operation" id="operation" maxlength="10"
                    value="{{ old('operation') ?? (isset($bank_account) ?  $bank_account->operation : '')}}">
         </div>
@@ -44,9 +44,9 @@
     </div>
     <div class="row">
         <div class="col-4">
-            <label for="balance">Saldo</label>
+            <label for="account_balance">Saldo</label>
             <input type="text" class="form-control" name="account_balance" id="account_balance" {{ isset($bank_account) ? 'disabled' : '' }}
-                   value="{{ old('account_balance') ?? (isset($last_balance) ?  'R$: '.\App\Utilitarios::getFormatReal($last_balance) : '')}}">
+                   value="{{ old('account_balance') ?? (isset($last_balance) ?  'R$: '.$last_balance : '')}}">
         </div>
     </div>
 </div>

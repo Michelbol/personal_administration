@@ -32,6 +32,16 @@ class CrudController extends Controller
     /**
      * @var string
      */
+    protected $msgUpdate;
+
+    /**
+     * @var string
+     */
+    protected $msgDestroy;
+
+    /**
+     * @var string
+     */
     private $snakeModel;
 
     /**
@@ -51,9 +61,10 @@ class CrudController extends Controller
      * Display a listing of the resource.
      *
      * @param $tenant
+     * @param Request $request
      * @return Factory|View
      */
-    public function index($tenant)
+    public function index($tenant, Request $request)
     {
         return view("$this->snakeModel.index");
     }
@@ -80,6 +91,47 @@ class CrudController extends Controller
         try{
             $this->service->create($request->all());
             $this->successMessage($this->msgStore);
+            return redirect()->routeTenant($this->snakeModel."s.index");
+        }catch (Exception $e){
+            $this->errorMessage($e->getMessage());
+            return redirect()->back()->withInput($request->all());
+        }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param $tenant
+     * @param Request $request
+     * @param int $id
+     * @return Response|RedirectResponse
+     */
+    public function update($tenant, Request $request, $id)
+    {
+        try{
+            $this->service->update($id, $request->all());
+            $this->successMessage($this->msgUpdate);
+            return redirect()->routeTenant($this->snakeModel."s.index");
+        }catch (Exception $e){
+            $this->errorMessage($e->getMessage());
+            return redirect()->back()->withInput($request->all());
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param $tenant
+     * @param Request $request
+     * @param int $id
+     * @return Response|RedirectResponse
+     */
+    public function destroy($tenant, Request $request ,$id)
+    {
+        try{
+            $this->service->delete($id);
+
+            $this->successMessage($this->msgDestroy);
             return redirect()->routeTenant($this->snakeModel."s.index");
         }catch (Exception $e){
             $this->errorMessage($e->getMessage());

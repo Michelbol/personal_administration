@@ -4,32 +4,40 @@ namespace App\Http\Controllers;
 
 use App\Models\BankAccount;
 use App\Models\Car;
+use App\Services\BankAccountService;
 use Carbon\Carbon;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
-class HomeController extends Controller
+class HomeController extends CrudController
 {
     /**
      * Create a new controller instance.
      *
-     * @return void
+     * @param BankAccountService $service
+     * @param BankAccount $bankAccount
      */
-    public function __construct()
+    public function __construct(BankAccountService $service, BankAccount $bankAccount)
     {
+        parent::__construct($service, $bankAccount);
         $this->middleware('auth');
     }
 
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @param $tenant
+     * @param Request $request
+     * @return Factory|View
      */
-    public function index(Request $request)
+    public function index($tenant, Request $request)
     {
         $year = $request->get('year', Carbon::now()->year);
-        $bankAccounts = BankAccount::with('bank:id,title_color,body_color')->get(['id', 'name', 'bank_id']);
-        $cars = Car::all(['id', 'license_plate', 'model']);
+        $bankAccounts = BankAccount::with('bank')->get();
+        $cars = Car::all();
         $total_cars = Car::count();
-        return view('home', compact('bankAccounts', 'total_cars', 'cars', 'year'));
+        $service = $this->service;
+        return view('home', compact('bankAccounts', 'total_cars', 'cars', 'year', 'service'));
     }
 }

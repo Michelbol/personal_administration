@@ -12,10 +12,10 @@
                         </div>
                         <div class="card-body"
                             {{ isset($bankAccount->bank->body_color) ? 'style=background-color:'.$bankAccount->bank->body_color."" : '' }}>
-                            <p class="card-text">Acumulou em Juros do ano: R$: {{ $bankAccount::calcAnnualInterest($bankAccount->id, $year)}}</p>
+                            <p class="card-text">Acumulou em Juros do ano: R$: {{ $service->calcAnnualInterest($bankAccount->id, $year)}}</p>
                             <a href="#balance-collapse-{{ $bankAccount->id }}" data-toggle="collapse">Mostrar Saldo</a>
                             <div class="collapse" id="balance-collapse-{{ $bankAccount->id }}">
-                                <p class="card-text">Saldo: R$: {{ $bankAccount::lastBalance($bankAccount->id) }}</p>
+                                <p class="card-text">Saldo: R$: {{ $service->lastBalance($bankAccount->id) }}</p>
                             </div>
                         </div>
                     </div>

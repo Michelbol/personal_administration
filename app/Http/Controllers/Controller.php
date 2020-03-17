@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Session;
+use App\Models\Enum\SessionEnum;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -17,7 +18,7 @@ class Controller extends BaseController
      */
     public function successMessage(string $message)
     {
-        Session::flash('message', ['msg' => $message, 'type' => 'success']);
+        Session::flash('message', ['msg' => $message, 'type' => SessionEnum::success]);
     }
 
     /**
@@ -25,6 +26,6 @@ class Controller extends BaseController
      */
     public function errorMessage(string $message)
     {
-        Session::flash('message', ['msg' => $message, 'type' => 'danger']);
+        Session::flash('message', ['msg' => $message, 'type' => SessionEnum::error]);
     }
 }
