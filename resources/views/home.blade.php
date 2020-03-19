@@ -2,6 +2,15 @@
 
 @section('content')
     <div class="container">
+        <form class="form-inline" action="{{ routeTenant('home') }}">
+            <div class="form-group mb-2 mx-sm-3">
+                <label class="sr-only" for="year">Ano</label>
+                <input type="text" id="year" name="year" class="form-control" value="{{ $year }}" placeholder="Ano">
+            </div>
+            <button class="btn btn-info mb-2" type="submit">Mudar o Ano</button>
+        </form>
+    </div>
+    <div class="container">
         <div class="row justify-content-center">
             @foreach($bankAccounts as $index => $bankAccount)
                 <div class="col-md-3">
@@ -37,16 +46,5 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="container">
-        <form action="{{ routeTenant('home') }}">
-            <div class="col-2">
-                <label for="year">Year</label>
-                <input type="text" id="year" name="year" class="form-control" value="{{ $year }}">
-                <button class="btn btn-info" type="submit">Mudar o Ano</button>
-            </div>
-            <div class="col-2">
-            </div>
-        </form>
     </div>
 @endsection
