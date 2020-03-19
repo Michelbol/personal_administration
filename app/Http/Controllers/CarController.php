@@ -2,79 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CarRequest;
 use App\Models\CarSupply;
+use App\Services\CarService;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
-use \Session;
-use \Exception;
 use App\Models\Car;
 use App\Utilitarios;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
-class CarController extends Controller
+class CarController extends CrudController
 {
-    public function index(){
-        return view('car.index');
-    }
+    protected $msgStore = 'Carro incluido com sucesso';
 
-    public function create(){
-        return view('car.create');
-    }
+    protected $msgUpdate = 'Carro atualizado com sucesso';
 
-    public function store(Request $request){
+    protected $msgDestroy = 'Carro deletado com sucesso';
 
-        $validData = $request->validate([
-            'model' => 'max:100',
-            'license_plate' => 'required|max:15',
-            'annual_licensing' => 'date_format:d/m/Y',
-            'annual_insurance' => 'date_format:d/m/Y',
-        ]);
+    protected $requestValidator = CarRequest::class;
 
-        $car = new Car();
-        $car->model = $validData['model'];
-        $car->license_plate = $validData['license_plate'];
-        $car->annual_licensing = $validData['annual_licensing'];
-        $car->annual_insurance = $validData['annual_insurance'];
-        $car->save();
-        Session::flash('message', ['msg' => 'Carro incluido com sucesso', 'type' => 'success']);
-        return redirect()->routeTenant('car.index');
-    }
-
-    public function edit($tenant, $id){
-        $car = Car::findOrFail($id);
-        return view('car.edit', compact('car'));
-    }
-
-    public function update(Request $request, $tenant, $id){
-        $validData = $request->validate([
-            'id' => 'required',
-            'model' => 'max:100',
-            'license_plate' => 'required|max:15',
-            'annual_licensing' => 'date_format:d/m/Y',
-            'annual_insurance' => 'date_format:d/m/Y',
-        ]);
-
-        $car = Car::find($id);
-        $car->model = $validData['model'];
-        $car->license_plate = $validData['license_plate'];
-        $car->annual_licensing = $validData['annual_licensing'];
-        $car->annual_insurance = $validData['annual_insurance'];
-        $car->save();
-        Session::flash('message', ['msg' => 'Carro atualizado com sucesso', 'type' => 'success']);
-        return redirect()->routeTenant('car.index');
-    }
-
-    public function destroy($tenant, $id){
-        try{
-            $car = Car::findOrFail($id);
-            $car->delete();
-            Session::flash('message', ['msg' => 'Carro deletado com sucesso', 'type' => 'success']);
-            return redirect()->routeTenant('car.index');
-        }catch (Exception $e){
-            Session::flash('message', ['msg' => 'Erro ao deletar carro:'.$e->getMessage(), 'type' => 'success']);
-            return redirect()->routeTenant('car.index');
-        }
+    public function __construct(CarService $service = null, Car $model = null)
+    {
+        parent::__construct($service, $model);
     }
 
     public function get(){
@@ -84,21 +33,21 @@ class CarController extends Controller
             $response = DataTables::of($model)
                 ->addColumn('actions', function ($model){
                     return Utilitarios::getBtnAction([
-                        ['type'=>'edit',    'url' => routeTenant('car.edit',['id' => $model->id])],
+                        ['type'=>'edit',    'url' => routeTenant('cars.edit',['id' => $model->id])],
                         ['type'=>'other-a', 'url' => routeTenant('car_supply.index',['car_id' => $model->id]), 'name' => 'Abastencimentos'],
-                        ['type'=>'delete',  'url' => routeTenant('car.destroy',['id' => $model->id]), 'id' => $model->id]
+                        ['type'=>'delete',  'url' => routeTenant('cars.destroy',['id' => $model->id]), 'id' => $model->id]
                     ]);
                 })
                 ->rawColumns(['actions'])
                 ->toJson();
             return $response->original;
         }catch (\Exception $e){
-            dd('erro!'.$e->getMessage());
+            return response()->json(['error' =>'Error into datatable: '.$e->getMessage(), 'trace' => $e->getTrace()]);
         }
     }
 
-    public function profile($tenant, $id){
-        $year = Carbon::now()->year;
+    public function profile($tenant, $id, Request $request){
+        $year = $request->get('year', Carbon::now()->year);
         $liters = CarSupply::calcMonthlyLiters($year, $id);
         $totalPaid = CarSupply::calcMonthlyTotalPaid($year, $id);
         $traveledKilometers = CarSupply::calcMonthlyTraveledKilometers($year, $id);
@@ -114,6 +63,6 @@ class CarController extends Controller
         $totalPaid = collect($totalPaid)->implode(',');
         $traveledKilometers = collect($traveledKilometers)->implode(',');
 
-        return view('car.profile', compact('totalPaid', 'liters', 'traveledKilometers', 'averages'));
+        return view('car.profile', compact('totalPaid', 'liters', 'traveledKilometers', 'averages', 'year', 'id'));
     }
 }

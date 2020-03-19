@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h3>Conta Corrente</h3>
+        <h3>Cartões de Crédito</h3>
 
         <a href="{{ routeTenant('cred_card.create') }}" class="btn btn-info">Novo Cartão de Crédito</a>
 {{--        <a href="{{ routeTenant('cred_card.file') }}" class="btn btn-primary">Leitura de Arquivos</a>--}}

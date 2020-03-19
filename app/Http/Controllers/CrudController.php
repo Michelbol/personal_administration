@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\RedirectResponse;
 use Str;
 use Exception;
@@ -23,6 +24,11 @@ class CrudController extends Controller
      * @var CRUDService
      */
     protected $model;
+
+    /**
+     * @var FormRequest
+     */
+    protected $requestValidator;
 
     /**
      * @var string
@@ -88,7 +94,14 @@ class CrudController extends Controller
      */
     public function store(Request $request)
     {
+        /**
+         * @var $validator FormRequest
+         */
         try{
+            if(isset($this->requestValidator)){
+                $validator = new $this->requestValidator();
+                $this->validate($request, $validator->rules(), $validator->messages());
+            }
             $this->service->create($request->all());
             $this->successMessage($this->msgStore);
             return redirect()->routeTenant($this->snakeModel."s.index");
@@ -96,6 +109,18 @@ class CrudController extends Controller
             $this->errorMessage($e->getMessage());
             return redirect()->back()->withInput($request->all());
         }
+    }
+
+    /**
+     * @param $tenant
+     * @param $id
+     * @param Request $request
+     * @return Factory|View
+     */
+    public function edit($tenant, $id, Request $request){
+        $snakeModel = $this->snakeModel;
+        $$snakeModel = $this->model::findOrFail($id);
+        return view("$this->snakeModel.edit", compact($snakeModel));
     }
 
     /**
@@ -108,7 +133,14 @@ class CrudController extends Controller
      */
     public function update($tenant, Request $request, $id)
     {
+        /**
+         * @var $validator FormRequest
+         */
         try{
+            if(isset($this->requestValidator)){
+                $validator = new $this->requestValidator();
+                $this->validate($request, $validator->rules(), $validator->messages());
+            }
             $this->service->update($id, $request->all());
             $this->successMessage($this->msgUpdate);
             return redirect()->routeTenant($this->snakeModel."s.index");

@@ -76,13 +76,15 @@ class CarSupplyController extends Controller
             return redirect()->routeTenant('car_supply.index',['car_id' => $carSupply->car_id]);
         }catch (Exception $e){
             Session::flash('message', ['msg' => 'Erro ao deletar Abastecimento:'.$e->getMessage(), 'type' => 'success']);
-            return redirect()->routeTenant('car.index');
+            return redirect()->routeTenant('cars.index');
         }
     }
 
-    public function get(){
+    public function get($tenant, $id){
         try{
-            $model = CarSupply::select(['id', 'kilometer', 'liters', 'total_paid', 'date', 'fuel', 'gas_station'])->orderByDesc('date');
+            $model = CarSupply::select(['id', 'kilometer', 'liters', 'total_paid', 'date', 'fuel', 'gas_station'])
+                ->where('car_id', $id)
+                ->orderByDesc('date');
 
             $response = DataTables::of($model)
                 ->addColumn('actions', function ($model){

@@ -46,23 +46,23 @@ Route::prefix("{{$tenantParam}}")
             Route::get('/budget_financial/restart/{id}', 'BudgetFinancialController@budgetFinancialMonthByBankAccount')->name('budget_financial.restart');
             //=========================================BUDGET FINANCIAL POSTING=================================================================//
             Route::get('/budget_financial_posting/get/{id}', 'BudgetFinancialPostingController@get')->name('budget_financial_posting.get');
-        //=========================================CREDCARD=================================================================//
+            //=========================================CAR=================================================================//
+            Route::prefix('car')->name('cars.')->group(function(){
+                $controller = 'CarController';
+                Route::get('/',             $controller.'@index')       ->name('index');
+                Route::get('/profile/{id}', $controller.'@profile')     ->name('profile');
+                Route::post('/',            $controller.'@store')       ->name('store');
+                Route::get('/create',       $controller.'@create')      ->name('create');
+                Route::get('/get',          $controller.'@get')         ->name('get');
+                Route::get('/{id}',         $controller.'@show')        ->name('show');
+                Route::put('/{id}',         $controller.'@update')      ->name('update');
+                Route::delete('/{id}',      $controller.'@destroy')     ->name('destroy');
+                Route::get('/{id}/edit',    $controller.'@edit')        ->name('edit');
+            });
+            //=========================================CREDCARD=================================================================//
         Route::prefix('cred_card')->name('cred_card.')->group(function(){
             $controller = 'CredCardController';
             Route::get('/',             $controller.'@index')       ->name('index');
-            Route::post('/',            $controller.'@store')       ->name('store');
-            Route::get('/create',       $controller.'@create')      ->name('create');
-            Route::get('/get',          $controller.'@get')         ->name('get');
-            Route::get('/{id}',         $controller.'@show')        ->name('show');
-            Route::put('/{id}',         $controller.'@update')      ->name('update');
-            Route::delete('/{id}',      $controller.'@destroy')     ->name('destroy');
-            Route::get('/{id}/edit',    $controller.'@edit')        ->name('edit');
-        });
-        //=========================================CAR=================================================================//
-        Route::prefix('car')->name('car.')->group(function(){
-            $controller = 'CarController';
-            Route::get('/',             $controller.'@index')       ->name('index');
-            Route::get('/profile/{id}', $controller.'@profile')     ->name('profile');
             Route::post('/',            $controller.'@store')       ->name('store');
             Route::get('/create',       $controller.'@create')      ->name('create');
             Route::get('/get',          $controller.'@get')         ->name('get');
