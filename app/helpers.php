@@ -6,6 +6,8 @@
  * Time: 20:20
  */
 
+use Carbon\Carbon;
+
 if(!function_exists('routeTenant')){
     /**
      * Generate the URL to a named route.
@@ -103,6 +105,10 @@ if(!function_exists('getBtnAction')) {
 }
 
 if(!function_exists('formatDataCarbon')) {
+    /**
+     * @param $value
+     * @return Carbon|null
+     */
     function formatDataCarbon($value)
     {
         $data = null;

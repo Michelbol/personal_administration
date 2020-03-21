@@ -7,7 +7,7 @@ use DB;
 use Exception;
 use App\Utilitarios;
 use App\Models\BankAccount;
-use Illuminate\Support\Carbon;
+use Carbon\Carbon;
 
 class BankAccountService extends CRUDService
 {

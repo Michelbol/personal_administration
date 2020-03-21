@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\KeyFileTypeBankAccountPosting;
 use \Session;
 use App\Ofx;
 use \Exception;
@@ -17,8 +16,10 @@ use Illuminate\Http\Response;
 use Yajra\DataTables\DataTables;
 use App\Models\BankAccountPosting;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\RedirectResponse;
 use App\Models\TypeBankAccountPosting;
 use Illuminate\Database\Eloquent\Builder;
+use App\Models\KeyFileTypeBankAccountPosting;
 
 class BankAccountPostingController extends Controller
 {
@@ -170,12 +171,23 @@ class BankAccountPostingController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return Response
+     * @param $tenant
+     * @param $id
+     * @return RedirectResponse
+     * @throws Exception
      */
-    public function destroy($id)
+    public function destroy($tenant, $id)
     {
-        //
+        $bankAccountPosting = BankAccountPosting::findOrFail($id);
+        $bankAccountPosting->delete();
+
+        $balance = $this->bankAccountPosting::where('bank_account_id', $bankAccountPosting->bank_account_id)
+            ->where('posting_date', '<=', $bankAccountPosting->posting_date)
+            ->orderBy('posting_date', 'desc')
+            ->orderBy('id', 'desc')->first();
+        $this->recalcSaldo(formatDataCarbon($balance->posting_date), $bankAccountPosting->bank_account_id);
+        $this->successMessage("Lançamento deletado com sucesso");
+        return redirect()->back();
     }
 
     public function recalcSaldo(Carbon $date, $bank_account_id){
@@ -416,7 +428,7 @@ class BankAccountPostingController extends Controller
                 })->addColumn('actions', function($model){
                     return Utilitarios::getBtnAction([
                         ['type'=>'edit', 'url'=>'#', 'id' => $model->id],
-                        ['type'=>'delete', 'url' => '', 'id' => $model->id]
+                        ['type'=>'delete', 'url' => routeTenant('bank_account_posting.destroy', ['id' => $model->id]), 'id' => $model->id]
                     ]);
                 })
                 ->rawColumns(['actions'])

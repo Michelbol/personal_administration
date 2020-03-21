@@ -1,5 +1,4 @@
 var ctx = document.getElementById('myChart').getContext('2d');
-console.log(interest, balance);
 var myChart = new Chart(ctx, {
     type: 'line',
     data: {
