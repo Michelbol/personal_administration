@@ -76,6 +76,8 @@ function fillModal(bank_account_posting){
     $('#type_bank_account_posting_id')  .val(bank_account_posting.type_bank_account_posting_id);
     $('#expense_id')                    .val(bank_account_posting.expense_id);
     $('#income_id')                     .val(bank_account_posting.income_id);
+    $('#form_bank_acount_posting').prop('action', URLBASE()+'/bank_account_posting/'+bank_account_posting.id);
+    $('#form_bank_acount_posting [name="_method"]').val('PUT');
 }
 
 function cleanModal(){
@@ -87,6 +89,8 @@ function cleanModal(){
     $('#type_bank_account_posting_id').val('');
     $('income_id').val(null);
     $('expense_id').val(null);
+    $('#form_bank_acount_posting').prop('action', URLBASE()+'/bank_account_posting');
+    $('#form_bank_acount_posting [name="_method"]').val('POST');
 }
 
 $TYPE.on('change', function () {

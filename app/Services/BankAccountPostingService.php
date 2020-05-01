@@ -7,6 +7,7 @@ use App\Models\BankAccountPosting;
 use Carbon\Carbon;
 use Exception;
 use App\Models\BankAccount;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class BankAccountPostingService extends CRUDService
@@ -17,6 +18,26 @@ class BankAccountPostingService extends CRUDService
     protected $modelClass = BankAccountPosting::class;
 
     const STR_OPENING_ACCOUNT = 'Abertura Conta';
+
+    /**
+     * @param array $data
+     * @return BankAccountPosting|Model
+     * @throws Exception
+     */
+    public function create($data)
+    {
+        if(isset($data['new_income'])){
+            $data['income_id'] = $this->createIncome(['name' => $data['new_incone'], 'amount' => $data['amount']]);
+        }
+        if(isset($data['new_expense'])){
+            $data['expense_id'] = $this->createExpense(['name' => $data['new_expense'], 'amount' => $data['amount']]);
+        }
+        $model = new BankAccountPosting();
+        $this->fill($model, $data);
+        $model->save();
+
+        return $model;
+    }
 
     /**
      * @param BankAccountPosting $model
@@ -55,5 +76,59 @@ class BankAccountPostingService extends CRUDService
         $model->save();
 
         return $model;
+    }
+
+    public function calcBalance(array $data)
+    {
+        $where = [
+            ['bank_account_id', '=', $data['bank_account_id']],
+            ['posting_date', '<=', formatDataCarbon($data['posting_date'])]
+        ];
+        if(isset($data['id'])){
+            $where[] = ['id', '!=', $data['id']];
+        }
+        $balance = BankAccountPosting::where('bank_account_id', $data['bank_account_id'])
+            ->where($where)
+            ->orderBy('posting_date', 'desc')
+            ->orderBy('id', 'desc')
+            ->first();
+        $amt = 0;
+        if(isset($balance)){
+            $amt = $balance->account_balance;
+        }
+        $amount = ($data['type'] === 'C' ? $data['amount'] : (-$data['amount']));
+        return $amt + $amount;
+    }
+
+    /**
+     * @param array $data
+     * @throws Exception
+     */
+    public function createIncome(array $data)
+    {
+        $data['income_id'] = (new IncomeService())->create($data)->id;
+    }
+
+    /**
+     * @param array $data
+     * @throws Exception
+     */
+    public function createExpense(array $data)
+    {
+        $data['expense_id'] = (new ExpenseService())->create($data)->id;
+    }
+
+    /**
+     * @param BankAccountPosting $bankAccountPosting
+     * @return BankAccountPosting|Builder|Model|object|null
+     */
+    public function lastPosting(BankAccountPosting $bankAccountPosting)
+    {
+        return BankAccountPosting
+            ::whereBankAccountId($bankAccountPosting->bank_account_id)
+            ->where('posting_date', '<=', $bankAccountPosting->posting_date)
+            ->orderBy('posting_date', 'desc')
+            ->orderBy('id', 'desc')
+            ->first();
     }
 }

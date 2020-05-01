@@ -128,7 +128,7 @@ class CrudController extends Controller
      *
      * @param $tenant
      * @param Request $request
-     * @param int $id
+     * @param $id
      * @return Response|RedirectResponse
      */
     public function update($tenant, Request $request, $id)

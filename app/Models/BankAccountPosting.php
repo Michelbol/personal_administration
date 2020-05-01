@@ -41,6 +41,7 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
  * @method static Builder|BankAccountPosting whereIncomeId($value)
  * @mixin Eloquent
  * @mixin Builder
+ * @mixin BankAccountPosting
  */
 class BankAccountPosting extends Model
 {
@@ -55,6 +56,20 @@ class BankAccountPosting extends Model
         'income_id',
         'expense_id',
     ];
+
+    public function setPostingDateAttribute($value)
+    {
+        if(isset($value)){
+            $this->attributes['posting_date'] = Carbon::createFromFormat('d/m/Y H:i', $value);
+        }
+    }
+
+    public function setAmountAttribute($value)
+    {
+        if(isset($value)){
+            $this->attributes['amount'] = formatReal($value);
+        }
+    }
 
     public function bankAccount()
     {

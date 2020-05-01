@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use App\Utilitarios;
 use App\Scopes\TenantModels;
+use Eloquent;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -38,7 +37,10 @@ use Illuminate\Database\Eloquent\Builder;
  * @method static Builder|BankAccount whereOperation($value)
  * @method static Builder|BankAccount whereTenantId($value)
  * @method static Builder|BankAccount whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
+ * @mixin Builder
+ * @mixin Model
+ * @mixin BankAccount
  */
 class BankAccount extends Model
 {

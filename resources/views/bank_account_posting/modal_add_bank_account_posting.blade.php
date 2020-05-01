@@ -11,6 +11,7 @@
                 <div class="container-fluid">
                     <form action="{{ routeTenant('bank_account_posting.store') }}" method="post" id="form_bank_acount_posting">
                         {{csrf_field()}}
+                        {{ method_field('POST') }}
                         <div class="row">
                             <input type="hidden" id="bank_account_id" name="bank_account_id" value="{{$bankAccount->id}}">
                             <input type="hidden" id="id" name="id" value="">

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use \Session;
+use App\Services\BankAccountPostingService;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 use App\Ofx;
 use \Exception;
 use Carbon\Carbon;
@@ -15,36 +18,23 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Yajra\DataTables\DataTables;
 use App\Models\BankAccountPosting;
-use Illuminate\Support\Facades\DB;
+use DB;
 use Illuminate\Http\RedirectResponse;
 use App\Models\TypeBankAccountPosting;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\KeyFileTypeBankAccountPosting;
 
-class BankAccountPostingController extends Controller
+class BankAccountPostingController extends CrudController
 {
+    /**
+     * @var BankAccountPostingService
+     */
+    protected $service = BankAccountPostingService::class;
 
-    protected $db;
-    protected $income;
-    protected $session;
-    protected $expenses;
-    protected $bankAccount;
-    protected $utilitarios;
-    protected $bankAccountPosting;
-    protected $typeBankAccountPosting;
-
-    public function __construct(TypeBankAccountPosting $typeBankAccountPosting, DB $db, BankAccount $bankAccount,
-                                Income $income, Expenses $expenses, BankAccountPosting $bankAccountPosting,
-                                Utilitarios $utilitarios, Session $session)
+    public function __construct(BankAccountPosting $bankAccountPosting,
+                                BankAccountPostingService $service)
     {
-        $this->db = $db;
-        $this->income = $income;
-        $this->session = $session;
-        $this->expenses = $expenses;
-        $this->bankAccount = $bankAccount;
-        $this->utilitarios = $utilitarios;
-        $this->bankAccountPosting = $bankAccountPosting;
-        $this->typeBankAccountPosting = $typeBankAccountPosting;
+        parent::__construct($service, $bankAccountPosting);
     }
 
     /**
@@ -52,226 +42,228 @@ class BankAccountPostingController extends Controller
      *
      * @param $tenant
      * @param $id
-     * @return Response
+     * @return Factory|View
      */
-    public function index($tenant, $id)
+    public function indexPostingByBank($tenant, $id)
     {
-        $filterTypeBankAccountPostings = $this->typeBankAccountPosting::all();
-        $bankAccount            = $this->bankAccount::find($id);
-        $incomes                = $this->income::all(['id', 'name']);
-        $expenses               = $this->expenses::all(['id', 'name']);
-        $variables = [
-          'bankAccount' => $bankAccount,
-          'filterTypeBankAccountPostings' => $filterTypeBankAccountPostings,
-          'incomes' => $incomes,
-          'expenses' => $expenses
-        ];
-        return view('bank_account_posting.index', $variables);
+        return view
+        (
+            'bank_account_posting.index',
+            [
+                'bankAccount' => BankAccount::find($id),
+                'filterTypeBankAccountPostings' => TypeBankAccountPosting::all(),
+                'incomes' => Income::all(['id', 'name']),
+                'expenses' => Expenses::all(['id', 'name'])
+            ]
+        );
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return Response
+     * @return Response|RedirectResponse
      * @throws Exception
      */
     public function store(Request $request)
     {
-        try{
-            $this->db::beginTransaction();
-            $data = $request->all();
-            $where_balance = [];
-            if(isset($data['id']) && $data['id'] > 0){
-                $bankAccountPosting = $this->bankAccountPosting::find($data['id']);
-                array_push($where_balance, ['id', '!=', $data['id']]);
-            }else{
-                $bankAccountPosting = new $this->bankAccountPosting();
-            }
-            if(isset($data['new_income'])){
-                $income = $this->income::create([
-                    'name' => $data['new_income'],
-                    'amount' => $this->utilitarios::formatReal($data['amount'])
-                ]);
-                $data['income_id'] = $income->id;
-            }
-            if(isset($data['new_expense'])){
-                $expense = $this->expenses::create([
-                    'name' => $data['new_expense'],
-                    'amount' => $this->utilitarios::formatReal($data['amount'])
-                ]);
-                $data['expense_id'] = $expense->id;
-            }
-            $bankAccountPosting->document = $data['document'];
-            $bankAccountPosting->posting_date = $this->utilitarios::formatDataCarbon($data['posting_date']);
-            array_push($where_balance, ['posting_date', '<=', $bankAccountPosting->posting_date]);
-            $bankAccountPosting->amount = $this->utilitarios::formatReal($data['amount']);
-            $bankAccountPosting->type = $data['type'];
-            $bankAccountPosting->type_bank_account_posting_id = $data['type_bank_account_posting_id'];
-            $bankAccountPosting->bank_account_id = $data['bank_account_id'];
-            $bankAccountPosting->income_id = $data['income_id'];
-            $bankAccountPosting->expense_id = $data['expense_id'];
-            $balance = $this->bankAccountPosting::where('bank_account_id', $bankAccountPosting->bank_account_id)
-                ->where($where_balance)
-                ->orderBy('posting_date', 'desc')
-                ->orderBy('id', 'desc')->first();
-            $amount = ($bankAccountPosting->type === 'C' ? $bankAccountPosting->amount : (-$bankAccountPosting->amount));
-            if($balance === null){
-                $bankAccountPosting->account_balance = $amount;
-            }else{
-                $bankAccountPosting->account_balance = $balance->account_balance + $amount;
-            }
-            $bankAccountPosting->save();
-            $this->recalcSaldo($bankAccountPosting->posting_date, $bankAccountPosting->bank_account_id);
-            $this->db::commit();
-            $this->session::flash('message', ['msg' => 'Lançamento Salvo com sucesso', 'type' => 'success']);
-            return redirect()->routeTenant('bank_account_posting.index', [$bankAccountPosting->bank_account_id]);
-        }catch (Exception $e){
-            $this->db::rollBack();
-            $this->session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
-            return redirect()->back();
-        }
+        /**
+         * @var $bankAccountPosting BankAccountPosting
+         */
+        $data = $request->all();
+        $data['amount'] = formatReal($data['amount']);
+        $data['account_balance'] = $this->service->calcBalance($data);
+        $bankAccountPosting = $this->service->create($data);
+
+        $this->recalcSaldo($bankAccountPosting->posting_date, $bankAccountPosting->bank_account_id);
+        $this->successMessage('Lançamento Salvo com sucesso');
+        return redirect()->routeTenant('bank_account_posting.index', [$bankAccountPosting->bank_account_id]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return Response
+     * @param int $id
+     * @param $tenant
+     * @return JsonResponse
      */
     public function show($tenant, $id)
     {
-        $bankAccountPosting = BankAccountPosting::find($id);
-        return response()->json(["result"=> true, "bankAccountPosting"=> $bankAccountPosting], 200);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
+        return response()->json
+        (
+            [
+                "result" => true,
+                "bankAccountPosting" => BankAccountPosting::find($id)
+            ],
+            200
+        );
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param  int  $id
+     * @param int $id
      * @return Response
+     * @throws Exception
      */
     public function update($tenant, Request $request, $id)
     {
-        //
+        /**
+         * @var $bankAccountPosting BankAccountPosting
+         */
+        $data = $request->all();
+        $data['account_balance'] = $this->service->calcBalance($data);
+        $bankAccountPosting = $this->service->update(BankAccountPosting::find($id), $data);
+
+        $this->recalcSaldo($bankAccountPosting->posting_date, $bankAccountPosting->bank_account_id);
+        $this->successMessage('Lançamento Salvo com sucesso');
+        return redirect()->routeTenant('bank_account_posting.index', [$bankAccountPosting->bank_account_id]);
+
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param $tenant
+     * @param Request $request
      * @param $id
      * @return RedirectResponse
      * @throws Exception
      */
-    public function destroy($tenant, $id)
+    public function destroy($tenant, Request $request, $id)
     {
         $bankAccountPosting = BankAccountPosting::findOrFail($id);
         $bankAccountPosting->delete();
 
-        $balance = $this->bankAccountPosting::where('bank_account_id', $bankAccountPosting->bank_account_id)
-            ->where('posting_date', '<=', $bankAccountPosting->posting_date)
-            ->orderBy('posting_date', 'desc')
-            ->orderBy('id', 'desc')->first();
-        $this->recalcSaldo(formatDataCarbon($balance->posting_date), $bankAccountPosting->bank_account_id);
+        $balance = $this->service->lastPosting($bankAccountPosting);
+        $this->recalcSaldo(
+            isset($balance->posting_date)
+                ? formatDataCarbon($balance->posting_date)
+                : Carbon::createFromTimestamp(-1),
+            $bankAccountPosting->bank_account_id
+        );
         $this->successMessage("Lançamento deletado com sucesso");
         return redirect()->back();
     }
 
-    public function recalcSaldo(Carbon $date, $bank_account_id){
-        try{
+    /**
+     * @param Carbon $date
+     * @param $bank_account_id
+     * @return bool
+     * @throws Exception
+     */
+    public function recalcSaldo(Carbon $date, $bank_account_id)
+    {
+        try {
             DB::beginTransaction();
-            $itens_recalc = BankAccountPosting::where('bank_account_id', $bank_account_id)
+            $itens_recalc = BankAccountPosting
+                ::whereBankAccountId($bank_account_id)
                 ->where('posting_date', '>=', $date)
                 ->orderBy('posting_date', 'asc')
-                ->orderBy('id', 'asc')->get();
+                ->orderBy('id', 'asc')
+                ->get();
             $balance = $itens_recalc->first()->account_balance;
             $itens_recalc->shift();
-            foreach($itens_recalc as $item){
+            foreach ($itens_recalc as $item) {
                 $balance = $balance +
                     ($item->type === 'C' ? $item->amount : (-$item->amount));
                 $item->account_balance = $balance;
                 $item->save();
             }
             DB::commit();
-        }catch(Exception $e){
+            return true;
+        } catch (Exception $e) {
             DB::rollBack();
-            Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
+            $this->errorMessage($e->getMessage());
             return redirect()->routeTenant('bank_account_posting.file');
         }
     }
 
-    public function readFileStore(Request $request){
-        try{
-            DB::beginTransaction();
-            $filestxt = $request->arquivostxt;
-            if(isset($filestxt)){
-                foreach($filestxt as $filetxt){
-                    $this->readFileTxt(file($filetxt));
-                }
+    /**
+     * @param Request $request
+     * @return mixed
+     * @throws Exception
+     */
+    public function readFileStore(Request $request)
+    {
+        $filesTxt = $request->get('arquivostxt');
+        if (isset($filesTxt)) {
+            foreach ($filesTxt as $fileTxt) {
+                $this->readFileTxt(file($fileTxt));
             }
-            $filesofx = $request->arquivosofx;
-            if(isset($filesofx)){
-                foreach($filesofx as $fileofx){
-                    $this->readFileOfx($fileofx);
-                }
-            }
-            DB::commit();
-            Session::flash('message', ['msg' => 'Arquivo(s) Lido(s) Com Sucesso', 'type' => 'success']);
-            return redirect()->routeTenant('bank_account_posting.file');
-        }catch(Exception $e){
-            DB::rollBack();
-            Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
-            return redirect()->routeTenant('bank_account_posting.file');
         }
+        $filesOfx = $request->get('arquivosofx');
+        if (isset($filesOfx)) {
+            foreach ($filesOfx as $fileOfx) {
+                $this->readFileOfx($fileOfx);
+            }
+        }
+        $this->successMessage("Arquivo(s) Lido(s) Com Sucesso");
+        return redirect()->routeTenant('bank_account_posting.file');
     }
 
-    function readFileOfx($fileofx){
+    /**
+     * @param $fileOfx
+     * @throws Exception
+     */
+    function readFileOfx($fileOfx)
+    {
         $type_bank_account_posting_not_saves = [];
-        $ofx = new Ofx($fileofx);
+        $ofx = new Ofx($fileOfx);
         $bankAccount = $this->mountBankAccountOfx($ofx);
-        foreach($ofx->bankTranList as $transactions){
+        foreach ($ofx->bankTranList as $transactions) {
             $typeBankAccountPosting = new TypeBankAccountPosting();
             $bankAccountPosting = $this->mountBankAccountPostingOfx($transactions, $typeBankAccountPosting, $bankAccount);
-            if($typeBankAccountPosting->getType((string)$transactions->MEMO) === 0){
+            if ($typeBankAccountPosting->getType((string)$transactions->MEMO) === 0) {
                 array_push($type_bank_account_posting_not_saves, $transactions->MEMO);
                 continue;
             }
-            if(sizeof($type_bank_account_posting_not_saves) === 0){
+            if (sizeof($type_bank_account_posting_not_saves) === 0) {
                 $bankAccountPosting->save();
             }
         }
-        if(sizeof($type_bank_account_posting_not_saves) !== 0){
-            throw new Exception('\nExistem tipos não salvos: '.implode(",", $type_bank_account_posting_not_saves));
+        if (sizeof($type_bank_account_posting_not_saves) !== 0) {
+            throw new Exception('\nExistem tipos não salvos: ' . implode(",", $type_bank_account_posting_not_saves));
         }
     }
 
-    function mountBankAccountOfx($ofx){
+    /**
+     * @param $ofx
+     * @return BankAccount
+     */
+    function mountBankAccountOfx($ofx)
+    {
         $bankAccount = new BankAccount();
-        $bank = Bank::where('number', 'like', '%'.(integer)$ofx->bankId.'%')->first();
+        $bank = Bank
+            ::where(
+                'number',
+                'like',
+                '%'.(integer)$ofx->bankId.'%')
+            ->first();
         $bankAccount->number_account = (string)$ofx->acctId;
-        $number_account = substr((string)$ofx->acctId, 0,8);
-        $bankAccount = BankAccount::where('bank_id', $bank->id)
-            ->where('number_account', 'like', '%'.(integer)$number_account.'%')->first();
+        $number_account = substr((string)$ofx->acctId, 0, 8);
+        $bankAccount = BankAccount
+            ::whereBankId($bank->id)
+            ->where(
+                'number_account',
+                'like',
+                '%'.(integer)$number_account.'%')
+            ->first();
         return $bankAccount;
     }
 
-    function mountBankAccountPostingOfx($transactions, TypeBankAccountPosting $typeBankAccountPosting, BankAccount $bankAccount){
+    /**
+     * @param $transactions
+     * @param TypeBankAccountPosting $typeBankAccountPosting
+     * @param BankAccount $bankAccount
+     * @return BankAccountPosting
+     */
+    function mountBankAccountPostingOfx($transactions, TypeBankAccountPosting $typeBankAccountPosting, BankAccount $bankAccount)
+    {
         $bankAccountPosting = new BankAccountPosting();
         $keyFileTypeBankAccountPosting = $typeBankAccountPosting->getType((string)$transactions->MEMO);
-        if($keyFileTypeBankAccountPosting === 0){
+        if ($keyFileTypeBankAccountPosting === 0) {
             $keyFileTypeBankAccountPosting = new KeyFileTypeBankAccountPosting();
             $keyFileTypeBankAccountPosting->type_id = 0;
             $keyFileTypeBankAccountPosting->expense_id = 0;
@@ -279,20 +271,22 @@ class BankAccountPostingController extends Controller
         }
         $bankAccountPosting->type_bank_account_posting_id = $keyFileTypeBankAccountPosting->type_id;
         $date_post = $transactions->DTPOSTED;
-        $bankAccountPosting->posting_date = Carbon::create(substr($date_post, 0,4), substr($date_post, 4,2), substr($date_post, 6,2), substr($date_post, 8,2));
+        $bankAccountPosting->posting_date = Carbon::create(substr($date_post, 0, 4), substr($date_post, 4, 2), substr($date_post, 6, 2), substr($date_post, 8, 2));
         $bankAccountPosting->bank_account_id = $bankAccount->id;
         $bankAccountPosting->document = $transactions->FITID;
         $bankAccountPosting->amount = ((float)$transactions->TRNAMT < 0) ? -((float)$transactions->TRNAMT) : (float)$transactions->TRNAMT;
         $bankAccountPosting->type = (string)$transactions->TRNTYPE === ofxCredit ? credit : debit;
         $bankAccountPosting->expense_id = $keyFileTypeBankAccountPosting->expense_id;
         $bankAccountPosting->income_id = $keyFileTypeBankAccountPosting->income_id;
-        $balance = BankAccountPosting::where('bank_account_id',$bankAccountPosting->bank_account_id)
-            ->where('posting_date', '<=', $bankAccountPosting->posting_date)
-            ->orderBy('posting_date', 'desc')
-            ->orderBy('id', 'desc')->first();
-        if($balance === null){
+        return $this->calcAccountBalance($bankAccountPosting);
+    }
+
+    public function calcAccountBalance(BankAccountPosting $bankAccountPosting)
+    {
+        $balance = $this->service->lastPosting($bankAccountPosting);
+        if ($balance === null) {
             $bankAccountPosting->account_balance = $bankAccountPosting->amount;
-        }else{
+        } else {
             $bankAccountPosting->account_balance = $balance->account_balance +
                 ($bankAccountPosting->type === 'C' ? $bankAccountPosting->amount : (-$bankAccountPosting->amount));
 
@@ -300,83 +294,91 @@ class BankAccountPostingController extends Controller
         return $bankAccountPosting;
     }
 
-    function readFileTxt($file){
+    /**
+     * @param $file
+     * @throws Exception
+     */
+    function readFileTxt($file)
+    {
         $header = explode(';', $file[0]);
         $type_bank_account_posting_not_saves = [];
 
         $this->validationFile($header);
 
-        foreach($file as $index => $posting){
-            if($index === 0){
+        foreach ($file as $index => $posting) {
+            if ($index === 0) {
                 continue;
             }
             $data = $this->clearStringFile($posting);
             $typeBankAccountPosting = new TypeBankAccountPosting();
-            if($typeBankAccountPosting->getType($data[3]) === 0){
+            if ($typeBankAccountPosting->getType($data[3]) === 0) {
                 array_push($type_bank_account_posting_not_saves, $data[3]);
                 continue;
             }
             $bankAccount = $this->mountBankAccount($data);
             $bankAccountPosting = $this->mountBankAccountPosting($data, $bankAccount, $typeBankAccountPosting);
-            if(sizeof($type_bank_account_posting_not_saves) === 0){
+            if (sizeof($type_bank_account_posting_not_saves) === 0) {
                 $bankAccountPosting->save();
             }
         }
-        if(sizeof($type_bank_account_posting_not_saves) !== 0){
-            throw new Exception('\nExistem tipos não salvos: '.implode(",", $type_bank_account_posting_not_saves));
+        if (sizeof($type_bank_account_posting_not_saves) !== 0) {
+            throw new Exception('\nExistem tipos não salvos: ' . implode(",", $type_bank_account_posting_not_saves));
         }
     }
 
-    function validationFile($header){
-        if( $header[0] === '"Conta"' &&
+    /**
+     * @param $header
+     * @throws Exception
+     */
+    function validationFile($header)
+    {
+        if ($header[0] === '"Conta"' &&
             $header[1] === '"Data_Mov"' &&
             $header[2] === '"Nr_Doc"' &&
-            $header[3] === '"Historico"'&&
+            $header[3] === '"Historico"' &&
             $header[4] === '"Valor"' &&
-            str_replace("\n", '', $header[5]) === '"Deb_Cred"'){
-        }else{
+            str_replace("\n", '', $header[5]) === '"Deb_Cred"') {
+        } else {
             throw new Exception('Arquivo inválido');
         }
     }
-    function mountBankAccount($data){
-        $agency         = substr($data[0],0,4);
-        $operation      = substr($data[0],4,3);
-        $number_account = substr($data[0],7,8);
-        $digit_account  = substr($data[0],15,1);
-        $bankAccount    = BankAccount::where([
-            'agency'            => intval($agency),
-            'operation'         => intval($operation),
-            'number_account'    => intval($number_account),
-            'digit_account'     => intval($digit_account)])->first();
-        return $bankAccount;
+
+    /**
+     * @param $data
+     * @return BankAccount
+     */
+    function mountBankAccount($data)
+    {
+        return BankAccount
+            ::where
+            (
+                [
+                    'agency' => intval(substr($data[0], 0, 4)),
+                    'operation' => intval(substr($data[0], 4, 3)),
+                    'number_account' => intval(substr($data[0], 7, 8)),
+                    'digit_account' => intval(substr($data[0], 15, 1))
+                ]
+            )
+            ->first();
     }
 
-    function mountBankAccountPosting($data, BankAccount $bankAccount,TypeBankAccountPosting $typeBankAccountPosting){
+    function mountBankAccountPosting($data, BankAccount $bankAccount, TypeBankAccountPosting $typeBankAccountPosting)
+    {
         $bankAccountPosting = new BankAccountPosting();
         $keyFileTypeBankAccountPosting = $typeBankAccountPosting->getType($data[3]);
         $bankAccountPosting->type_bank_account_posting_id = $keyFileTypeBankAccountPosting->type_id;
         $bankAccountPosting->expense_id = $keyFileTypeBankAccountPosting->expense_id;
         $bankAccountPosting->income_id = $keyFileTypeBankAccountPosting->income_id;
-        $bankAccountPosting->posting_date = Carbon::create(substr($data[1], 0,4), substr($data[1], 4,2), substr($data[1], 6,2));
+        $bankAccountPosting->posting_date = Carbon::create(substr($data[1], 0, 4), substr($data[1], 4, 2), substr($data[1], 6, 2));
         $bankAccountPosting->bank_account_id = $bankAccount->id;
         $bankAccountPosting->document = $data[2];
         $bankAccountPosting->amount = $data[4];
         $bankAccountPosting->type = str_replace("\n", '', $data[5]);
-        $balance = BankAccountPosting::where('bank_account_id',$bankAccountPosting->bank_account_id)
-                                        ->where('posting_date', '<=', $bankAccountPosting->posting_date)
-                                        ->orderBy('posting_date', 'desc')
-                                        ->orderBy('id', 'desc')->first();
-        if($balance === null){
-            $bankAccountPosting->account_balance = $bankAccountPosting->amount;
-        }else{
-            $bankAccountPosting->account_balance = $balance->account_balance +
-                ($bankAccountPosting->type === 'C' ? $bankAccountPosting->amount : (-$bankAccountPosting->amount));
-
-        }
-        return $bankAccountPosting;
+        return $this->calcAccountBalance($bankAccountPosting);
     }
 
-    function clearStringFile($posting){
+    function clearStringFile($posting)
+    {
         $data = explode(';', $posting);
         $data[0] = str_replace('"', '', $data[0]);
         $data[1] = str_replace('"', '', $data[1]);
@@ -387,55 +389,71 @@ class BankAccountPostingController extends Controller
         return $data;
     }
 
-    public function file(){
+    public function file()
+    {
         return view('bank_account_posting.file');
     }
 
-    public function get(Request $request){
-        try{
-            $model = BankAccountPosting::where('bank_account_id', $request->id)
-                ->join('type_bank_account_postings', 'type_bank_account_postings.id', 'bank_account_postings.type_bank_account_posting_id')
-                ->select(['bank_account_postings.id', 'document','posting_date', 'amount', 'type',
-                    'type_bank_account_postings.name as type_name', 'account_balance'])->orderBy('posting_date', 'desc')
-            ->orderBy('bank_account_postings.id', 'desc');
+    public function get(Request $request, $tenant, $id)
+    {
+        try {
+            $model = BankAccountPosting
+                ::whereBankAccountId($id)
+                ->join(
+                    'type_bank_account_postings',
+                    'type_bank_account_postings.id',
+                    'bank_account_postings.type_bank_account_posting_id')
+                ->select(
+                    [
+                        'bank_account_postings.id',
+                        'document',
+                        'posting_date',
+                        'amount',
+                        'type',
+                        'type_bank_account_postings.name as type_name',
+                        'account_balance'
+                    ]
+                )
+                ->orderBy('posting_date', 'desc')
+                ->orderBy('bank_account_postings.id', 'desc');
 
             $response = DataTables::of($model)
-                ->filter(function (Builder $query) use ($request){
+                ->filter(function (Builder $query) use ($request) {
 
-                    if($request->type_name > 0){
-                        $query->where('type_bank_account_postings.id', $request->type_name);
+                    if ($request->get('type_name') > 0) {
+                        $query->where('type_bank_account_postings.id', $request->get('type_name'));
                     }
-                    if($request->type !== "0"){
-                        $query->where('type', $request->type);
+                    if ($request->get('type') !== "0") {
+                        $query->where('type', $request->get('type'));
                     }
-                    if($request->posting_date !== null){
-                        $explode = explode('-', $request->posting_date);
+                    if ($request->get('posting_date') !== null) {
+                        $explode = explode('-', $request->get('posting_date'));
                         $dt_initial = Utilitarios::formatDataCarbon(trim($explode[0]));
                         $dt_final = Utilitarios::formatDataCarbon(trim($explode[1]));
                         $query->whereBetween('posting_date', [$dt_initial, $dt_final]);
                     }
                 })
-                ->addColumn('posting_date', function($model){
-                    return $model->posting_date = Utilitarios::formatDataCarbon($model->posting_date)->format('d/m/Y H:i');
+                ->addColumn('posting_date', function ($model) {
+                    return Utilitarios::formatDataCarbon($model->posting_date)->format('d/m/Y H:i');
                 })
-                ->addColumn('amount', function($model){
-                    return $model->amount = 'R$: '.Utilitarios::getFormatReal($model->amount);
+                ->addColumn('amount', function ($model) {
+                    return 'R$: ' . Utilitarios::getFormatReal($model->amount);
                 })
-                ->addColumn('type', function($model){
-                    return $model->type = $model->type === 'C' ? 'Crédito' : 'Débito';
-                })->addColumn('account_balance', function($model){
-                    return $model->amount = 'R$: '.Utilitarios::getFormatReal($model->account_balance);
-                })->addColumn('actions', function($model){
+                ->addColumn('type', function ($model) {
+                    return $model->type === 'C' ? 'Crédito' : 'Débito';
+                })->addColumn('account_balance', function ($model) {
+                    return 'R$: ' . Utilitarios::getFormatReal($model->account_balance);
+                })->addColumn('actions', function ($model) {
                     return Utilitarios::getBtnAction([
-                        ['type'=>'edit', 'url'=>'#', 'id' => $model->id],
-                        ['type'=>'delete', 'url' => routeTenant('bank_account_posting.destroy', ['id' => $model->id]), 'id' => $model->id]
+                        ['type' => 'edit', 'url' => '#', 'id' => $model->id],
+                        ['type' => 'delete', 'url' => routeTenant('bank_account_posting.destroy', [$model->id]), 'id' => $model->id]
                     ]);
                 })
                 ->rawColumns(['actions'])
                 ->toJson();
             return $response->original;
-        }catch (Exception $e){
-            dd('erro!'.$e->getMessage());
+        } catch (Exception $e) {
+            dd('erro!' . $e->getMessage());
         }
     }
 }

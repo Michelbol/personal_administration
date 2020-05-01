@@ -30,13 +30,11 @@ Route::prefix("{{$tenantParam}}")
             //=========================================BANK ACCOUNT===========================================================//
             Route::get('/bank_account/get', 'BankAccountController@get')->name('bank_account.get');
             //=========================================BANK ACCOUNT POSTING===================================================//
-            Route::get('/bank_account_posting/{id}', 'BankAccountPostingController@index')->name('bank_account_posting.index');
+            Route::get('/bank_account_posting/{id}', 'BankAccountPostingController@indexPostingByBank')->name('bank_account_posting.index');
             Route::get('/bank_account_posting/show/{id}', 'BankAccountPostingController@show')->name('bank_account_posting.show');
             Route::get('/bank_account_posting/get/{id}', 'BankAccountPostingController@get')->name('bank_account_posting.get');
             Route::get('/bank_account_posting/', 'BankAccountPostingController@file')->name('bank_account_posting.file');
             Route::post('/bank_account_posting/read_file', 'BankAccountPostingController@readFileStore')->name('bank_account_posting.read_file');
-            Route::post('/bank_account_posting', 'BankAccountPostingController@store')->name('bank_account_posting.store');
-            Route::delete('/bank_account_posting/{id}',      'BankAccountPostingController@destroy')     ->name('bank_account_posting.destroy');
             //=========================================INCOME=================================================================//
             Route::get('/income/get', 'IncomeController@get')->name('income.get');
             //=========================================EXPENSE=================================================================//
@@ -84,6 +82,7 @@ Route::prefix("{{$tenantParam}}")
             Route::delete('/{id}',      $controller.'@destroy')     ->name('destroy');
             Route::get('/{id}/edit',    $controller.'@edit')        ->name('edit');
         });
+        Route::apiResource('bank_account_posting', 'BankAccountPostingController')->except(['index', 'show']);
             Route::resources([
                 'bank_accounts'             => 'BankAccountController',
                 'bank'                      => 'BankController',
