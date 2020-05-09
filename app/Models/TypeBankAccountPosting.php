@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -22,6 +23,8 @@ use Illuminate\Database\Eloquent\Builder;
  * @method static Builder|TypeBankAccountPosting whereUpdatedAt($value)
  * @mixin Builder
  * @mixin Model
+ * @mixin Eloquent
+ * @mixin TypeBankAccountPosting
  */
 class TypeBankAccountPosting extends Model
 {
