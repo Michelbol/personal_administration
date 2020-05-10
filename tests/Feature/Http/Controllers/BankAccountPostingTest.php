@@ -5,7 +5,9 @@ namespace Tests\Feature;
 use App\Models\BankAccount;
 use App\Models\BankAccountPosting;
 use App\Models\Enum\SessionEnum;
+use App\Models\Enum\TypeBankAccountPostingEnum;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Collection;
 use Tests\SeedingTrait;
 use Tests\TestCase;
 
@@ -89,5 +91,32 @@ class BankAccountPostingTest extends TestCase
             ->assertStatus(302)
             ->assertRedirect('')
             ->assertSessionHas('message', ['msg'=>'Lançamento deletado com sucesso', 'type' => SessionEnum::success]);
+
+        /**
+         * @var $data Collection
+         */
+        $data = factory(BankAccountPosting::class, 2)->create();
+        $data2 = $data->sortByDesc('posting_date')->first();
+
+        $response = $this->delete("$tenant->sub_domain/bank_account_posting/{$data2['id']}");
+        $response
+            ->assertStatus(302)
+            ->assertRedirect('')
+            ->assertSessionHas('message', ['msg'=>'Lançamento deletado com sucesso', 'type' => SessionEnum::success]);
+
+        /**
+         * @var $data Collection
+         */
+        $data = factory(BankAccountPosting::class, 5)->create(['type' => TypeBankAccountPostingEnum::CREDIT]);
+        $data->merge(factory(BankAccountPosting::class, 5)->create(['type' => TypeBankAccountPostingEnum::DEBIT]));
+
+        $data2 = $data->sortBy('posting_date')->first();
+
+        $response = $this->delete("$tenant->sub_domain/bank_account_posting/{$data2['id']}");
+        $response
+            ->assertStatus(302)
+            ->assertRedirect('')
+            ->assertSessionHas('message', ['msg'=>'Lançamento deletado com sucesso', 'type' => SessionEnum::success]);
+
     }
 }

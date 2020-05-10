@@ -168,7 +168,9 @@ class BankAccountPostingController extends CrudController
             $itens_recalc->shift();
             foreach ($itens_recalc as $item) {
                 $balance = $balance +
-                    ($item->type === 'C' ? $item->amount : (-$item->amount));
+                    ($item->type === 'C'
+                        ? $item->amount
+                        : (-$item->amount));
                 $item->account_balance = $balance;
                 $item->save();
             }
