@@ -1,5 +1,6 @@
 <?php
 
+use App\User;
 use Illuminate\Database\Seeder;
 
 class UsersTableSeeder extends Seeder
@@ -11,8 +12,8 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        if(\App\User::where('email', 'master@master.com')->count() === 0){
-            factory(\App\User::class, 1)->create([
+        if(User::where('email', 'master@master.com')->count() === 0){
+            factory(User::class, 1)->create([
                 'name' => 'Michel',
                 'email' => 'master@master.com',
                 'password' => bcrypt('master')

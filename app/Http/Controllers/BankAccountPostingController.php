@@ -102,6 +102,7 @@ class BankAccountPostingController extends CrudController
     /**
      * Update the specified resource in storage.
      *
+     * @param $tenant
      * @param Request $request
      * @param int $id
      * @return Response
