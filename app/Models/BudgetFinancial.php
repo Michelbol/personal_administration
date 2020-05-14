@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Scopes\TenantModels;
+use Eloquent;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -38,7 +40,8 @@ use Illuminate\Database\Eloquent\Collection;
  * @method static Builder|BudgetFinancial whereUpdatedAt($value)
  * @method static Builder|BudgetFinancial whereUserId($value)
  * @method static Builder|BudgetFinancial whereYear($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
+ * @mixin BudgetFinancial
  */
 class BudgetFinancial extends Model
 {
@@ -70,13 +73,23 @@ class BudgetFinancial extends Model
         return $this->months[$index];
     }
 
+    /**
+     * @return HasMany
+     */
     public function budgetFinancialPostings(){
         return $this->hasMany(BudgetFinancialPosting::class);
     }
 
+    /**
+     * @return HasMany
+     */
     public function budgetFinancialPostingsIncomes(){
         return $this->hasMany(BudgetFinancialPosting::class)->where('income_id', '>', 0);
     }
+
+    /**
+     * @return HasMany
+     */
     public function budgetFinancialPostingsExpenses(){
         return $this->hasMany(BudgetFinancialPosting::class)->where('expense_id', '>', 0);
     }

@@ -14,8 +14,8 @@ use App\Models\UserTenant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\BudgetFinancial;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
+use DB;
+use Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\Factory;
 use App\Models\BudgetFinancialPosting;
@@ -36,6 +36,8 @@ class BudgetFinancialController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param $tenant
+     * @param Request $request
      * @return RedirectResponse|Factory|View
      */
     public function index($tenant, Request $request)
@@ -70,13 +72,13 @@ class BudgetFinancialController extends Controller
                 $budgedFinancials = [];
                 $index_expenses = routeTenant('expense.index');
                 $index_incomes = routeTenant('income.index');
-                \Session::flash('message', [
+                Session::flash('message', [
                     'msg' => "Para planejar seu orçamento, crie suas <a href='$index_expenses'>Despesas</a>/<a href='$index_incomes'>Receitas</a>",
                     'type' => 'danger']);
             }
             $users = UserTenant::all();
-        }catch(\Exception $e){
-            \Session::flash('message', ['msg' => "Erro ao acessa a página".$e->getMessage(), 'type' => 'danger']);
+        }catch(Exception $e){
+            Session::flash('message', ['msg' => "Erro ao acessa a página".$e->getMessage(), 'type' => 'danger']);
             return redirect()->back();
         }
 
@@ -84,22 +86,13 @@ class BudgetFinancialController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param $year
+     * @param $selected_user_id
+     * @return void
      */
-    public function store($tenant, $year, $selected_user_id)
+    public function store($year, $selected_user_id)
     {
         try{
             DB::beginTransaction();
@@ -123,58 +116,24 @@ class BudgetFinancialController extends Controller
             }
             DB::commit();
 //            \Session::flash('message', ['msg' => 'Criado meses do ano '.$year, 'type' => 'success']);
-        }catch (\Exception $e){
-            \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
+        }catch (Exception $e){
+            Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param $tenant
+     * @param BudgetFinancial $budgetFinancial
      * @return Factory|View
      */
-    public function edit($tenant, $id)
+    public function edit($tenant, BudgetFinancial $budgetFinancial)
     {
-        $budgetFinancial = BudgetFinancial::find($id);
         $incomes = Income::all();
         $expenses = Expenses::all();
 
         return view('budget_financial.edit', compact('budgetFinancial', 'incomes', 'expenses'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 
     public function updateInitialBalance(Request $request, $tenant, $id){
@@ -185,14 +144,23 @@ class BudgetFinancialController extends Controller
             $budgetFinancial->update(['initial_balance' => Utilitarios::formatReal($data['initial_balance'])]);
             BudgetFinancialPosting::recalcBalance($budgetFinancial);
             DB::commit();
-            \Session::flash('message', ['msg' => 'Atualizado Saldo com sucesso', 'type' => 'success']);
+            Session::flash('message', ['msg' => 'Atualizado Saldo com sucesso', 'type' => 'success']);
             return redirect()->routeTenant('budget_financial.edit', [$budgetFinancial->id]);
-        }catch (\Exception $e){
-            dd($e->getMessage());
-            \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
+        }catch (Exception $e){
+            Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
+            return redirect()->back();
         }
     }
+
+    /**
+     * @param $tenant
+     * @param $id
+     * @return mixed
+     */
     public function lastMonth($tenant, $id){
+        /**
+         * @var $budgetFinancialLastMonth BudgetFinancial
+         */
         try{
             DB::beginTransaction();
             $budgetFinancial = BudgetFinancial::find($id);
@@ -203,8 +171,10 @@ class BudgetFinancialController extends Controller
                 $month = $budgetFinancial->month-1;
                 $year = $budgetFinancial->year;
             }
-            $budgetFinancialLastMonth = BudgetFinancial::where('month', $month)
-                                                        ->where('year', $year)->first();
+            $budgetFinancialLastMonth = BudgetFinancial
+                ::where('month', $month)
+                ->where('year', $year)
+                ->first();
             if(isset($budgetFinancialLastMonth)){
                 $income = $budgetFinancialLastMonth->budgetFinancialPostingsIncomes()->sum('amount');
                 $expense = $budgetFinancialLastMonth->budgetFinancialPostingsExpenses()->sum('amount');
@@ -215,18 +185,18 @@ class BudgetFinancialController extends Controller
             $budgetFinancial->update(['initial_balance' => $balance]);
             BudgetFinancialPosting::recalcBalance($budgetFinancial);
             DB::commit();
-            \Session::flash('message', ['msg' => 'Atualizado Saldo com sucesso', 'type' => 'success']);
+            Session::flash('message', ['msg' => 'Atualizado Saldo com sucesso', 'type' => 'success']);
             return redirect()->routeTenant('budget_financial.edit', [$budgetFinancial->id]);
-        }catch (\Exception $e){
-            dd($e->getMessage());
-            \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
+        }catch (Exception $e){
+            Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
+            return redirect()->back();
         }
     }
 
     public function createBudgetCurrentYear($tenant, $selected_user_id){
         try{
-            $this->store($tenant, Carbon::now()->year, $selected_user_id);
-        }catch(\Exception $e){
+            $this->store(Carbon::now()->year, $selected_user_id);
+        }catch(Exception $e){
 
         }
     }

@@ -34,6 +34,9 @@ class BankAccountPostingTest extends TestCase
 
     public function testStore()
     {
+        /**
+         * @var $data array
+         */
         $object = $this->setUser();
         $tenant = $object->get('tenant');
         $data = factory(BankAccountPosting::class)->make()->toArray();
@@ -64,6 +67,9 @@ class BankAccountPostingTest extends TestCase
 
     public function testUpdate()
     {
+        /**
+         * @var $data array
+         */
         $object = $this->setUser();
         $tenant = $object->get('tenant');
         $data = factory(BankAccountPosting::class)->create()->toArray();
@@ -119,4 +125,18 @@ class BankAccountPostingTest extends TestCase
             ->assertSessionHas('message', ['msg'=>'Lançamento deletado com sucesso', 'type' => SessionEnum::success]);
 
     }
+
+//    public function testReadFileStore()
+//    {
+//        $object = $this->setUser();
+//        $tenant = $object->get('tenant');
+//        $data = [
+//            'arquivostxt' => ['']
+//        ];
+//        $response = $this->post("$tenant->sub_domain/bank_account_posting/read_file", $data);
+//        $response
+//            ->assertStatus(302)
+//            ->assertRedirect("/$tenant->sub_domain/bank_account_posting")
+//            ->assertSessionHas('message', ['msg'=>'Arquivo(s) Lido(s) Com Sucesso', 'type' => SessionEnum::success]);
+//    }
 }
