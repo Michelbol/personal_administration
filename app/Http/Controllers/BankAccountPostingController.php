@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\BankAccountPostingService;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use App\Ofx;
@@ -345,7 +346,7 @@ class BankAccountPostingController extends CrudController
 
     /**
      * @param $data
-     * @return BankAccount
+     * @return Builder|Model|object|BankAccount
      */
     function mountBankAccount($data)
     {

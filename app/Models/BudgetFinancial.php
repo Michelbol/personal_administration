@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Scopes\TenantModels;
+use Eloquent;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -38,7 +39,7 @@ use Illuminate\Database\Eloquent\Collection;
  * @method static Builder|BudgetFinancial whereUpdatedAt($value)
  * @method static Builder|BudgetFinancial whereUserId($value)
  * @method static Builder|BudgetFinancial whereYear($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class BudgetFinancial extends Model
 {

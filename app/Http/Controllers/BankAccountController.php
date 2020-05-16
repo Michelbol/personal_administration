@@ -11,7 +11,7 @@ use Yajra\DataTables\DataTables;
 use App\Models\Enum\SessionEnum;
 use App\Services\BankAccountService;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Support\Facades\Session;
+use Session;
 
 class BankAccountController extends CrudController
 {
