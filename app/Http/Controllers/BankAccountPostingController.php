@@ -103,6 +103,7 @@ class BankAccountPostingController extends CrudController
     /**
      * Update the specified resource in storage.
      *
+     * @param $tenant
      * @param Request $request
      * @param int $id
      * @return Response
@@ -168,7 +169,9 @@ class BankAccountPostingController extends CrudController
             $itens_recalc->shift();
             foreach ($itens_recalc as $item) {
                 $balance = $balance +
-                    ($item->type === 'C' ? $item->amount : (-$item->amount));
+                    ($item->type === 'C'
+                        ? $item->amount
+                        : (-$item->amount));
                 $item->account_balance = $balance;
                 $item->save();
             }

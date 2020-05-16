@@ -12,258 +12,262 @@ class BanksTableSeeder extends Seeder
      */
     public function run()
     {
-        if(Bank::where('id', '>', 0)->count() === 0){
-            Bank::create(['Number' => '001', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO BRASIL S/A']);
-            Bank::create(['Number' => '002', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CENTRAL DO BRASIL']);
-            Bank::create(['Number' => '003', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DA AMAZONIA S.A']);
-            Bank::create(['Number' => '004', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO NORDESTE DO BRASIL S.A']);
-            Bank::create(['Number' => '007', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO NAC DESENV. ECO. SOCIAL S.A']);
-            Bank::create(['Number' => '008', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MERIDIONAL DO BRASIL']);
-            Bank::create(['Number' => '020', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DE ALAGOAS S.A']);
-            Bank::create(['Number' => '021', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DO ESPIRITO SANTO S.A']);
-            Bank::create(['Number' => '022', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DE CREDITO REAL DE MINAS GERAIS SA']);
-            Bank::create(['Number' => '024', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DE PERNAMBUCO']);
-            Bank::create(['Number' => '025', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO ALFA S/A']);
-            Bank::create(['Number' => '026', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DO ACRE S.A']);
-            Bank::create(['Number' => '027', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DE SANTA CATARINA S.A']);
-            Bank::create(['Number' => '028', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DA BAHIA S.A']);
-            Bank::create(['Number' => '029', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DO RIO DE JANEIRO S.A']);
-            Bank::create(['Number' => '030', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DA PARAIBA S.A']);
-            Bank::create(['Number' => '031', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DE GOIAS S.A']);
-            Bank::create(['Number' => '032', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DO MATO GROSSO S.A.']);
-            Bank::create(['Number' => '033', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DE SAO PAULO S.A']);
-            Bank::create(['Number' => '034', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESADO DO AMAZONAS S.A']);
-            Bank::create(['Number' => '035', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DO CEARA S.A']);
-            Bank::create(['Number' => '036', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DO MARANHAO S.A']);
-            Bank::create(['Number' => '037', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DO PARA S.A']);
-            Bank::create(['Number' => '038', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DO PARANA S.A']);
-            Bank::create(['Number' => '039', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DO PIAUI S.A']);
-            Bank::create(['Number' => '041', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DO RIO GRANDE DO SUL S.A']);
-            Bank::create(['Number' => '047', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DE SERGIPE S.A']);
-            Bank::create(['Number' => '048', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DE MINAS GERAIS S.A']);
-            Bank::create(['Number' => '059', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DE RONDONIA S.A']);
-            Bank::create(['Number' => '070', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DE BRASILIA S.A']);
-            Bank::create(['Number' => '077', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INTER S.A']);
-            Bank::create(['Number' => '102', 'title_color' => null, 'body_color' => null, 'Name' => 'XP INVESTIMENTOS']);
-            Bank::create(['Number' => '104', 'title_color' => '#0369b9', 'body_color' => '#f3bb5c', 'Name' => 'CAIXA ECONOMICA FEDERAL']);
-            Bank::create(['Number' => '106', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO ITABANCO S.A.']);
-            Bank::create(['Number' => '107', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BBM S.A']);
-            Bank::create(['Number' => '109', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CREDIBANCO S.A']);
-            Bank::create(['Number' => '116', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO B.N.L DO BRASIL S.A']);
-            Bank::create(['Number' => '148', 'title_color' => null, 'body_color' => null, 'Name' => 'MULTI BANCO S.A']);
-            Bank::create(['Number' => '151', 'title_color' => null, 'body_color' => null, 'Name' => 'CAIXA ECONOMICA DO ESTADO DE SAO PAULO']);
-            Bank::create(['Number' => '153', 'title_color' => null, 'body_color' => null, 'Name' => 'CAIXA ECONOMICA DO ESTADO DO R.G.SUL']);
-            Bank::create(['Number' => '165', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO NORCHEM S.A']);
-            Bank::create(['Number' => '166', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INTER-ATLANTICO S.A']);
-            Bank::create(['Number' => '168', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO C.C.F. BRASIL S.A']);
-            Bank::create(['Number' => '175', 'title_color' => null, 'body_color' => null, 'Name' => 'CONTINENTAL BANCO S.A']);
-            Bank::create(['Number' => '184', 'title_color' => null, 'body_color' => null, 'Name' => 'BBA - CREDITANSTALT S.A']);
-            Bank::create(['Number' => '199', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FINANCIAL PORTUGUES']);
-            Bank::create(['Number' => '200', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FRICRISA AXELRUD S.A']);
-            Bank::create(['Number' => '201', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO AUGUSTA INDUSTRIA E COMERCIAL S.A']);
-            Bank::create(['Number' => '204', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO S.R.L S.A']);
-            Bank::create(['Number' => '205', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO SUL AMERICA S.A']);
-            Bank::create(['Number' => '206', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MARTINELLI S.A']);
-            Bank::create(['Number' => '208', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PACTUAL S.A']);
-            Bank::create(['Number' => '210', 'title_color' => null, 'body_color' => null, 'Name' => 'DEUTSCH SUDAMERIKANICHE BANK AG']);
-            Bank::create(['Number' => '211', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO SISTEMA S.A']);
-            Bank::create(['Number' => '212', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MATONE S.A']);
-            Bank::create(['Number' => '213', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO ARBI S.A']);
-            Bank::create(['Number' => '214', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DIBENS S.A']);
-            Bank::create(['Number' => '215', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO AMERICA DO SUL S.A']);
-            Bank::create(['Number' => '216', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO REGIONAL MALCON S.A']);
-            Bank::create(['Number' => '217', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO AGROINVEST S.A']);
-            Bank::create(['Number' => '218', 'title_color' => null, 'body_color' => null, 'Name' => 'BBS - BANCO BONSUCESSO S.A.']);
-            Bank::create(['Number' => '219', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DE CREDITO DE SAO PAULO S.A']);
-            Bank::create(['Number' => '220', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CREFISUL']);
-            Bank::create(['Number' => '221', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO GRAPHUS S.A']);
-            Bank::create(['Number' => '222', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO AGF BRASIL S. A.']);
-            Bank::create(['Number' => '223', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INTERUNION S.A']);
-            Bank::create(['Number' => '224', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FIBRA S.A']);
-            Bank::create(['Number' => '225', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BRASCAN S.A']);
-            Bank::create(['Number' => '228', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO ICATU S.A']);
-            Bank::create(['Number' => '229', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CRUZEIRO S.A']);
-            Bank::create(['Number' => '230', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BANDEIRANTES S.A']);
-            Bank::create(['Number' => '231', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BOAVISTA S.A']);
-            Bank::create(['Number' => '232', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INTERPART S.A']);
-            Bank::create(['Number' => '233', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MAPPIN S.A']);
-            Bank::create(['Number' => '234', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO LAVRA S.A.']);
-            Bank::create(['Number' => '235', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO LIBERAL S.A']);
-            Bank::create(['Number' => '236', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CAMBIAL S.A']);
-            Bank::create(['Number' => '237', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BRADESCO S.A']);
-            Bank::create(['Number' => '239', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BANCRED S.A']);
-            Bank::create(['Number' => '240', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DE CREDITO REAL DE MINAS GERAIS S.']);
-            Bank::create(['Number' => '241', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CLASSICO S.A']);
-            Bank::create(['Number' => '242', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO EUROINVEST S.A']);
-            Bank::create(['Number' => '243', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO STOCK S.A']);
-            Bank::create(['Number' => '244', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CIDADE S.A']);
-            Bank::create(['Number' => '245', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO EMPRESARIAL S.A']);
-            Bank::create(['Number' => '246', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO ABC ROMA S.A']);
-            Bank::create(['Number' => '247', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO OMEGA S.A']);
-            Bank::create(['Number' => '249', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INVESTCRED S.A']);
-            Bank::create(['Number' => '250', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO SCHAHIN CURY S.A']);
-            Bank::create(['Number' => '251', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO SAO JORGE S.A.']);
-            Bank::create(['Number' => '252', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FININVEST S.A']);
-            Bank::create(['Number' => '254', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PARANA BANCO S.A']);
-            Bank::create(['Number' => '255', 'title_color' => null, 'body_color' => null, 'Name' => 'MILBANCO S.A.']);
-            Bank::create(['Number' => '256', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO GULVINVEST S.A']);
-            Bank::create(['Number' => '258', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INDUSCRED S.A']);
-            Bank::create(['Number' => '260', 'title_color'  => '#ba4de3', 'body_color'   => '#d494ec', 'Name' => 'NUBANK S.A']);
-            Bank::create(['Number' => '261', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO VARIG S.A']);
-            Bank::create(['Number' => '262', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BOREAL S.A']);
-            Bank::create(['Number' => '263', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CACIQUE']);
-            Bank::create(['Number' => '264', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PERFORMANCE S.A']);
-            Bank::create(['Number' => '265', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FATOR S.A']);
-            Bank::create(['Number' => '266', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CEDULA S.A']);
-            Bank::create(['Number' => '267', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BBM-COM.C.IMOB.CFI S.A.']);
-            Bank::create(['Number' => '275', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO REAL S.A']);
-            Bank::create(['Number' => '277', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PLANIBANC S.A']);
-            Bank::create(['Number' => '282', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BRASILEIRO COMERCIAL']);
-            Bank::create(['Number' => '291', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DE CREDITO NACIONAL S.A']);
-            Bank::create(['Number' => '294', 'title_color' => null, 'body_color' => null, 'Name' => 'BCR - BANCO DE CREDITO REAL S.A']);
-            Bank::create(['Number' => '295', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CREDIPLAN S.A']);
-            Bank::create(['Number' => '300', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DE LA NACION ARGENTINA S.A']);
-            Bank::create(['Number' => '302', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO PROGRESSO S.A']);
-            Bank::create(['Number' => '303', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO HNF S.A.']);
-            Bank::create(['Number' => '304', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PONTUAL S.A']);
-            Bank::create(['Number' => '308', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO COMERCIAL BANCESA S.A.']);
-            Bank::create(['Number' => '318', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO B.M.G. S.A']);
-            Bank::create(['Number' => '320', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INDUSTRIAL E COMERCIAL']);
-            Bank::create(['Number' => '341', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO ITAU S.A']);
-            Bank::create(['Number' => '346', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FRANCES E BRASILEIRO S.A']);
-            Bank::create(['Number' => '347', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO SUDAMERIS BRASIL S.A']);
-            Bank::create(['Number' => '351', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BOZANO SIMONSEN S.A']);
-            Bank::create(['Number' => '353', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO GERAL DO COMERCIO S.A']);
-            Bank::create(['Number' => '356', 'title_color' => null, 'body_color' => null, 'Name' => 'ABN AMRO S.A']);
-            Bank::create(['Number' => '366', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO SOGERAL S.A']);
-            Bank::create(['Number' => '369', 'title_color' => null, 'body_color' => null, 'Name' => 'PONTUAL']);
-            Bank::create(['Number' => '370', 'title_color' => null, 'body_color' => null, 'Name' => 'BEAL - BANCO EUROPEU PARA AMERICA LATINA']);
-            Bank::create(['Number' => '372', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO ITAMARATI S.A']);
-            Bank::create(['Number' => '375', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FENICIA S.A']);
-            Bank::create(['Number' => '376', 'title_color' => null, 'body_color' => null, 'Name' => 'CHASE MANHATTAN BANK S.A']);
-            Bank::create(['Number' => '388', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MERCANTIL DE DESCONTOS S/A']);
-            Bank::create(['Number' => '389', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MERCANTIL DO BRASIL S.A']);
-            Bank::create(['Number' => '392', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MERCANTIL DE SAO PAULO S.A']);
-            Bank::create(['Number' => '394', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO B.M.C. S.A']);
-            Bank::create(['Number' => '399', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BAMERINDUS DO BRASIL S.A']);
-            Bank::create(['Number' => '409', 'title_color' => null, 'body_color' => null, 'Name' => 'UNIBANCO - UNIAO DOS BANCOS BRASILEIROS']);
-            Bank::create(['Number' => '412', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO NACIONAL DA BAHIA S.A']);
-            Bank::create(['Number' => '415', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO NACIONAL S.A']);
-            Bank::create(['Number' => '420', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO NACIONAL DO NORTE S.A']);
-            Bank::create(['Number' => '422', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO SAFRA S.A']);
-            Bank::create(['Number' => '424', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO NOROESTE S.A']);
-            Bank::create(['Number' => '434', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FORTALEZA S.A']);
-            Bank::create(['Number' => '453', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO RURAL S.A']);
-            Bank::create(['Number' => '456', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO TOKIO S.A']);
-            Bank::create(['Number' => '464', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO SUMITOMO BRASILEIRO S.A']);
-            Bank::create(['Number' => '466', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MITSUBISHI BRASILEIRO S.A']);
-            Bank::create(['Number' => '472', 'title_color' => null, 'body_color' => null, 'Name' => 'LLOYDS BANK PLC']);
-            Bank::create(['Number' => '473', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FINANCIAL PORTUGUES S.A']);
-            Bank::create(['Number' => '477', 'title_color' => null, 'body_color' => null, 'Name' => 'CITIBANK N.A']);
-            Bank::create(['Number' => '479', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DE BOSTON S.A']);
-            Bank::create(['Number' => '480', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PORTUGUES DO ATLANTICO-BRASIL S.A']);
-            Bank::create(['Number' => '483', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO AGRIMISA S.A.']);
-            Bank::create(['Number' => '487', 'title_color' => null, 'body_color' => null, 'Name' => 'DEUTSCHE BANK S.A - BANCO ALEMAO']);
-            Bank::create(['Number' => '488', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO J. P. MORGAN S.A']);
-            Bank::create(['Number' => '489', 'title_color' => null, 'body_color' => null, 'Name' => 'BANESTO BANCO URUGAUAY S.A']);
-            Bank::create(['Number' => '492', 'title_color' => null, 'body_color' => null, 'Name' => 'INTERNATIONALE NEDERLANDEN BANK N.V.']);
-            Bank::create(['Number' => '493', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO UNION S.A.C.A']);
-            Bank::create(['Number' => '494', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO LA REP. ORIENTAL DEL URUGUAY']);
-            Bank::create(['Number' => '495', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO LA PROVINCIA DE BUENOS AIRES']);
-            Bank::create(['Number' => '496', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO EXTERIOR DE ESPANA S.A']);
-            Bank::create(['Number' => '498', 'title_color' => null, 'body_color' => null, 'Name' => 'CENTRO HISPANO BANCO']);
-            Bank::create(['Number' => '499', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO IOCHPE S.A']);
-            Bank::create(['Number' => '501', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BRASILEIRO IRAQUIANO S.A.']);
-            Bank::create(['Number' => '502', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO SANTANDER S.A']);
-            Bank::create(['Number' => '504', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MULTIPLIC S.A']);
-            Bank::create(['Number' => '505', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO GARANTIA S.A']);
-            Bank::create(['Number' => '600', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO LUSO BRASILEIRO S.A']);
-            Bank::create(['Number' => '601', 'title_color' => null, 'body_color' => null, 'Name' => 'BFC BANCO S.A.']);
-            Bank::create(['Number' => '602', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PATENTE S.A']);
-            Bank::create(['Number' => '604', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INDUSTRIAL DO BRASIL S.A']);
-            Bank::create(['Number' => '607', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO SANTOS NEVES S.A']);
-            Bank::create(['Number' => '608', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO OPEN S.A']);
-            Bank::create(['Number' => '610', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO V.R. S.A']);
-            Bank::create(['Number' => '611', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PAULISTA S.A']);
-            Bank::create(['Number' => '612', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO GUANABARA S.A']);
-            Bank::create(['Number' => '613', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PECUNIA S.A']);
-            Bank::create(['Number' => '616', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INTERPACIFICO S.A']);
-            Bank::create(['Number' => '617', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INVESTOR S.A.']);
-            Bank::create(['Number' => '618', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO TENDENCIA S.A']);
-            Bank::create(['Number' => '621', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO APLICAP S.A.']);
-            Bank::create(['Number' => '622', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DRACMA S.A']);
-            Bank::create(['Number' => '623', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PANAMERICANO S.A']);
-            Bank::create(['Number' => '624', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO GENERAL MOTORS S.A']);
-            Bank::create(['Number' => '625', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO ARAUCARIA S.A']);
-            Bank::create(['Number' => '626', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FICSA S.A']);
-            Bank::create(['Number' => '627', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DESTAK S.A']);
-            Bank::create(['Number' => '628', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CRITERIUM S.A']);
-            Bank::create(['Number' => '629', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCORP BANCO COML. E. DE INVESTMENTO']);
-            Bank::create(['Number' => '630', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INTERCAP S.A']);
-            Bank::create(['Number' => '633', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO REDIMENTO S.A']);
-            Bank::create(['Number' => '634', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO TRIANGULO S.A']);
-            Bank::create(['Number' => '635', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DO AMAPA S.A']);
-            Bank::create(['Number' => '637', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO SOFISA S.A']);
-            Bank::create(['Number' => '638', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PROSPER S.A']);
-            Bank::create(['Number' => '639', 'title_color' => null, 'body_color' => null, 'Name' => 'BIG S.A. - BANCO IRMAOS GUIMARAES']);
-            Bank::create(['Number' => '640', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DE CREDITO METROPOLITANO S.A']);
-            Bank::create(['Number' => '641', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO EXCEL ECONOMICO S/A']);
-            Bank::create(['Number' => '643', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO SEGMENTO S.A']);
-            Bank::create(['Number' => '645', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DE RORAIMA S.A']);
-            Bank::create(['Number' => '647', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MARKA S.A']);
-            Bank::create(['Number' => '648', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO ATLANTIS S.A']);
-            Bank::create(['Number' => '649', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DIMENSAO S.A']);
-            Bank::create(['Number' => '650', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PEBB S.A']);
-            Bank::create(['Number' => '652', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FRANCES E BRASILEIRO SA']);
-            Bank::create(['Number' => '653', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INDUSVAL S.A']);
-            Bank::create(['Number' => '654', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO A. J. RENNER S.A']);
-            Bank::create(['Number' => '655', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO VOTORANTIM S.A.']);
-            Bank::create(['Number' => '656', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MATRIX S.A']);
-            Bank::create(['Number' => '657', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO TECNICORP S.A']);
-            Bank::create(['Number' => '658', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PORTO REAL S.A']);
-            Bank::create(['Number' => '702', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO SANTOS S.A']);
-            Bank::create(['Number' => '705', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INVESTCORP S.A.']);
-            Bank::create(['Number' => '707', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DAYCOVAL S.A']);
-            Bank::create(['Number' => '711', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO VETOR S.A.']);
-            Bank::create(['Number' => '713', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CINDAM S.A']);
-            Bank::create(['Number' => '715', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO VEGA S.A']);
-            Bank::create(['Number' => '718', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO OPERADOR S.A']);
-            Bank::create(['Number' => '719', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PRIMUS S.A']);
-            Bank::create(['Number' => '720', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MAXINVEST S.A']);
-            Bank::create(['Number' => '721', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CREDIBEL S.A']);
-            Bank::create(['Number' => '722', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INTERIOR DE SAO PAULO S.A']);
-            Bank::create(['Number' => '724', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PORTO SEGURO S.A']);
-            Bank::create(['Number' => '725', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FINABANCO S.A']);
-            Bank::create(['Number' => '726', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO UNIVERSAL S.A']);
-            Bank::create(['Number' => '728', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FITAL S.A']);
-            Bank::create(['Number' => '729', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FONTE S.A']);
-            Bank::create(['Number' => '730', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO COMERCIAL PARAGUAYO S.A']);
-            Bank::create(['Number' => '731', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO GNPP S.A.']);
-            Bank::create(['Number' => '732', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PREMIER S.A.']);
-            Bank::create(['Number' => '733', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO NACOES S.A.']);
-            Bank::create(['Number' => '734', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO GERDAU S.A']);
-            Bank::create(['Number' => '735', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO NEON']);
-            Bank::create(['Number' => '736', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO UNITED S.A']);
-            Bank::create(['Number' => '737', 'title_color' => null, 'body_color' => null, 'Name' => 'THECA']);
-            Bank::create(['Number' => '738', 'title_color' => null, 'body_color' => null, 'Name' => 'MARADA']);
-            Bank::create(['Number' => '739', 'title_color' => null, 'body_color' => null, 'Name' => 'BGN']);
-            Bank::create(['Number' => '740', 'title_color' => null, 'body_color' => null, 'Name' => 'BCN BARCLAYS']);
-            Bank::create(['Number' => '741', 'title_color' => null, 'body_color' => null, 'Name' => 'BRP']);
-            Bank::create(['Number' => '742', 'title_color' => null, 'body_color' => null, 'Name' => 'EQUATORIAL']);
-            Bank::create(['Number' => '743', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO EMBLEMA S.A']);
-            Bank::create(['Number' => '744', 'title_color' => null, 'body_color' => null, 'Name' => 'THE FIRST NATIONAL BANK OF BOSTON']);
-            Bank::create(['Number' => '745', 'title_color' => null, 'body_color' => null, 'Name' => 'CITIBAN N.A.']);
-            Bank::create(['Number' => '746', 'title_color' => null, 'body_color' => null, 'Name' => 'MODAL S\A']);
-            Bank::create(['Number' => '747', 'title_color' => null, 'body_color' => null, 'Name' => 'RAIBOBANK DO BRASIL']);
-            Bank::create(['Number' => '748', 'title_color' => null, 'body_color' => null, 'Name' => 'SICREDI']);
-            Bank::create(['Number' => '749', 'title_color' => null, 'body_color' => null, 'Name' => 'BRMSANTIL SA']);
-            Bank::create(['Number' => '750', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO REPUBLIC NATIONAL OF NEW YORK (BRA']);
-            Bank::create(['Number' => '751', 'title_color' => null, 'body_color' => null, 'Name' => 'DRESDNER BANK LATEINAMERIKA-BRASIL S/A']);
-            Bank::create(['Number' => '752', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BANQUE NATIONALE DE PARIS BRASIL S']);
-            Bank::create(['Number' => '753', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO COMERCIAL URUGUAI S.A.']);
-            Bank::create(['Number' => '755', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MERRILL LYNCH S.A']);
-            Bank::create(['Number' => '756', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO COOPERATIVO DO BRASIL S.A.']);
-            Bank::create(['Number' => '757', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO KEB DO BRASIL S.A.']);
+        if (Bank::where('id', '>', 0)->count() === 0) {
+            DB::table('banks')->insert([
+                ['Number' => '001', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO BRASIL S/A'],
+                ['Number' => '002', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CENTRAL DO BRASIL'],
+                ['Number' => '003', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DA AMAZONIA S.A'],
+                ['Number' => '004', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO NORDESTE DO BRASIL S.A'],
+                ['Number' => '007', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO NAC DESENV. ECO. SOCIAL S.A'],
+                ['Number' => '008', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MERIDIONAL DO BRASIL'],
+                ['Number' => '020', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DE ALAGOAS S.A'],
+                ['Number' => '021', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DO ESPIRITO SANTO S.A'],
+                ['Number' => '022', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DE CREDITO REAL DE MINAS GERAIS SA'],
+                ['Number' => '024', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DE PERNAMBUCO'],
+                ['Number' => '025', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO ALFA S/A'],
+                ['Number' => '026', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DO ACRE S.A'],
+                ['Number' => '027', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DE SANTA CATARINA S.A'],
+                ['Number' => '028', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DA BAHIA S.A'],
+                ['Number' => '029', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DO RIO DE JANEIRO S.A'],
+                ['Number' => '030', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DA PARAIBA S.A'],
+                ['Number' => '031', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DE GOIAS S.A'],
+                ['Number' => '032', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DO MATO GROSSO S.A.'],
+                ['Number' => '033', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DE SAO PAULO S.A'],
+                ['Number' => '034', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESADO DO AMAZONAS S.A'],
+                ['Number' => '035', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DO CEARA S.A'],
+                ['Number' => '036', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DO MARANHAO S.A'],
+                ['Number' => '037', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DO PARA S.A'],
+                ['Number' => '038', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DO PARANA S.A'],
+                ['Number' => '039', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DO PIAUI S.A'],
+                ['Number' => '041', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DO RIO GRANDE DO SUL S.A'],
+                ['Number' => '047', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DE SERGIPE S.A'],
+                ['Number' => '048', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DE MINAS GERAIS S.A'],
+                ['Number' => '059', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DE RONDONIA S.A'],
+                ['Number' => '070', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DE BRASILIA S.A'],
+                ['Number' => '077', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INTER S.A'],
+                ['Number' => '102', 'title_color' => null, 'body_color' => null, 'Name' => 'XP INVESTIMENTOS'],
+                ['Number' => '104', 'title_color' => '#0369b9', 'body_color' => '#f3bb5c', 'Name' => 'CAIXA ECONOMICA FEDERAL'],
+                ['Number' => '106', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO ITABANCO S.A.'],
+                ['Number' => '107', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BBM S.A'],
+                ['Number' => '109', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CREDIBANCO S.A'],
+                ['Number' => '116', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO B.N.L DO BRASIL S.A'],
+                ['Number' => '148', 'title_color' => null, 'body_color' => null, 'Name' => 'MULTI BANCO S.A'],
+                ['Number' => '151', 'title_color' => null, 'body_color' => null, 'Name' => 'CAIXA ECONOMICA DO ESTADO DE SAO PAULO'],
+                ['Number' => '153', 'title_color' => null, 'body_color' => null, 'Name' => 'CAIXA ECONOMICA DO ESTADO DO R.G.SUL'],
+                ['Number' => '165', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO NORCHEM S.A'],
+                ['Number' => '166', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INTER-ATLANTICO S.A'],
+                ['Number' => '168', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO C.C.F. BRASIL S.A'],
+                ['Number' => '175', 'title_color' => null, 'body_color' => null, 'Name' => 'CONTINENTAL BANCO S.A'],
+                ['Number' => '184', 'title_color' => null, 'body_color' => null, 'Name' => 'BBA - CREDITANSTALT S.A'],
+                ['Number' => '199', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FINANCIAL PORTUGUES'],
+                ['Number' => '200', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FRICRISA AXELRUD S.A'],
+                ['Number' => '201', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO AUGUSTA INDUSTRIA E COMERCIAL S.A'],
+                ['Number' => '204', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO S.R.L S.A'],
+                ['Number' => '205', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO SUL AMERICA S.A'],
+                ['Number' => '206', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MARTINELLI S.A'],
+                ['Number' => '208', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PACTUAL S.A'],
+                ['Number' => '210', 'title_color' => null, 'body_color' => null, 'Name' => 'DEUTSCH SUDAMERIKANICHE BANK AG'],
+                ['Number' => '211', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO SISTEMA S.A'],
+                ['Number' => '212', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MATONE S.A'],
+                ['Number' => '213', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO ARBI S.A'],
+                ['Number' => '214', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DIBENS S.A'],
+                ['Number' => '215', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO AMERICA DO SUL S.A'],
+                ['Number' => '216', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO REGIONAL MALCON S.A'],
+                ['Number' => '217', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO AGROINVEST S.A'],
+                ['Number' => '218', 'title_color' => null, 'body_color' => null, 'Name' => 'BBS - BANCO BONSUCESSO S.A.'],
+                ['Number' => '219', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DE CREDITO DE SAO PAULO S.A'],
+                ['Number' => '220', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CREFISUL'],
+                ['Number' => '221', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO GRAPHUS S.A'],
+                ['Number' => '222', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO AGF BRASIL S. A.'],
+                ['Number' => '223', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INTERUNION S.A'],
+                ['Number' => '224', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FIBRA S.A'],
+                ['Number' => '225', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BRASCAN S.A'],
+                ['Number' => '228', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO ICATU S.A'],
+                ['Number' => '229', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CRUZEIRO S.A'],
+                ['Number' => '230', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BANDEIRANTES S.A'],
+                ['Number' => '231', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BOAVISTA S.A'],
+                ['Number' => '232', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INTERPART S.A'],
+                ['Number' => '233', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MAPPIN S.A'],
+                ['Number' => '234', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO LAVRA S.A.'],
+                ['Number' => '235', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO LIBERAL S.A'],
+                ['Number' => '236', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CAMBIAL S.A'],
+                ['Number' => '237', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BRADESCO S.A'],
+                ['Number' => '239', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BANCRED S.A'],
+                ['Number' => '240', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DE CREDITO REAL DE MINAS GERAIS S.'],
+                ['Number' => '241', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CLASSICO S.A'],
+                ['Number' => '242', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO EUROINVEST S.A'],
+                ['Number' => '243', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO STOCK S.A'],
+                ['Number' => '244', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CIDADE S.A'],
+                ['Number' => '245', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO EMPRESARIAL S.A'],
+                ['Number' => '246', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO ABC ROMA S.A'],
+                ['Number' => '247', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO OMEGA S.A'],
+                ['Number' => '249', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INVESTCRED S.A'],
+                ['Number' => '250', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO SCHAHIN CURY S.A'],
+                ['Number' => '251', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO SAO JORGE S.A.'],
+                ['Number' => '252', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FININVEST S.A'],
+                ['Number' => '254', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PARANA BANCO S.A'],
+                ['Number' => '255', 'title_color' => null, 'body_color' => null, 'Name' => 'MILBANCO S.A.'],
+                ['Number' => '256', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO GULVINVEST S.A'],
+                ['Number' => '258', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INDUSCRED S.A'],
+                ['Number' => '260', 'title_color' => '#ba4de3', 'body_color' => '#d494ec', 'Name' => 'NUBANK S.A'],
+                ['Number' => '261', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO VARIG S.A'],
+                ['Number' => '262', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BOREAL S.A'],
+                ['Number' => '263', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CACIQUE'],
+                ['Number' => '264', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PERFORMANCE S.A'],
+                ['Number' => '265', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FATOR S.A'],
+                ['Number' => '266', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CEDULA S.A'],
+                ['Number' => '267', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BBM-COM.C.IMOB.CFI S.A.'],
+                ['Number' => '275', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO REAL S.A'],
+                ['Number' => '277', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PLANIBANC S.A'],
+                ['Number' => '282', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BRASILEIRO COMERCIAL'],
+                ['Number' => '291', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DE CREDITO NACIONAL S.A'],
+                ['Number' => '294', 'title_color' => null, 'body_color' => null, 'Name' => 'BCR - BANCO DE CREDITO REAL S.A'],
+                ['Number' => '295', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CREDIPLAN S.A'],
+                ['Number' => '300', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DE LA NACION ARGENTINA S.A'],
+                ['Number' => '302', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO PROGRESSO S.A'],
+                ['Number' => '303', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO HNF S.A.'],
+                ['Number' => '304', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PONTUAL S.A'],
+                ['Number' => '308', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO COMERCIAL BANCESA S.A.'],
+                ['Number' => '318', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO B.M.G. S.A'],
+                ['Number' => '320', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INDUSTRIAL E COMERCIAL'],
+                ['Number' => '341', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO ITAU S.A'],
+                ['Number' => '346', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FRANCES E BRASILEIRO S.A'],
+                ['Number' => '347', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO SUDAMERIS BRASIL S.A'],
+                ['Number' => '351', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BOZANO SIMONSEN S.A'],
+                ['Number' => '353', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO GERAL DO COMERCIO S.A'],
+                ['Number' => '356', 'title_color' => null, 'body_color' => null, 'Name' => 'ABN AMRO S.A'],
+                ['Number' => '366', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO SOGERAL S.A'],
+                ['Number' => '369', 'title_color' => null, 'body_color' => null, 'Name' => 'PONTUAL'],
+                ['Number' => '370', 'title_color' => null, 'body_color' => null, 'Name' => 'BEAL - BANCO EUROPEU PARA AMERICA LATINA'],
+                ['Number' => '372', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO ITAMARATI S.A'],
+                ['Number' => '375', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FENICIA S.A'],
+                ['Number' => '376', 'title_color' => null, 'body_color' => null, 'Name' => 'CHASE MANHATTAN BANK S.A'],
+                ['Number' => '388', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MERCANTIL DE DESCONTOS S/A'],
+                ['Number' => '389', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MERCANTIL DO BRASIL S.A'],
+                ['Number' => '392', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MERCANTIL DE SAO PAULO S.A'],
+                ['Number' => '394', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO B.M.C. S.A'],
+                ['Number' => '399', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BAMERINDUS DO BRASIL S.A'],
+                ['Number' => '409', 'title_color' => null, 'body_color' => null, 'Name' => 'UNIBANCO - UNIAO DOS BANCOS BRASILEIROS'],
+                ['Number' => '412', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO NACIONAL DA BAHIA S.A'],
+                ['Number' => '415', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO NACIONAL S.A'],
+                ['Number' => '420', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO NACIONAL DO NORTE S.A'],
+                ['Number' => '422', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO SAFRA S.A'],
+                ['Number' => '424', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO NOROESTE S.A'],
+                ['Number' => '434', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FORTALEZA S.A'],
+                ['Number' => '453', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO RURAL S.A'],
+                ['Number' => '456', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO TOKIO S.A'],
+                ['Number' => '464', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO SUMITOMO BRASILEIRO S.A'],
+                ['Number' => '466', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MITSUBISHI BRASILEIRO S.A'],
+                ['Number' => '472', 'title_color' => null, 'body_color' => null, 'Name' => 'LLOYDS BANK PLC'],
+                ['Number' => '473', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FINANCIAL PORTUGUES S.A'],
+                ['Number' => '477', 'title_color' => null, 'body_color' => null, 'Name' => 'CITIBANK N.A'],
+                ['Number' => '479', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DE BOSTON S.A'],
+                ['Number' => '480', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PORTUGUES DO ATLANTICO-BRASIL S.A'],
+                ['Number' => '483', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO AGRIMISA S.A.'],
+                ['Number' => '487', 'title_color' => null, 'body_color' => null, 'Name' => 'DEUTSCHE BANK S.A - BANCO ALEMAO'],
+                ['Number' => '488', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO J. P. MORGAN S.A'],
+                ['Number' => '489', 'title_color' => null, 'body_color' => null, 'Name' => 'BANESTO BANCO URUGAUAY S.A'],
+                ['Number' => '492', 'title_color' => null, 'body_color' => null, 'Name' => 'INTERNATIONALE NEDERLANDEN BANK N.V.'],
+                ['Number' => '493', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO UNION S.A.C.A'],
+                ['Number' => '494', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO LA REP. ORIENTAL DEL URUGUAY'],
+                ['Number' => '495', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO LA PROVINCIA DE BUENOS AIRES'],
+                ['Number' => '496', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO EXTERIOR DE ESPANA S.A'],
+                ['Number' => '498', 'title_color' => null, 'body_color' => null, 'Name' => 'CENTRO HISPANO BANCO'],
+                ['Number' => '499', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO IOCHPE S.A'],
+                ['Number' => '501', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BRASILEIRO IRAQUIANO S.A.'],
+                ['Number' => '502', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO SANTANDER S.A'],
+                ['Number' => '504', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MULTIPLIC S.A'],
+                ['Number' => '505', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO GARANTIA S.A'],
+                ['Number' => '600', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO LUSO BRASILEIRO S.A'],
+                ['Number' => '601', 'title_color' => null, 'body_color' => null, 'Name' => 'BFC BANCO S.A.'],
+                ['Number' => '602', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PATENTE S.A'],
+                ['Number' => '604', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INDUSTRIAL DO BRASIL S.A'],
+                ['Number' => '607', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO SANTOS NEVES S.A'],
+                ['Number' => '608', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO OPEN S.A'],
+                ['Number' => '610', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO V.R. S.A'],
+                ['Number' => '611', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PAULISTA S.A'],
+                ['Number' => '612', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO GUANABARA S.A'],
+                ['Number' => '613', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PECUNIA S.A'],
+                ['Number' => '616', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INTERPACIFICO S.A'],
+                ['Number' => '617', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INVESTOR S.A.'],
+                ['Number' => '618', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO TENDENCIA S.A'],
+                ['Number' => '621', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO APLICAP S.A.'],
+                ['Number' => '622', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DRACMA S.A'],
+                ['Number' => '623', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PANAMERICANO S.A'],
+                ['Number' => '624', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO GENERAL MOTORS S.A'],
+                ['Number' => '625', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO ARAUCARIA S.A'],
+                ['Number' => '626', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FICSA S.A'],
+                ['Number' => '627', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DESTAK S.A'],
+                ['Number' => '628', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CRITERIUM S.A'],
+                ['Number' => '629', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCORP BANCO COML. E. DE INVESTMENTO'],
+                ['Number' => '630', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INTERCAP S.A'],
+                ['Number' => '633', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO REDIMENTO S.A'],
+                ['Number' => '634', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO TRIANGULO S.A'],
+                ['Number' => '635', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DO AMAPA S.A'],
+                ['Number' => '637', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO SOFISA S.A'],
+                ['Number' => '638', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PROSPER S.A'],
+                ['Number' => '639', 'title_color' => null, 'body_color' => null, 'Name' => 'BIG S.A. - BANCO IRMAOS GUIMARAES'],
+                ['Number' => '640', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DE CREDITO METROPOLITANO S.A'],
+                ['Number' => '641', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO EXCEL ECONOMICO S/A'],
+                ['Number' => '643', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO SEGMENTO S.A'],
+                ['Number' => '645', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DO ESTADO DE RORAIMA S.A'],
+                ['Number' => '647', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MARKA S.A'],
+                ['Number' => '648', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO ATLANTIS S.A'],
+                ['Number' => '649', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DIMENSAO S.A'],
+                ['Number' => '650', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PEBB S.A'],
+                ['Number' => '652', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FRANCES E BRASILEIRO SA'],
+                ['Number' => '653', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INDUSVAL S.A'],
+                ['Number' => '654', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO A. J. RENNER S.A'],
+                ['Number' => '655', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO VOTORANTIM S.A.'],
+                ['Number' => '656', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MATRIX S.A'],
+                ['Number' => '657', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO TECNICORP S.A'],
+                ['Number' => '658', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PORTO REAL S.A'],
+                ['Number' => '702', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO SANTOS S.A'],
+                ['Number' => '705', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INVESTCORP S.A.'],
+                ['Number' => '707', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO DAYCOVAL S.A'],
+                ['Number' => '711', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO VETOR S.A.'],
+                ['Number' => '713', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CINDAM S.A'],
+                ['Number' => '715', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO VEGA S.A'],
+                ['Number' => '718', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO OPERADOR S.A'],
+                ['Number' => '719', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PRIMUS S.A'],
+                ['Number' => '720', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MAXINVEST S.A'],
+                ['Number' => '721', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CREDIBEL S.A'],
+                ['Number' => '722', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INTERIOR DE SAO PAULO S.A'],
+                ['Number' => '724', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PORTO SEGURO S.A'],
+                ['Number' => '725', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FINABANCO S.A'],
+                ['Number' => '726', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO UNIVERSAL S.A'],
+                ['Number' => '728', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FITAL S.A'],
+                ['Number' => '729', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FONTE S.A'],
+                ['Number' => '730', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO COMERCIAL PARAGUAYO S.A'],
+                ['Number' => '731', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO GNPP S.A.'],
+                ['Number' => '732', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PREMIER S.A.'],
+                ['Number' => '733', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO NACOES S.A.'],
+                ['Number' => '734', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO GERDAU S.A'],
+                ['Number' => '735', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO NEON'],
+                ['Number' => '736', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO UNITED S.A'],
+                ['Number' => '737', 'title_color' => null, 'body_color' => null, 'Name' => 'THECA'],
+                ['Number' => '738', 'title_color' => null, 'body_color' => null, 'Name' => 'MARADA'],
+                ['Number' => '739', 'title_color' => null, 'body_color' => null, 'Name' => 'BGN'],
+                ['Number' => '740', 'title_color' => null, 'body_color' => null, 'Name' => 'BCN BARCLAYS'],
+                ['Number' => '741', 'title_color' => null, 'body_color' => null, 'Name' => 'BRP'],
+                ['Number' => '742', 'title_color' => null, 'body_color' => null, 'Name' => 'EQUATORIAL'],
+                ['Number' => '743', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO EMBLEMA S.A'],
+                ['Number' => '744', 'title_color' => null, 'body_color' => null, 'Name' => 'THE FIRST NATIONAL BANK OF BOSTON'],
+                ['Number' => '745', 'title_color' => null, 'body_color' => null, 'Name' => 'CITIBAN N.A.'],
+                ['Number' => '746', 'title_color' => null, 'body_color' => null, 'Name' => 'MODAL S\A'],
+                ['Number' => '747', 'title_color' => null, 'body_color' => null, 'Name' => 'RAIBOBANK DO BRASIL'],
+                ['Number' => '748', 'title_color' => null, 'body_color' => null, 'Name' => 'SICREDI'],
+                ['Number' => '749', 'title_color' => null, 'body_color' => null, 'Name' => 'BRMSANTIL SA'],
+                ['Number' => '750', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO REPUBLIC NATIONAL OF NEW YORK (BRA'],
+                ['Number' => '751', 'title_color' => null, 'body_color' => null, 'Name' => 'DRESDNER BANK LATEINAMERIKA-BRASIL S/A'],
+                ['Number' => '752', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BANQUE NATIONALE DE PARIS BRASIL S'],
+                ['Number' => '753', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO COMERCIAL URUGUAI S.A.'],
+                ['Number' => '755', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MERRILL LYNCH S.A'],
+                ['Number' => '756', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO COOPERATIVO DO BRASIL S.A.'],
+                ['Number' => '757', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO KEB DO BRASIL S.A.'],
+            ]);
+
+
         }
     }
 }

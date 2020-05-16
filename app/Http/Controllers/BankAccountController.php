@@ -8,10 +8,8 @@ use Illuminate\View\View;
 use App\Models\BankAccount;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
-use App\Models\Enum\SessionEnum;
 use App\Services\BankAccountService;
 use Illuminate\Contracts\View\Factory;
-use Session;
 
 class BankAccountController extends CrudController
 {
@@ -44,11 +42,15 @@ class BankAccountController extends CrudController
         return view('bank_account.edit',compact('bank_account','id','last_balance', 'monthInterest', 'year_search', 'monthBalance'));
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     * @throws Exception
+     */
     public function get(Request $request){
         $model = $this->bankAccount::join('banks', 'bank_accounts.bank_id', 'banks.id')
             ->select(['bank_accounts.id', 'bank_accounts.name','banks.name as name_bank', 'bank_accounts.agency']);
 
-        try{
             $response = DataTables::of($model)
                 ->blacklist(['actions'])
                 ->addColumn('actions', function ($model){
@@ -62,9 +64,5 @@ class BankAccountController extends CrudController
                 ->toJson();
 
             return $response->original;
-        }catch (Exception $e){
-            Session::flash('message', ['msg' => $e->getMessage(), 'type' => SessionEnum::error]);
-            return redirect()->back();
-        }
     }
 }

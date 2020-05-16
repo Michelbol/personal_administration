@@ -43,7 +43,7 @@ class CoverageAnalisys extends Command
         $coverageFile = file($this->argument('file_name'));
         $coverageClass = new CoverageAnalysis($coverageFile);
         $coverageClass->calcStatistics();
-        if($coverageClass->isCoverageValid()){
+        if(!$coverageClass->isCoverageValid()){
             throw new Exception('Coverage is to low to continuous');
         }
         return;

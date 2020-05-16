@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\CreditCard;
 use Illuminate\Database\Seeder;
 
 class CredCardTableSeeder extends Seeder
@@ -11,8 +12,8 @@ class CredCardTableSeeder extends Seeder
      */
     public function run()
     {
-        if(\App\Models\CreditCard::whereName('Nu Bank')->count() === 0){
-            \App\Models\CreditCard::create([
+        if(CreditCard::whereName('Nu Bank')->count() === 0){
+            CreditCard::create([
                 'name'  => 'Nu Bank',
                 'limit' => 6750,
                 'default_closing_date' => 1,

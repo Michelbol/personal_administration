@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Tenant;
 use Illuminate\Database\Seeder;
 
 class TenantTableSeeder extends Seeder
@@ -11,7 +12,7 @@ class TenantTableSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\Tenant::create([
+        Tenant::create([
             'name' => 'Souza',
             'sub_domain' => 'souza'
         ]);
