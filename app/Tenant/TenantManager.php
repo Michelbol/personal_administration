@@ -7,14 +7,15 @@
  */
 namespace App\Tenant;
 
-use Illuminate\Support\Facades\Cache;
+use Cache;
+use Request;
 
 class TenantManager{
 
     private $tenant;
 
     public function routeParam(){
-        return \Request::route(config('tenant.route_param'));
+        return Request::route(config('tenant.route_param'));
     }
 
     public function isSubdomainException(){

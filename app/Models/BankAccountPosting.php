@@ -40,7 +40,6 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
  * @method static Builder|BankAccountPosting whereExpenseId($value)
  * @method static Builder|BankAccountPosting whereIncomeId($value)
  * @mixin Eloquent
- * @mixin Builder
  * @mixin BankAccountPosting
  */
 class BankAccountPosting extends Model

@@ -6,6 +6,7 @@
  * Time: 20:20
  */
 
+use App\Tenant\TenantManager;
 use Carbon\Carbon;
 
 if(!function_exists('routeTenant')){
@@ -18,7 +19,7 @@ if(!function_exists('routeTenant')){
      * @return string
      */
     function routeTenant($name, $params = [], $absolute = true){
-        $tenantManager = app(\App\Tenant\TenantManager::class);
+        $tenantManager = app(TenantManager::class);
         return route($name, $params+[ config('tenant.route_param') => $tenantManager->routeParam() ], $absolute);
     }
 }

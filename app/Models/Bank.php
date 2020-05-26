@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models;
+
+use Eloquent;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -25,8 +27,8 @@ use Illuminate\Database\Eloquent\Builder;
  * @method static Builder|Bank whereNumber($value)
  * @method static Builder|Bank whereTitleColor($value)
  * @method static Builder|Bank whereUpdatedAt($value)
- * @mixin Model
- * @mixin Builder
+ * @mixin Eloquent
+ * @mixin Bank
  */
 class Bank extends Model
 {

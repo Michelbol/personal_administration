@@ -8,6 +8,7 @@ use App\Services\CarService;
 use Carbon\Carbon;
 use App\Models\Car;
 use App\Utilitarios;
+use Exception;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -26,24 +27,24 @@ class CarController extends CrudController
         parent::__construct($service, $model);
     }
 
+    /**
+     * @return mixed
+     * @throws Exception
+     */
     public function get(){
-        try{
-            $model = Car::select(['id', 'model', 'license_plate', 'annual_licensing', 'annual_insurance']);
+        $model = Car::select(['id', 'model', 'license_plate', 'annual_licensing', 'annual_insurance']);
 
-            $response = DataTables::of($model)
-                ->addColumn('actions', function ($model){
-                    return Utilitarios::getBtnAction([
-                        ['type'=>'edit',    'url' => routeTenant('cars.edit',['id' => $model->id])],
-                        ['type'=>'other-a', 'url' => routeTenant('car_supply.index',['car_id' => $model->id]), 'name' => 'Abastencimentos'],
-                        ['type'=>'delete',  'url' => routeTenant('cars.destroy',['id' => $model->id]), 'id' => $model->id]
-                    ]);
-                })
-                ->rawColumns(['actions'])
-                ->toJson();
-            return $response->original;
-        }catch (\Exception $e){
-            return response()->json(['error' =>'Error into datatable: '.$e->getMessage(), 'trace' => $e->getTrace()]);
-        }
+        $response = DataTables::of($model)
+            ->addColumn('actions', function ($model){
+                return Utilitarios::getBtnAction([
+                    ['type'=>'edit',    'url' => routeTenant('cars.edit',['id' => $model->id])],
+                    ['type'=>'other-a', 'url' => routeTenant('car_supply.index',['car_id' => $model->id]), 'name' => 'Abastencimentos'],
+                    ['type'=>'delete',  'url' => routeTenant('cars.destroy',['id' => $model->id]), 'id' => $model->id]
+                ]);
+            })
+            ->rawColumns(['actions'])
+            ->toJson();
+        return $response->original;
     }
 
     public function profile($tenant, $id, Request $request){

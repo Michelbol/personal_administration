@@ -74,7 +74,7 @@ class IncomeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($tenant, $id)
+    public function edit($id)
     {
         $income = Income::find($id);
 
@@ -88,7 +88,7 @@ class IncomeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $tenant, $id)
+    public function update(Request $request, $id)
     {
         try{
             DB::beginTransaction();
@@ -115,7 +115,7 @@ class IncomeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($tenant, $id)
+    public function destroy($id)
     {
         try{
             DB::beginTransaction();

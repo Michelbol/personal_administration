@@ -7,38 +7,21 @@ use App\Models\BudgetFinancialPosting;
 use App\Models\Expenses;
 use App\Models\Income;
 use App\Utilitarios;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Session;
 use Yajra\DataTables\DataTables;
 
 class BudgetFinancialPostingController extends Controller
 {
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -69,44 +52,22 @@ class BudgetFinancialPostingController extends Controller
             $budgetFinancialPosting->save();
             BudgetFinancialPosting::recalcBalance(BudgetFinancial::find($budgetFinancialPosting->budget_financial_id));
             DB::commit();
-            \Session::flash('message', ['msg' => 'Lançamento Salvo com sucesso', 'type' => 'success']);
+            Session::flash('message', ['msg' => 'Lançamento Salvo com sucesso', 'type' => 'success']);
             return redirect()->routeTenant('budget_financial.edit', ['budget_financial' => $budgetFinancialPosting->budget_financial_id]);
-        }catch (\Exception $e){
-            \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
+        }catch (Exception $e){
+            Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
             return redirect()->back();
         }
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function update(Request $request,$tenant, $id)
+    public function update(Request $request, $id)
     {
         try{
             DB::beginTransaction();
@@ -134,10 +95,10 @@ class BudgetFinancialPostingController extends Controller
             $budgetFinancialPosting->save();
             BudgetFinancialPosting::recalcBalance(BudgetFinancial::find($budgetFinancialPosting->budget_financial_id));
             DB::commit();
-            \Session::flash('message', ['msg' => 'Lançamento Atualizado com sucesso', 'type' => 'success']);
+            Session::flash('message', ['msg' => 'Lançamento Atualizado com sucesso', 'type' => 'success']);
             return redirect()->routeTenant('budget_financial.edit', ['budget_financial' => $budgetFinancialPosting->budget_financial_id]);
-        }catch (\Exception $e){
-            \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
+        }catch (Exception $e){
+            Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
             return redirect()->back();
         }
     }
@@ -145,8 +106,9 @@ class BudgetFinancialPostingController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param $tenant
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($tenant, $id)
     {
@@ -154,26 +116,30 @@ class BudgetFinancialPostingController extends Controller
             $budget_financial_posting = BudgetFinancialPosting::find($id);
             $budget_financial_posting->delete();
             BudgetFinancialPosting::recalcBalance(BudgetFinancial::find($budget_financial_posting->budget_financial_id));
-            \Session::flash('message', ['msg' => 'Lançamento deletado com sucesso', 'type' => 'success']);
+            Session::flash('message', ['msg' => 'Lançamento deletado com sucesso', 'type' => 'success']);
             return redirect()->routeTenant('budget_financial.edit', ['budget_financial' => $budget_financial_posting->budget_financial_id]);
-        }catch (\Exception $e){
-            \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
+        }catch (Exception $e){
+            Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
             return redirect()->back();
         }
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     * @throws Exception
+     */
     public function get(Request $request){
-        try{
-            $model = BudgetFinancialPosting::where('budget_financial_id', $request->id)
-                ->leftjoin('incomes', 'incomes.id', 'budget_financial_postings.income_id')
-                ->leftjoin('expenses', 'expenses.id', 'budget_financial_postings.expense_id')
-                ->select(['budget_financial_postings.amount', 'budget_financial_postings.id',
+        $model = BudgetFinancialPosting::where('budget_financial_id', $request->id)
+            ->leftjoin('incomes', 'incomes.id', 'budget_financial_postings.income_id')
+            ->leftjoin('expenses', 'expenses.id', 'budget_financial_postings.expense_id')
+            ->select(['budget_financial_postings.amount', 'budget_financial_postings.id',
                 'budget_financial_postings.account_balance','budget_financial_postings.posting_date',
                 'incomes.name as incomes_name', 'incomes.id as income_id', 'expenses.id as expenses_id',
                 'expenses.name as expenses_name', 'expenses.isFixed as expense_isFixed', 'incomes.isFixed as income_isFixed'])
-                ->orderBy('budget_financial_postings.posting_date', 'asc');
+            ->orderBy('budget_financial_postings.posting_date', 'asc');
 
-            $response = DataTables::of($model)
+        $response = DataTables::of($model)
 //                ->filter(function (Builder $query) use ($request){
 
 //                    if($request->type_name > 0){
@@ -189,39 +155,36 @@ class BudgetFinancialPostingController extends Controller
 //                        $query->whereBetween('posting_date', [$dt_initial, $dt_final]);
 //                    }
 //                })
-                ->addColumn('name', function($model){
-                    return isset($model->expenses_name) ? $model->expenses_name : $model->incomes_name;
-                })
-                ->addColumn('type', function($model){
-                    return isset($model->expenses_name) ? 'Despesa' : 'Receita';
-                })
-                ->addColumn('isFixed', function($model){
-                    $fixed =  '<i class="fas fa-thumbs-up"></i>';
-                    $not_fixed = '<i class="far fa-thumbs-down"></i>';
-                    return isset($model->expenses_name) ? ($model->expense_isFixed === 1 ? $fixed : $not_fixed ) :
-                        ($model->income_isFixed === 1 ? $fixed : $not_fixed);
-                })
-                ->addColumn('posting_date', function($model){
-                    return $model->posting_date = Utilitarios::formatDataCarbon($model->posting_date)->format('d/m/Y');
-                })
-                ->addColumn('amount', function($model){
-                    return isset($model->expenses_name) ? $model->amount = '-R$: '.Utilitarios::getFormatReal($model->amount) :
-                        $model->amount = 'R$: '.Utilitarios::getFormatReal($model->amount) ;
-                })
-                ->addColumn('account_balance', function($model){
-                    return 'R$: '.Utilitarios::getFormatReal($model->account_balance);
-                })
-                ->addColumn('actions', function($model){
-                    return Utilitarios::getBtnAction([
-                        ['type'=>'others', 'name' => 'open-modal-budget-financial-posting', 'class' => 'fa fa-edit', 'disabled' => true,'tooltip' => 'Editar'],
-                        ['url' => routeTenant('budget_financial_posting.destroy', ['budget_financial_posting' => $model->id]), 'id' => $model->id,'type'=>'delete', 'name' => '<i class="fa fa-times"></i>', 'class' => 'btn', 'disabled' => true,'tooltip' => 'Excluir'],
-                    ]);
-                })
-                ->rawColumns(['actions', 'isFixed'])
-                ->toJson();
-            return $response->original;
-        }catch (\Exception $e){
-            dd('erro!'.$e->getMessage());
-        }
+            ->addColumn('name', function($model){
+                return isset($model->expenses_name) ? $model->expenses_name : $model->incomes_name;
+            })
+            ->addColumn('type', function($model){
+                return isset($model->expenses_name) ? 'Despesa' : 'Receita';
+            })
+            ->addColumn('isFixed', function($model){
+                $fixed =  '<i class="fas fa-thumbs-up"></i>';
+                $not_fixed = '<i class="far fa-thumbs-down"></i>';
+                return isset($model->expenses_name) ? ($model->expense_isFixed === 1 ? $fixed : $not_fixed ) :
+                    ($model->income_isFixed === 1 ? $fixed : $not_fixed);
+            })
+            ->addColumn('posting_date', function($model){
+                return $model->posting_date = Utilitarios::formatDataCarbon($model->posting_date)->format('d/m/Y');
+            })
+            ->addColumn('amount', function($model){
+                return isset($model->expenses_name) ? $model->amount = '-R$: '.Utilitarios::getFormatReal($model->amount) :
+                    $model->amount = 'R$: '.Utilitarios::getFormatReal($model->amount) ;
+            })
+            ->addColumn('account_balance', function($model){
+                return 'R$: '.Utilitarios::getFormatReal($model->account_balance);
+            })
+            ->addColumn('actions', function($model){
+                return Utilitarios::getBtnAction([
+                    ['type'=>'others', 'name' => 'open-modal-budget-financial-posting', 'class' => 'fa fa-edit', 'disabled' => true,'tooltip' => 'Editar'],
+                    ['url' => routeTenant('budget_financial_posting.destroy', ['budget_financial_posting' => $model->id]), 'id' => $model->id,'type'=>'delete', 'name' => '<i class="fa fa-times"></i>', 'class' => 'btn', 'disabled' => true,'tooltip' => 'Excluir'],
+                ]);
+            })
+            ->rawColumns(['actions', 'isFixed'])
+            ->toJson();
+        return $response->original;
     }
 }

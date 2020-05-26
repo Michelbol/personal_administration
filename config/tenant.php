@@ -5,8 +5,11 @@
  * Date: 01/04/2019
  * Time: 20:27
  */
+
+use App\Models\Tenant;
+
 return [
-    'model' => \App\Models\Tenant::class,
+    'model' => Tenant::class,
     'field_name' => 'sub_domain',
     'foreign_key' => 'tenant_id',
     'route_param' => 'tenant',

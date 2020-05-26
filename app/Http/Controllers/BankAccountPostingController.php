@@ -190,13 +190,13 @@ class BankAccountPostingController extends CrudController
      */
     public function readFileStore(Request $request)
     {
-        $filesTxt = $request->get('arquivostxt');
+        $filesTxt = $request->file('arquivostxt');
         if (isset($filesTxt)) {
             foreach ($filesTxt as $fileTxt) {
                 $this->readFileTxt(file($fileTxt));
             }
         }
-        $filesOfx = $request->get('arquivosofx');
+        $filesOfx = $request->file('arquivosofx');
         if (isset($filesOfx)) {
             foreach ($filesOfx as $fileOfx) {
                 $this->readFileOfx($fileOfx);
@@ -273,8 +273,7 @@ class BankAccountPostingController extends CrudController
             $keyFileTypeBankAccountPosting->income_id = 0;
         }
         $bankAccountPosting->type_bank_account_posting_id = $keyFileTypeBankAccountPosting->type_id;
-        $date_post = $transactions->DTPOSTED;
-        $bankAccountPosting->posting_date = Carbon::create(substr($date_post, 0, 4), substr($date_post, 4, 2), substr($date_post, 6, 2), substr($date_post, 8, 2));
+        $bankAccountPosting->posting_date = Carbon::createFromFormat("YmdHis", substr($transactions->DTPOSTED, 0, 14))->format('d/m/Y H:i');
         $bankAccountPosting->bank_account_id = $bankAccount->id;
         $bankAccountPosting->document = $transactions->FITID;
         $bankAccountPosting->amount = ((float)$transactions->TRNAMT < 0) ? -((float)$transactions->TRNAMT) : (float)$transactions->TRNAMT;
@@ -284,6 +283,10 @@ class BankAccountPostingController extends CrudController
         return $this->calcAccountBalance($bankAccountPosting);
     }
 
+    /**
+     * @param BankAccountPosting $bankAccountPosting
+     * @return BankAccountPosting
+     */
     public function calcAccountBalance(BankAccountPosting $bankAccountPosting)
     {
         $balance = $this->service->lastPosting($bankAccountPosting);
@@ -365,6 +368,12 @@ class BankAccountPostingController extends CrudController
             ->first();
     }
 
+    /**
+     * @param $data
+     * @param BankAccount $bankAccount
+     * @param TypeBankAccountPosting $typeBankAccountPosting
+     * @return BankAccountPosting
+     */
     function mountBankAccountPosting($data, BankAccount $bankAccount, TypeBankAccountPosting $typeBankAccountPosting)
     {
         $bankAccountPosting = new BankAccountPosting();
@@ -380,6 +389,10 @@ class BankAccountPostingController extends CrudController
         return $this->calcAccountBalance($bankAccountPosting);
     }
 
+    /**
+     * @param $posting
+     * @return array
+     */
     function clearStringFile($posting)
     {
         $data = explode(';', $posting);
@@ -392,71 +405,77 @@ class BankAccountPostingController extends CrudController
         return $data;
     }
 
+    /**
+     * @return Factory|View
+     */
     public function file()
     {
         return view('bank_account_posting.file');
     }
 
+    /**
+     * @param Request $request
+     * @param $tenant
+     * @param $id
+     * @return mixed
+     * @throws Exception
+     */
     public function get(Request $request, $tenant, $id)
     {
-        try {
-            $model = BankAccountPosting
-                ::whereBankAccountId($id)
-                ->join(
-                    'type_bank_account_postings',
-                    'type_bank_account_postings.id',
-                    'bank_account_postings.type_bank_account_posting_id')
-                ->select(
-                    [
-                        'bank_account_postings.id',
-                        'document',
-                        'posting_date',
-                        'amount',
-                        'type',
-                        'type_bank_account_postings.name as type_name',
-                        'account_balance'
-                    ]
-                )
-                ->orderBy('posting_date', 'desc')
-                ->orderBy('bank_account_postings.id', 'desc');
+        $model = BankAccountPosting
+            ::whereBankAccountId($id)
+            ->join(
+                'type_bank_account_postings',
+                'type_bank_account_postings.id',
+                'bank_account_postings.type_bank_account_posting_id')
+            ->select(
+                [
+                    'bank_account_postings.id',
+                    'document',
+                    'posting_date',
+                    'amount',
+                    'type',
+                    'type_bank_account_postings.name as type_name',
+                    'account_balance'
+                ]
+            )
+            ->orderBy('posting_date', 'desc')
+            ->orderBy('bank_account_postings.id', 'desc');
 
-            $response = DataTables::of($model)
-                ->filter(function (Builder $query) use ($request) {
+        $response = DataTables::of($model)
+            ->filter(function (Builder $query) use ($request) {
 
-                    if ($request->get('type_name') > 0) {
-                        $query->where('type_bank_account_postings.id', $request->get('type_name'));
-                    }
-                    if ($request->get('type') !== "0") {
-                        $query->where('type', $request->get('type'));
-                    }
-                    if ($request->get('posting_date') !== null) {
-                        $explode = explode('-', $request->get('posting_date'));
-                        $dt_initial = Utilitarios::formatDataCarbon(trim($explode[0]));
-                        $dt_final = Utilitarios::formatDataCarbon(trim($explode[1]));
-                        $query->whereBetween('posting_date', [$dt_initial, $dt_final]);
-                    }
-                })
-                ->addColumn('posting_date', function ($model) {
-                    return Utilitarios::formatDataCarbon($model->posting_date)->format('d/m/Y H:i');
-                })
-                ->addColumn('amount', function ($model) {
-                    return 'R$: ' . Utilitarios::getFormatReal($model->amount);
-                })
-                ->addColumn('type', function ($model) {
-                    return $model->type === 'C' ? 'Crédito' : 'Débito';
-                })->addColumn('account_balance', function ($model) {
-                    return 'R$: ' . Utilitarios::getFormatReal($model->account_balance);
-                })->addColumn('actions', function ($model) {
-                    return Utilitarios::getBtnAction([
-                        ['type' => 'edit', 'url' => '#', 'id' => $model->id],
-                        ['type' => 'delete', 'url' => routeTenant('bank_account_posting.destroy', [$model->id]), 'id' => $model->id]
-                    ]);
-                })
-                ->rawColumns(['actions'])
-                ->toJson();
-            return $response->original;
-        } catch (Exception $e) {
-            dd('erro!' . $e->getMessage());
-        }
+                if ($request->get('type_name') > 0) {
+                    $query->where('type_bank_account_postings.id', $request->get('type_name'));
+                }
+                if ($request->get('type') !== "0") {
+                    $query->where('type', $request->get('type'));
+                }
+                if ($request->get('posting_date') !== null) {
+                    $explode = explode('-', $request->get('posting_date'));
+                    $dt_initial = Utilitarios::formatDataCarbon(trim($explode[0]));
+                    $dt_final = Utilitarios::formatDataCarbon(trim($explode[1]));
+                    $query->whereBetween('posting_date', [$dt_initial, $dt_final]);
+                }
+            })
+            ->addColumn('posting_date', function ($model) {
+                return Utilitarios::formatDataCarbon($model->posting_date)->format('d/m/Y H:i');
+            })
+            ->addColumn('amount', function ($model) {
+                return 'R$: ' . Utilitarios::getFormatReal($model->amount);
+            })
+            ->addColumn('type', function ($model) {
+                return $model->type === 'C' ? 'Crédito' : 'Débito';
+            })->addColumn('account_balance', function ($model) {
+                return 'R$: ' . Utilitarios::getFormatReal($model->account_balance);
+            })->addColumn('actions', function ($model) {
+                return Utilitarios::getBtnAction([
+                    ['type' => 'edit', 'url' => '#', 'id' => $model->id],
+                    ['type' => 'delete', 'url' => routeTenant('bank_account_posting.destroy', [$model->id]), 'id' => $model->id]
+                ]);
+            })
+            ->rawColumns(['actions'])
+            ->toJson();
+        return $response->original;
     }
 }
