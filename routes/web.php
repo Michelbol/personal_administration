@@ -47,42 +47,42 @@ Route::prefix("{{$tenantParam}}")
             Route::get('/budget_financial_posting/get/{id}', 'BudgetFinancialPostingController@get')->name('budget_financial_posting.get');
             //=========================================CAR=================================================================//
             Route::prefix('car')->name('cars.')->group(function(){
-                $controller = 'CarController';
-                Route::get('/',             $controller.'@index')       ->name('index');
-                Route::get('/profile/{id}', $controller.'@profile')     ->name('profile');
-                Route::post('/',            $controller.'@store')       ->name('store');
-                Route::get('/create',       $controller.'@create')      ->name('create');
-                Route::get('/get',          $controller.'@get')         ->name('get');
-                Route::get('/{id}',         $controller.'@show')        ->name('show');
-                Route::put('/{id}',         $controller.'@update')      ->name('update');
-                Route::delete('/{id}',      $controller.'@destroy')     ->name('destroy');
-                Route::get('/{id}/edit',    $controller.'@edit')        ->name('edit');
+                Route::get('/',             'CarController@index')       ->name('index');
+                Route::get('/profile/{id}', 'CarController@profile')     ->name('profile');
+                Route::post('/',            'CarController@store')       ->name('store');
+                Route::get('/create',       'CarController@create')      ->name('create');
+                Route::get('/get',          'CarController@get')         ->name('get');
+                Route::get('/{id}',         'CarController@show')        ->name('show');
+                Route::put('/{id}',         'CarController@update')      ->name('update');
+                Route::delete('/{id}',      'CarController@destroy')     ->name('destroy');
+                Route::get('/{id}/edit',    'CarController@edit')        ->name('edit');
             });
             //=========================================CREDCARD=================================================================//
         Route::prefix('cred_card')->name('cred_card.')->group(function(){
-            $controller = 'CredCardController';
-            Route::get('/',             $controller.'@index')       ->name('index');
-            Route::post('/',            $controller.'@store')       ->name('store');
-            Route::get('/create',       $controller.'@create')      ->name('create');
-            Route::get('/get',          $controller.'@get')         ->name('get');
-            Route::get('/{id}',         $controller.'@show')        ->name('show');
-            Route::put('/{id}',         $controller.'@update')      ->name('update');
-            Route::delete('/{id}',      $controller.'@destroy')     ->name('destroy');
-            Route::get('/{id}/edit',    $controller.'@edit')        ->name('edit');
+            Route::get('/',             'CredCardController@index')       ->name('index');
+            Route::post('/',            'CredCardController@store')       ->name('store');
+            Route::get('/create',       'CredCardController@create')      ->name('create');
+            Route::get('/get',          'CredCardController@get')         ->name('get');
+            Route::get('/{id}',         'CredCardController@show')        ->name('show');
+            Route::put('/{id}',         'CredCardController@update')      ->name('update');
+            Route::delete('/{id}',      'CredCardController@destroy')     ->name('destroy');
+            Route::get('/{id}/edit',    'CredCardController@edit')        ->name('edit');
         });
         //=========================================CARSUPPLIES=================================================================//
         Route::prefix('car_supply')->name('car_supply.')->group(function(){
-            $controller = 'CarSupplyController';
-            Route::get('/{car_id}',     $controller.'@index')       ->name('index');
-            Route::post('/',            $controller.'@store')       ->name('store');
-            Route::get('/create/{car_id}',$controller.'@create')    ->name('create');
-            Route::get('/get/{car_id}', $controller.'@get')         ->name('get');
-            Route::get('/{id}',         $controller.'@show')        ->name('show');
-            Route::put('/{id}',         $controller.'@update')      ->name('update');
-            Route::delete('/{id}',      $controller.'@destroy')     ->name('destroy');
-            Route::get('/{id}/edit',    $controller.'@edit')        ->name('edit');
+            Route::get('/{car_id}',     'CarSupplyController@index')       ->name('index');
+            Route::post('/',            'CarSupplyController@store')       ->name('store');
+            Route::get('/create/{car_id}','CarSupplyController@create')    ->name('create');
+            Route::get('/get/{car_id}', 'CarSupplyController@get')         ->name('get');
+            Route::get('/{id}',         'CarSupplyController@show')        ->name('show');
+            Route::put('/{id}',         'CarSupplyController@update')      ->name('update');
+            Route::delete('/{id}',      'CarSupplyController@destroy')     ->name('destroy');
+            Route::get('/{id}/edit',    'CarSupplyController@edit')        ->name('edit');
         });
-        Route::apiResource('bank_account_posting', 'BankAccountPostingController')->except(['index', 'show']);
+        Route::apiResource(
+            'bank_account_posting',
+            'BankAccountPostingController'
+        )->except(['index', 'show']);
             Route::resources([
                 'bank_accounts'             => 'BankAccountController',
                 'bank'                      => 'BankController',

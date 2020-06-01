@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\CreditCard;
 use App\Utilitarios;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Session;
 use Yajra\DataTables\DataTables;
 
 class CredCardController extends Controller
@@ -12,7 +15,7 @@ class CredCardController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -22,7 +25,7 @@ class CredCardController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -32,8 +35,8 @@ class CredCardController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -46,30 +49,20 @@ class CredCardController extends Controller
             $cred_card->fill($data);
             $cred_card->save();
 
-            \Session::flash('message', ['msg' => 'Cartão de crédito salvo com sucesso', 'type' => 'success']);
+            Session::flash('message', ['msg' => 'Cartão de crédito salvo com sucesso', 'type' => 'success']);
             return redirect()->routeTenant('cred_card.index');
-        }catch (\Exception $e){
-            \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
+        }catch (Exception $e){
+            Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
             return redirect()->routeTenant('cred_card.index');
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $tenant
+     * @return Response
      */
     public function edit($tenant, $id)
     {
@@ -81,9 +74,10 @@ class CredCardController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $tenant
+     * @return Response
      */
     public function update(Request $request, $tenant, $id)
     {
@@ -94,10 +88,10 @@ class CredCardController extends Controller
             $cred_card->fill($data);
             $cred_card->save();
 
-            \Session::flash('message', ['msg' => 'Cartão Atualizado com sucesso', 'type' => 'success']);
+            Session::flash('message', ['msg' => 'Cartão Atualizado com sucesso', 'type' => 'success']);
             return redirect()->routeTenant('cred_card.index');
-        }catch (\Exception $e){
-            \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
+        }catch (Exception $e){
+            Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
             return redirect()->routeTenant('cred_card.index');
         }
     }
@@ -106,7 +100,8 @@ class CredCardController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $tenant
+     * @return Response
      */
     public function destroy($tenant, $id)
     {
@@ -114,14 +109,19 @@ class CredCardController extends Controller
             $cred_card = CreditCard::find($id);
             $cred_card->delete();
 
-            \Session::flash('message', ['msg' => 'Cartão de Crédito Deletado com sucesso', 'type' => 'success']);
+            Session::flash('message', ['msg' => 'Cartão de Crédito Deletado com sucesso', 'type' => 'success']);
             return redirect()->routeTenant('cred_card.index');
-        }catch (\Exception $e){
-            \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
+        }catch (Exception $e){
+            Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
             return redirect()->routeTenant('cred_card.index');
         }
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     * @throws Exception
+     */
     public function get(Request $request){
         $model = CreditCard::select(['id', 'name','limit', 'default_closing_date']);
 

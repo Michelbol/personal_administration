@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Scopes\TenantModels;
 use App\Utilitarios;
+use Eloquent;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,7 +16,7 @@ use Illuminate\Database\Eloquent\Collection;
  * @method static Builder|Car newModelQuery()
  * @method static Builder|Car newQuery()
  * @method static Builder|Car query()
- * @mixin \Eloquent
+ * @mixin Eloquent
  * @property int $id
  * @property string $license_plate
  * @property string|null $model
