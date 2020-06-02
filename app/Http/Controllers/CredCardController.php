@@ -40,21 +40,17 @@ class CredCardController extends Controller
      */
     public function store(Request $request)
     {
-        try{
-            $data = $request->all();
-            if(isset($data['limit'])){
-                $data['limit'] = Utilitarios::formatReal($data['limit']);
-            }
-            $cred_card = new CreditCard();
-            $cred_card->fill($data);
-            $cred_card->save();
-
-            Session::flash('message', ['msg' => 'Cartão de crédito salvo com sucesso', 'type' => 'success']);
-            return redirect()->routeTenant('cred_card.index');
-        }catch (Exception $e){
-            Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
-            return redirect()->routeTenant('cred_card.index');
+        $data = $request->all();
+        if(isset($data['limit'])){
+            $data['limit'] = Utilitarios::formatReal($data['limit']);
         }
+        $cred_card = new CreditCard();
+        $cred_card->fill($data);
+        $cred_card->save();
+
+        $this->successMessage('Cartão de crédito salvo com sucesso');
+
+        return redirect()->routeTenant('cred_card.index');
     }
 
     /**
@@ -81,40 +77,31 @@ class CredCardController extends Controller
      */
     public function update(Request $request, $tenant, $id)
     {
-        try{
-            $data = $request->all();
-            $data['limit'] = Utilitarios::formatReal($data['limit']);
-            $cred_card = CreditCard::find($id);
-            $cred_card->fill($data);
-            $cred_card->save();
+        $data = $request->all();
+        $data['limit'] = Utilitarios::formatReal($data['limit']);
+        $cred_card = CreditCard::find($id);
+        $cred_card->fill($data);
+        $cred_card->save();
 
-            Session::flash('message', ['msg' => 'Cartão Atualizado com sucesso', 'type' => 'success']);
-            return redirect()->routeTenant('cred_card.index');
-        }catch (Exception $e){
-            Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
-            return redirect()->routeTenant('cred_card.index');
-        }
+        $this->successMessage('Cartão Atualizado com sucesso');
+        return redirect()->routeTenant('cred_card.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @param $tenant
      * @return Response
+     * @throws Exception
      */
     public function destroy($tenant, $id)
     {
-        try{
-            $cred_card = CreditCard::find($id);
-            $cred_card->delete();
+        $cred_card = CreditCard::find($id);
+        $cred_card->delete();
 
-            Session::flash('message', ['msg' => 'Cartão de Crédito Deletado com sucesso', 'type' => 'success']);
-            return redirect()->routeTenant('cred_card.index');
-        }catch (Exception $e){
-            Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
-            return redirect()->routeTenant('cred_card.index');
-        }
+        Session::flash('message', ['msg' => 'Cartão de Crédito Deletado com sucesso', 'type' => 'success']);
+        return redirect()->routeTenant('cred_card.index');
     }
 
     /**
