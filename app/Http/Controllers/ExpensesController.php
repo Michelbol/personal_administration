@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Expenses;
 use App\Utilitarios;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Session;
 use Yajra\DataTables\DataTables;
 
 class ExpensesController extends Controller
@@ -13,7 +16,7 @@ class ExpensesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -23,7 +26,7 @@ class ExpensesController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -33,8 +36,8 @@ class ExpensesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -49,30 +52,19 @@ class ExpensesController extends Controller
             $expense->save();
 
             DB::commit();
-            \Session::flash('message', ['msg' => 'Despesa Salva com sucesso', 'type' => 'success']);
+            Session::flash('message', ['msg' => 'Despesa Salva com sucesso', 'type' => 'success']);
             return redirect()->routeTenant('expense.index');
-        }catch (\Exception $e){
-            \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
+        }catch (Exception $e){
+            Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
             return redirect()->routeTenant('expense.index');
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit($tenant, $id)
     {
@@ -84,9 +76,9 @@ class ExpensesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, $id)
     {
@@ -101,10 +93,10 @@ class ExpensesController extends Controller
             $expense->save();
 
             DB::commit();
-            \Session::flash('message', ['msg' => 'Despesas Atualizada com sucesso', 'type' => 'success']);
+            Session::flash('message', ['msg' => 'Despesas Atualizada com sucesso', 'type' => 'success']);
             return redirect()->routeTenant('expense.index');
-        }catch (\Exception $e){
-            \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
+        }catch (Exception $e){
+            Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
             return redirect()->routeTenant('expense.index');
         }
     }
@@ -113,7 +105,7 @@ class ExpensesController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($tenant, $id)
     {
@@ -121,10 +113,10 @@ class ExpensesController extends Controller
             DB::beginTransaction();
             Expenses::find($id)->delete();
             DB::commit();
-            \Session::flash('message', ['msg' => 'Despesa Excluida com sucesso', 'type' => 'success']);
+            Session::flash('message', ['msg' => 'Despesa Excluida com sucesso', 'type' => 'success']);
             return redirect()->routeTenant('expense.index');
-        }catch (\Exception $e){
-            \Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
+        }catch (Exception $e){
+            Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
             return redirect()->routeTenant('expense.index');
         }
     }
@@ -165,7 +157,7 @@ class ExpensesController extends Controller
                 ->rawColumns(['actions', 'isFixed'])
                 ->toJson();
             return $response->original;
-        }catch (\Exception $e){
+        }catch (Exception $e){
             dd('erro!'.$e->getMessage());
         }
     }

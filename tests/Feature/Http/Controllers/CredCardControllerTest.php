@@ -10,7 +10,7 @@ use Tests\SeedingTrait;
 use Tests\TenantRoutesTrait;
 use Tests\TestCase;
 
-class CredCardController extends TestCase
+class CredCardControllerTest extends TestCase
 {
     use DatabaseMigrations, SeedingTrait, TenantRoutesTrait;
     /**

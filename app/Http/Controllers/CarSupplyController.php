@@ -9,7 +9,6 @@ use App\Utilitarios;
 use App\Models\CarSupply;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
-use Illuminate\Support\Facades\Session;
 
 class CarSupplyController extends Controller
 {
@@ -38,7 +37,7 @@ class CarSupplyController extends Controller
         $carSupply->gas_station   = $validData['gas_station'];
         $carSupply->calcTraveledKilometer();
         $carSupply->save();
-        Session::flash('message', ['msg' => 'Abastecimento incluido com sucesso', 'type' => 'success']);
+        $this->successMessage('Abastecimento incluido com sucesso');
         return redirect()->routeTenant('car_supply.index',['car_id' => $carSupply->car_id]);
     }
 
@@ -64,40 +63,38 @@ class CarSupplyController extends Controller
         $carSupply->gas_station   = $validData['gas_station'];
         $carSupply->calcTraveledKilometer();
         $carSupply->save();
-        Session::flash('message', ['msg' => 'Abastecimento Atualizado com sucesso', 'type' => 'success']);
+        $this->successMessage('Abastecimento Atualizado com sucesso');
         return redirect()->routeTenant('car_supply.index',['car_id' => $carSupply->car_id]);
     }
 
+    /**
+     * @param $tenant
+     * @param $id
+     * @return mixed
+     * @throws Exception
+     */
     public function destroy($tenant, $id){
-        try{
-            $carSupply = CarSupply::findOrFail($id, ['id', 'car_id']);
-            $carSupply->delete();
-            Session::flash('message', ['msg' => 'Abastecimento deletado com sucesso', 'type' => 'success']);
-            return redirect()->routeTenant('car_supply.index',['car_id' => $carSupply->car_id]);
-        }catch (Exception $e){
-            Session::flash('message', ['msg' => 'Erro ao deletar Abastecimento:'.$e->getMessage(), 'type' => 'success']);
-            return redirect()->routeTenant('cars.index');
-        }
+        $carSupply = CarSupply::findOrFail($id, ['id', 'car_id']);
+        $carSupply->delete();
+        $this->successMessage('Abastecimento deletado com sucesso');
+        return redirect()->routeTenant('car_supply.index',['car_id' => $carSupply->car_id]);
     }
 
     public function get($tenant, $id){
-        try{
-            $model = CarSupply::select(['id', 'kilometer', 'liters', 'total_paid', 'date', 'fuel', 'gas_station'])
-                ->where('car_id', $id)
-                ->orderByDesc('date');
+        $model = CarSupply::select(['id', 'kilometer', 'liters', 'total_paid', 'date', 'fuel', 'gas_station'])
+            ->where('car_id', $id)
+            ->orderByDesc('date');
 
-            $response = DataTables::of($model)
-                ->addColumn('actions', function ($model){
-                    return Utilitarios::getBtnAction([
-                        ['type'=>'edit',    'url' => routeTenant('car_supply.edit',['id' => $model->id])],
-                        ['type'=>'delete',  'url' => routeTenant('car_supply.destroy',['id' => $model->id]), 'id' => $model->id]
-                    ]);
-                })
-                ->rawColumns(['actions'])
-                ->toJson();
-            return $response->original;
-        }catch (\Exception $e){
-            dd('erro!'.$e->getMessage());
-        }
+        $response = DataTables::of($model)
+            ->addColumn('actions', function ($model){
+                return Utilitarios::getBtnAction([
+                    ['type'=>'edit',    'url' => routeTenant('car_supply.edit',['id' => $model->id])],
+                    ['type'=>'delete',  'url' => routeTenant('car_supply.destroy',['id' => $model->id]), 'id' => $model->id]
+                ]);
+            })
+            ->rawColumns(['actions'])
+            ->toJson();
+        return $response->original;
+
     }
 }
