@@ -7,7 +7,6 @@ use App\Utilitarios;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
 use Session;
 use Yajra\DataTables\DataTables;
 
@@ -38,32 +37,27 @@ class ExpensesController extends Controller
      *
      * @param Request $request
      * @return Response
+     * @throws Exception
      */
     public function store(Request $request)
     {
-        try{
-            DB::beginTransaction();
-            $expense = new Expenses();
-            $data = $request->all();
-            $expense->name = $data['name'];
-            $expense->amount = Utilitarios::formatReal($data['amount']);
-            $expense->isFixed = isset($data['isFixed']);
-            $expense->due_date = $data['due_date'];
-            $expense->save();
+        $expense = new Expenses();
+        $data = $request->all();
+        $expense->name = $data['name'];
+        $expense->amount = Utilitarios::formatReal($data['amount']);
+        $expense->isFixed = isset($data['isFixed']);
+        $expense->due_date = $data['due_date'];
+        $expense->save();
 
-            DB::commit();
-            Session::flash('message', ['msg' => 'Despesa Salva com sucesso', 'type' => 'success']);
-            return redirect()->routeTenant('expense.index');
-        }catch (Exception $e){
-            Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
-            return redirect()->routeTenant('expense.index');
-        }
+        Session::flash('message', ['msg' => 'Despesa Salva com sucesso', 'type' => 'success']);
+        return redirect()->routeTenant('expense.index');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
+     * @param $tenant
      * @return Response
      */
     public function edit($tenant, $id)
@@ -82,51 +76,42 @@ class ExpensesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        try{
-            DB::beginTransaction();
-            $data = $request->all();
-            $expense = Expenses::find($request['id']);
-            $expense->name = $data['name'];
-            $expense->amount = Utilitarios::formatReal($data['amount']);
-            $expense->isFixed = isset($data['isFixed']);
-            $expense->due_date = $data['due_date'];
-            $expense->save();
+        $data = $request->all();
+        $expense = Expenses::find($request['id']);
+        $expense->name = $data['name'];
+        $expense->amount = Utilitarios::formatReal($data['amount']);
+        $expense->isFixed = isset($data['isFixed']);
+        $expense->due_date = $data['due_date'];
+        $expense->save();
 
-            DB::commit();
-            Session::flash('message', ['msg' => 'Despesas Atualizada com sucesso', 'type' => 'success']);
-            return redirect()->routeTenant('expense.index');
-        }catch (Exception $e){
-            Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
-            return redirect()->routeTenant('expense.index');
-        }
+        Session::flash('message', ['msg' => 'Despesas Atualizada com sucesso', 'type' => 'success']);
+        return redirect()->routeTenant('expense.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return Response
+     * @throws Exception
      */
     public function destroy($tenant, $id)
     {
-        try{
-            DB::beginTransaction();
-            Expenses::find($id)->delete();
-            DB::commit();
-            Session::flash('message', ['msg' => 'Despesa Excluida com sucesso', 'type' => 'success']);
-            return redirect()->routeTenant('expense.index');
-        }catch (Exception $e){
-            Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
-            return redirect()->routeTenant('expense.index');
-        }
+        Expenses::find($id)->delete();
+
+        Session::flash('message', ['msg' => 'Despesa Excluida com sucesso', 'type' => 'success']);
+        return redirect()->routeTenant('expense.index');
     }
 
-
+    /**
+     * @param Request $request
+     * @return mixed
+     * @throws Exception
+     */
     public function get(Request $request){
-        try{
-            $model = Expenses::select(['id', 'name', 'amount', 'isFixed', 'due_date']);
+        $model = Expenses::select(['id', 'name', 'amount', 'isFixed', 'due_date']);
 
-            $response = DataTables::of($model)
+        $response = DataTables::of($model)
 //                ->filter(function (Builder $query) use ($request){
 
 //                    if($request->type_name > 0){
@@ -142,23 +127,20 @@ class ExpensesController extends Controller
 //                        $query->whereBetween('posting_date', [$dt_initial, $dt_final]);
 //                    }
 //                })
-                ->addColumn('isFixed', function($model){
-                    return $model->isFixed === 1 ? '<i class="fas fa-thumbs-up"></i>' : '<i class="far fa-thumbs-down"></i>';
-                })
-                ->addColumn('amount', function($model){
-                    return 'R$: '.Utilitarios::getFormatReal($model->amount);
-                })
-                ->addColumn('actions', function ($model){
-                    return Utilitarios::getBtnAction([
-                        ['type'=>'edit', 'url' => routeTenant('expense.edit',['expense' => $model->id])],
-                        ['type'=>'delete', 'url' => routeTenant('expense.destroy',['expense' => $model->id]), 'id' => $model->id]
-                    ]);
-                })
-                ->rawColumns(['actions', 'isFixed'])
-                ->toJson();
-            return $response->original;
-        }catch (Exception $e){
-            dd('erro!'.$e->getMessage());
-        }
+            ->addColumn('isFixed', function($model){
+                return $model->isFixed === 1 ? '<i class="fas fa-thumbs-up"></i>' : '<i class="far fa-thumbs-down"></i>';
+            })
+            ->addColumn('amount', function($model){
+                return 'R$: '.Utilitarios::getFormatReal($model->amount);
+            })
+            ->addColumn('actions', function ($model){
+                return Utilitarios::getBtnAction([
+                    ['type'=>'edit', 'url' => routeTenant('expense.edit',['expense' => $model->id])],
+                    ['type'=>'delete', 'url' => routeTenant('expense.destroy',['expense' => $model->id]), 'id' => $model->id]
+                ]);
+            })
+            ->rawColumns(['actions', 'isFixed'])
+            ->toJson();
+        return $response->original;
     }
 }
