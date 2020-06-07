@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Controllers;
 use App\Models\Car;
 use App\Models\CarSupply;
 use App\Models\Enum\SessionEnum;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\SeedingTrait;
 use Tests\TenantRoutesTrait;
@@ -22,6 +23,14 @@ class CarControllerTest extends TestCase
     {
         $this->setUser();
         $car = factory(Car::class)->create();
+        factory(CarSupply::class)
+            ->create
+            (
+                [
+                    'date' => now(),
+                    'car_id' => $car->id
+                ]
+            );
         $response = $this->get("car/profile/$car->id");
 
         $response

@@ -22,106 +22,95 @@ class BudgetFinancialPostingController extends Controller
      *
      * @param Request $request
      * @return Response
+     * @throws Exception
      */
     public function store(Request $request)
     {
-        try{
-            DB::beginTransaction();
-            $budgetFinancialPosting = new BudgetFinancialPosting();
-            $data = $request->all();
-            $budgetFinancialPosting->posting_date = Utilitarios::formatDataCarbon($data['posting_date']);
-            $budgetFinancialPosting->amount = Utilitarios::formatReal($data['amount']);
-            $budgetFinancialPosting->budget_financial_id = $data['budget_financial_id'];
-            if(isset($data['new_expense'])){
-                $expense = Expenses::create([
-                    'name' => $data['new_expense'],
-                    'amount' => Utilitarios::formatReal($data['amount'])
-                ]);
-                $data['expense_id'] = $expense->id;
-            }
-            $budgetFinancialPosting->expense_id = $data['expense_id'];
-            if(isset($data['new_income'])){
-                $income = Income::create([
-                    'name' => $data['new_income'],
-                    'amount' => Utilitarios::formatReal($data['amount'])
-                ]);
-                $data['income_id'] = $income->id;
-            }
-            $budgetFinancialPosting->income_id = $data['income_id'];
-            $budgetFinancialPosting->account_balance = 0;
-            $budgetFinancialPosting->save();
-            BudgetFinancialPosting::recalcBalance(BudgetFinancial::find($budgetFinancialPosting->budget_financial_id));
-            DB::commit();
-            Session::flash('message', ['msg' => 'Lançamento Salvo com sucesso', 'type' => 'success']);
-            return redirect()->routeTenant('budget_financial.edit', ['budget_financial' => $budgetFinancialPosting->budget_financial_id]);
-        }catch (Exception $e){
-            Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
-            return redirect()->back();
+        DB::beginTransaction();
+        $budgetFinancialPosting = new BudgetFinancialPosting();
+        $data = $request->all();
+
+        $budgetFinancialPosting->posting_date = Utilitarios::formatDataCarbon($data['posting_date']);
+        $budgetFinancialPosting->amount = Utilitarios::formatReal($data['amount']);
+        $budgetFinancialPosting->budget_financial_id = $data['budget_financial_id'];
+        if(isset($data['new_expense'])){
+            $expense = Expenses::create([
+                'name' => $data['new_expense'],
+                'amount' => Utilitarios::formatReal($data['amount'])
+            ]);
+            $data['expense_id'] = $expense->id;
         }
+        $budgetFinancialPosting->expense_id = $data['expense_id'];
+        if(isset($data['new_income'])){
+            $income = Income::create([
+                'name' => $data['new_income'],
+                'amount' => Utilitarios::formatReal($data['amount'])
+            ]);
+            $data['income_id'] = $income->id;
+        }
+        $budgetFinancialPosting->income_id = $data['income_id'];
+        $budgetFinancialPosting->account_balance = 0;
+        $budgetFinancialPosting->save();
+        BudgetFinancialPosting::recalcBalance(BudgetFinancial::find($budgetFinancialPosting->budget_financial_id));
+        DB::commit();
+        $this->successMessage('Lançamento Salvo com sucesso');
+        return redirect()->routeTenant('budget_financial.edit', ['budget_financial' => $budgetFinancialPosting->budget_financial_id]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param  int  $id
+     * @param int $id
      * @return Response
+     * @throws Exception
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,$tenant, $id)
     {
-        try{
-            DB::beginTransaction();
-            $budgetFinancialPosting = BudgetFinancialPosting::find($id);
-            $data = $request->all();
-            $budgetFinancialPosting->posting_date = Utilitarios::formatDataCarbon($data['posting_date']);
-            $budgetFinancialPosting->amount = Utilitarios::formatReal(str_replace('R$: ', '', $data['amount']));
-            if(isset($data['new_expense'])){
-                $expense = Expenses::create([
-                    'name' => $data['new_expense'],
-                    'amount' => $data['amount']
-                ]);
-                $data['expense_id'] = $expense->id;
-            }
-            $budgetFinancialPosting->expense_id = $data['expense_id'];
-            if(isset($data['new_income'])){
-                $income = Income::create([
-                    'name' => $data['new_income'],
-                    'amount' => $data['amount']
-                ]);
-                $data['income_id'] = $income->id;
-            }
-            $budgetFinancialPosting->income_id = $data['income_id'];
-            $budgetFinancialPosting->account_balance = 0;
-            $budgetFinancialPosting->save();
-            BudgetFinancialPosting::recalcBalance(BudgetFinancial::find($budgetFinancialPosting->budget_financial_id));
-            DB::commit();
-            Session::flash('message', ['msg' => 'Lançamento Atualizado com sucesso', 'type' => 'success']);
-            return redirect()->routeTenant('budget_financial.edit', ['budget_financial' => $budgetFinancialPosting->budget_financial_id]);
-        }catch (Exception $e){
-            Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
-            return redirect()->back();
+        DB::beginTransaction();
+        $budgetFinancialPosting = BudgetFinancialPosting::find($id);
+        $data = $request->all();
+        $budgetFinancialPosting->posting_date = Utilitarios::formatDataCarbon($data['posting_date']);
+        $budgetFinancialPosting->amount = Utilitarios::formatReal(str_replace('R$: ', '', $data['amount']));
+        if(isset($data['new_expense'])){
+            $expense = Expenses::create([
+                'name' => $data['new_expense'],
+                'amount' => $budgetFinancialPosting->amount
+            ]);
+            $data['expense_id'] = $expense->id;
         }
+        $budgetFinancialPosting->expense_id = $data['expense_id'];
+        if(isset($data['new_income'])){
+            $income = Income::create([
+                'name' => $data['new_income'],
+                'amount' => $budgetFinancialPosting->amount
+            ]);
+            $data['income_id'] = $income->id;
+        }
+        $budgetFinancialPosting->income_id = $data['income_id'];
+        $budgetFinancialPosting->account_balance = 0;
+        $budgetFinancialPosting->save();
+        BudgetFinancialPosting::recalcBalance(BudgetFinancial::find($budgetFinancialPosting->budget_financial_id));
+        DB::commit();
+        Session::flash('message', ['msg' => 'Lançamento Atualizado com sucesso', 'type' => 'success']);
+        return redirect()->routeTenant('budget_financial.edit', ['budget_financial' => $budgetFinancialPosting->budget_financial_id]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param $tenant
-     * @param  int  $id
+     * @param int $id
      * @return Response
+     * @throws Exception
      */
     public function destroy($tenant, $id)
     {
-        try{
-            $budget_financial_posting = BudgetFinancialPosting::find($id);
-            $budget_financial_posting->delete();
-            BudgetFinancialPosting::recalcBalance(BudgetFinancial::find($budget_financial_posting->budget_financial_id));
-            Session::flash('message', ['msg' => 'Lançamento deletado com sucesso', 'type' => 'success']);
-            return redirect()->routeTenant('budget_financial.edit', ['budget_financial' => $budget_financial_posting->budget_financial_id]);
-        }catch (Exception $e){
-            Session::flash('message', ['msg' => $e->getMessage(), 'type' => 'danger']);
-            return redirect()->back();
-        }
+        $budget_financial_posting = BudgetFinancialPosting::find($id);
+        $budget_financial_posting->delete();
+        BudgetFinancialPosting::recalcBalance(BudgetFinancial::find($budget_financial_posting->budget_financial_id));
+        Session::flash('message', ['msg' => 'Lançamento deletado com sucesso', 'type' => 'success']);
+        return redirect()->routeTenant('budget_financial.edit', ['budget_financial' => $budget_financial_posting->budget_financial_id]);
     }
 
     /**

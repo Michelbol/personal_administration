@@ -3,6 +3,7 @@
 /public/hot
 /public/storage
 /public/coverage
+/public/test
 /storage/*.key
 /vendor
 /storage/debugbar

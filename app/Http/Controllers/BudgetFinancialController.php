@@ -43,6 +43,8 @@ class BudgetFinancialController extends CrudController
     /**
      * Display a listing of the resource.
      *
+     * @param $tenant
+     * @param Request $request
      * @return RedirectResponse|Factory|View
      */
     public function index($tenant, Request $request)
@@ -116,6 +118,7 @@ class BudgetFinancialController extends CrudController
      * @param $tenant
      * @param $id
      * @return mixed
+     * @throws Exception
      */
     public function updateInitialBalance(Request $request, $tenant, $id){
         DB::beginTransaction();
@@ -132,6 +135,7 @@ class BudgetFinancialController extends CrudController
      * @param $tenant
      * @param $id
      * @return mixed
+     * @throws Exception
      */
     public function lastMonth($tenant, $id){
         DB::beginTransaction();
@@ -143,8 +147,8 @@ class BudgetFinancialController extends CrudController
             $year = $budgetFinancial->year-1;
         }
         $budgetFinancialLastMonth = BudgetFinancial
-            ::whereMonth($month)
-            ->whereYear($year)
+            ::where('month', $month)
+            ->where('year', $year)
             ->first();
         $balance = 0;
         if(isset($budgetFinancialLastMonth)){
@@ -163,6 +167,7 @@ class BudgetFinancialController extends CrudController
      * @param $tenant
      * @param $id
      * @return RedirectResponse
+     * @throws Exception
      */
     public function budgetFinancialMonthByBankAccount($tenant, $id)
     {
@@ -172,13 +177,8 @@ class BudgetFinancialController extends CrudController
          */
         $budgetFinancial = BudgetFinancial::findOrFail($id, ['id', 'month', 'year']);
         $budgetFinancialPostings = $budgetFinancial->budgetFinancialPostings;
-        try{
-            foreach ($budgetFinancialPostings as $budgetFinancialPosting){
-                $budgetFinancialPosting->delete();
-            }
-        }catch (Exception $e){
-            Session::flash('message', ['msg' => 'Erro para resetar o orçamento.', 'type' => SessionEnum::error]);
-            return redirect()->back();
+        foreach ($budgetFinancialPostings as $budgetFinancialPosting){
+            $budgetFinancialPosting->delete();
         }
         $startMonth = Carbon::create($budgetFinancial->year, $budgetFinancial->month)->firstOfMonth();
         $endMonth = Carbon::create($budgetFinancial->year, $budgetFinancial->month)->lastOfMonth();
