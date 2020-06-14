@@ -22,7 +22,11 @@ Route::prefix("{{$tenantParam}}")
     ->group(function() {
         Route::get('/', 'WelcomeController@index')->name('welcome');
 
-        Auth::routes();
+        Auth::routes([
+            'register' => false,
+            'reset' => false,
+            'verify' => false,
+        ]);
 
         Route::get('/home', 'HomeController@index')->name('home');
 

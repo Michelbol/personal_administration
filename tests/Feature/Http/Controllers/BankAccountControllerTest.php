@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\SeedingTrait;
 use Tests\TestCase;
 
-class BankAccountTest extends TestCase
+class BankAccountControllerTest extends TestCase
 {
     use DatabaseMigrations, SeedingTrait;
     /**

@@ -193,14 +193,24 @@ class BankAccountPostingController extends CrudController
     {
         $filesTxt = $request->file('arquivostxt');
         if (isset($filesTxt)) {
-            foreach ($filesTxt as $fileTxt) {
-                $this->readFileTxt(file($fileTxt));
+            try{
+                foreach ($filesTxt as $fileTxt) {
+                    $this->readFileTxt(file($fileTxt));
+                }
+            }catch (Exception $exception){
+                $this->errorMessage($exception->getMessage());
+                return redirect()->back();
             }
         }
         $filesOfx = $request->file('arquivosofx');
         if (isset($filesOfx)) {
-            foreach ($filesOfx as $fileOfx) {
-                $this->readFileOfx($fileOfx);
+            try{
+                foreach ($filesOfx as $fileOfx) {
+                    $this->readFileOfx($fileOfx);
+                }
+            }catch (Exception $exception){
+                $this->errorMessage($exception->getMessage());
+                return redirect()->back();
             }
         }
         $this->successMessage("Arquivo(s) Lido(s) Com Sucesso");
@@ -382,7 +392,7 @@ class BankAccountPostingController extends CrudController
         $bankAccountPosting->type_bank_account_posting_id = $keyFileTypeBankAccountPosting->type_id;
         $bankAccountPosting->expense_id = $keyFileTypeBankAccountPosting->expense_id;
         $bankAccountPosting->income_id = $keyFileTypeBankAccountPosting->income_id;
-        $bankAccountPosting->posting_date = Carbon::create(substr($data[1], 0, 4), substr($data[1], 4, 2), substr($data[1], 6, 2));
+        $bankAccountPosting->posting_date = Carbon::create(substr($data[1], 0, 4), substr($data[1], 4, 2), substr($data[1], 6, 2))->format('d/m/Y H:i');
         $bankAccountPosting->bank_account_id = $bankAccount->id;
         $bankAccountPosting->document = $data[2];
         $bankAccountPosting->amount = $data[4];
