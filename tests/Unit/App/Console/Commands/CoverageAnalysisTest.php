@@ -1,8 +1,9 @@
 <?php
 
-namespace Tests\Unit\Console\Commands;
+namespace Tests\Unit\App\Console\Commands;
 
 use App\Console\Commands\CoverageAnalisys;
+use App\Models\CoverageAnalysis;
 use Exception;
 use Tests\TestCase;
 
@@ -40,6 +41,19 @@ class CoverageAnalysisTest extends TestCase
         $this->expectException(Exception::class);
         $this->artisan(CoverageAnalisys::class, ['file_name' => base_path('coverage.txt')])
             ->assertExitCode(0);
+    }
+
+    public function testGet()
+    {
+        $classes = rand((config('app.min_coverage')+1), 100);
+        $methods = rand((config('app.min_coverage')+1), 100);
+        $lines = rand((config('app.min_coverage')+1), 100);
+        $this->makeFile(base_path('coverage.txt'), $classes, $methods, $lines);
+        $coverageClass = new CoverageAnalysis(file(base_path('coverage.txt')));
+        $coverageClass->calcStatistics();
+        $this->assertIsFloat($coverageClass->getClasses());
+        $this->assertIsFloat($coverageClass->getLines());
+        $this->assertIsFloat($coverageClass->getMethods());
     }
 
     public function makeFile(string $filename, int $classes, int $methods, int $lines)

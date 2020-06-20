@@ -5,39 +5,27 @@ namespace App\Models\Enum;
 
 use \Exception;
 use ReflectionClass;
+use ReflectionException;
 
 class BasicEnum
 {
-    public function __construct($value = null)
-    {
-        try {
-            if (isset($value)) {
-                $calledClass = get_called_class();
-                $reflect = new ReflectionClass($calledClass);
-                return $reflect[$value];
-            }
-        } catch (Exception $e) {
-            return 'Error to get constants: ' . $e->getMessage();
-        }
-    }
-
     private static $constCacheArray = NULL;
 
+    /**
+     * @return mixed
+     * @throws ReflectionException
+     */
     public static function getConstants()
     {
-        try {
-            if (self::$constCacheArray == NULL) {
-                self::$constCacheArray = [];
-            }
-            $calledClass = get_called_class();
-            if (!array_key_exists($calledClass, self::$constCacheArray)) {
-                $reflect = new ReflectionClass($calledClass);
-                self::$constCacheArray[$calledClass] = $reflect->getConstants();
-            }
-            return self::$constCacheArray[$calledClass];
-        } catch (Exception $e) {
-            return 'Error to get constants: ' . $e->getMessage();
+        if (self::$constCacheArray == NULL) {
+            self::$constCacheArray = [];
         }
+        $calledClass = get_called_class();
+        if (!array_key_exists($calledClass, self::$constCacheArray)) {
+            $reflect = new ReflectionClass($calledClass);
+            self::$constCacheArray[$calledClass] = $reflect->getConstants();
+        }
+        return self::$constCacheArray[$calledClass];
     }
 
     public static function getName($value)

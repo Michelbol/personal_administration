@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers;
+namespace Tests\Feature\App\Http\Controllers;
 
 use App\Models\Enum\SessionEnum;
 use App\Models\Income;

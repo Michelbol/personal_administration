@@ -11,17 +11,16 @@ namespace App\Http\Middleware;
 
 use App\Tenant\TenantManager;
 use \Closure;
-use Illuminate\Auth\AuthenticationException;
+use Illuminate\Http\Request;
 
 class DefineAuthGuard
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure $next
+     * @param  Request $request
+     * @param Closure $next
      * @return mixed
-     * @throws AuthenticationException
      */
     public function handle($request, Closure $next)
     {

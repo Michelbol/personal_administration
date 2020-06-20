@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Validation\UnauthorizedException;
 use Str;
 use Exception;
 use Illuminate\View\View;
@@ -100,6 +101,9 @@ class CrudController extends Controller
         try{
             if(isset($this->requestValidator)){
                 $validator = new $this->requestValidator();
+                if(!$validator->authorize()){
+                    throw new UnauthorizedException;
+                }
                 $this->validate($request, $validator->rules(), $validator->messages());
             }
             $this->service->create($request->all());
@@ -139,6 +143,9 @@ class CrudController extends Controller
         try{
             if(isset($this->requestValidator)){
                 $validator = new $this->requestValidator();
+                if(!$validator->authorize()){
+                    throw new UnauthorizedException;
+                }
                 $this->validate($request, $validator->rules(), $validator->messages());
             }
             $this->service->update($id, $request->all());

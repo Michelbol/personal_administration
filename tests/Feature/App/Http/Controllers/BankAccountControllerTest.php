@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\App\Http\Controllers;
 
 use App\Models\BankAccount;
 use Illuminate\Foundation\Testing\DatabaseMigrations;

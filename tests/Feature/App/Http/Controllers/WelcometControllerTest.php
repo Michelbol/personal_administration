@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers;
+namespace Tests\Feature\App\Http\Controllers;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\SeedingTrait;
 use Tests\TestCase;
 
-class BankControllerTest extends TestCase
+class WelcometControllerTest extends TestCase
 {
     use DatabaseMigrations, SeedingTrait;
     /**
@@ -18,16 +18,10 @@ class BankControllerTest extends TestCase
     {
         $object = $this->setUser();
         $tenant = $object->get('tenant');
-        $response = $this->get("$tenant->sub_domain/bank");
+        $response = $this->get("$tenant->sub_domain/");
 
         $response
             ->assertStatus(200)
-            ->assertJson([]);
-
-        $response = $this->get("$tenant->sub_domain/bank?q=nu");
-
-        $response
-            ->assertStatus(200)
-            ->assertJson([]);
+            ->assertViewIs('welcome');
     }
 }

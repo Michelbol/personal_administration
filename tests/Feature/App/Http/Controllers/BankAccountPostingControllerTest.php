@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\App\Http\Controllers;
 
 use App\Models\BankAccount;
 use App\Models\BankAccountPosting;
@@ -118,7 +118,7 @@ class BankAccountPostingControllerTest extends TestCase
         $data = factory(BankAccountPosting::class, 5)->create(['type' => TypeBankAccountPostingEnum::CREDIT]);
         $data->merge(factory(BankAccountPosting::class, 5)->create(['type' => TypeBankAccountPostingEnum::DEBIT]));
 
-        $data2 = $data->sortBy('posting_date')->first();
+        $data2 = $data->sortBy('posting_date')->last();
 
         $response = $this->delete("$tenant->sub_domain/bank_account_posting/{$data2['id']}");
         $response
@@ -289,7 +289,7 @@ class BankAccountPostingControllerTest extends TestCase
     public function createFile($name, $mime)
     {
         return new UploadedFile(
-            base_path()."\\tests\\Feature\\Http\\Controllers\\$name",
+            base_path()."\\tests\\Feature\\App\\Http\\Controllers\\$name",
             $name,
             $mime,
             null,
