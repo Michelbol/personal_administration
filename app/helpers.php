@@ -177,3 +177,13 @@ if(!function_exists('formatGetData')){
         return $data;
     }
 }
+
+if(!function_exists('cleanNumber')){
+    function cleanNumber($value)
+    {
+        if (isset($value)) {
+            $value = preg_replace("/[^0-9]/", '', $value);
+        }
+        return $value;
+    }
+}

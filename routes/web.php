@@ -33,6 +33,14 @@ Route::prefix("{{$tenantParam}}")
         Route::middleware('auth:web_tenant')->group(function () {
             //=========================================BANK ACCOUNT===========================================================//
             Route::get('/bank_account/get', 'BankAccountController@get')->name('bank_account.get');
+            //=========================================Supplier===========================================================//
+            Route::get('/supplier/get', 'SupplierController@get')->name('supplier.get');
+            //=========================================Product===========================================================//
+            Route::get('/product/get', 'ProductController@get')->name('product.get');
+            //=========================================Invoice===========================================================//
+            Route::get('/invoice/get', 'InvoiceController@get')->name('invoice.get');
+            Route::get('/invoice/create/qr_code', 'InvoiceController@createByQrCode')->name('invoice.create.qr_code');
+            Route::post('/invoice/qr_code', 'InvoiceController@storeByQrCode')->name('invoice.store.qr_code');
             //=========================================BANK ACCOUNT POSTING===================================================//
             Route::get('/bank_account_posting/{id}', 'BankAccountPostingController@indexPostingByBank')->name('bank_account_posting.index');
             Route::get('/bank_account_posting/show/{id}', 'BankAccountPostingController@show')->name('bank_account_posting.show');
@@ -94,6 +102,9 @@ Route::prefix("{{$tenantParam}}")
                 'budget_financial_posting'  => 'BudgetFinancialPostingController',
                 'income'                    => 'IncomeController',
                 'expense'                   => 'ExpensesController',
+                'supplier'                  => 'SupplierController',
+                'product'                   => 'ProductController',
+                'invoice'                   => 'InvoiceController',
             ]);
         });
     });

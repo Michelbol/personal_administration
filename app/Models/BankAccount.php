@@ -41,6 +41,8 @@ use Illuminate\Database\Eloquent\Builder;
  * @mixin Builder
  * @mixin Model
  * @mixin BankAccount
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\BankAccountPosting[] $bankAccountPostings
+ * @property-read int|null $bank_account_postings_count
  */
 class BankAccount extends Model
 {
