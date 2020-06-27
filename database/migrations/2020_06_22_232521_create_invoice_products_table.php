@@ -27,6 +27,11 @@ class CreateInvoiceProductsTable extends Migration
             $table->foreign('product_id')
                 ->references('id')
                 ->on('products');
+
+            $table->unsignedBigInteger('invoice_id');
+            $table->foreign('invoice_id')
+                ->references('id')
+                ->on('invoices');
         });
     }
 

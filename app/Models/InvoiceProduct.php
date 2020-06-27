@@ -17,6 +17,7 @@ use Illuminate\Support\Carbon;
  * @property float $quantity
  * @property float $unitary_value
  * @property float $total_value
+ * @property int $invoice_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property int $product_id
@@ -33,6 +34,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|InvoiceProduct whereUn($value)
  * @method static Builder|InvoiceProduct whereUnitaryValue($value)
  * @method static Builder|InvoiceProduct whereUpdatedAt($value)
+ * @method static Builder|InvoiceProduct whereInvoiceId($value)
  * @mixin Eloquent
  */
 class InvoiceProduct extends Model
@@ -44,11 +46,13 @@ class InvoiceProduct extends Model
         'quantity',
         'unitary_value',
         'total_value',
+        'invoice_id',
     ];
 
     protected $casts = [
         'quantity' => 'decimal',
         'unitary_value' => 'decimal',
         'total_value' => 'decimal',
+        'invoice_id' => 'int',
     ];
 }

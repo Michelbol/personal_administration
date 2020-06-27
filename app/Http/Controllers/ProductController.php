@@ -30,7 +30,7 @@ class ProductController extends CrudController
      * @throws Exception
      */
     public function get(){
-        $model = Invoice::select('*');
+        $model = Product::select('*');
 
         $response = DataTables::of($model)
             ->addColumn('actions', function ($model){

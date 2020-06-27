@@ -62,7 +62,7 @@ class SupplierService extends CRUDService
      * @return Model|string|Supplier
      * @throws Exception
      */
-    public function getSupplierByDom(Dom $dom)
+    public function findOrCreateSupplierByDom(Dom $dom)
     {
         $supplier = (new InvoiceRepository())->findOneSupplierByCnpj($this->getCnpjSupplier($dom));
         $data = $this->getSupplierData($dom);

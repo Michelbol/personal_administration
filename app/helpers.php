@@ -144,8 +144,9 @@ if(!function_exists('formatDataCarbon')) {
 if(!function_exists('formatReal')) {
     function formatReal($value)
     {
-        $aux = 0;
         if ($value) {
+            $value = preg_replace('[^0-9\.,]','', $value);
+            $value = removeSpaces($value);
             if (strpos($value, ',')) {
                 $aux = str_replace(".", "", $value);
                 $aux = str_replace(",", ".", $aux);
@@ -153,7 +154,6 @@ if(!function_exists('formatReal')) {
                 $aux = $value;
             }
             $value = str_replace("%", "", $aux);
-//            $value = str_replace("-", "", $aux);
         }
 
         return number_format($value, 2, '.', '');
@@ -185,5 +185,12 @@ if(!function_exists('cleanNumber')){
             $value = preg_replace("/[^0-9]/", '', $value);
         }
         return $value;
+    }
+}
+
+if(!function_exists('removeSpaces')){
+    function removeSpaces($value)
+    {
+        return preg_replace("/\s+/", "", $value);
     }
 }

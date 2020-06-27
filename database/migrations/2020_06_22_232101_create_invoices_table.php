@@ -34,6 +34,12 @@ class CreateInvoicesTable extends Migration
                 ->foreign('tenant_id')
                 ->references('id')
                 ->on('tenants');
+
+            $table->unsignedBigInteger('supplier_id');
+            $table
+                ->foreign('supplier_id')
+                ->references('id')
+                ->on('suppliers');
         });
     }
 

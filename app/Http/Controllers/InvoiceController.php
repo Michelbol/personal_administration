@@ -6,9 +6,11 @@ use App\Http\Requests\CarRequest;
 use App\Http\Requests\InvoiceQrCodeRequest;
 use App\Models\Invoice;
 use App\Services\InvoiceService;
+use DB;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use PHPHtmlParser\Exceptions\ChildNotFoundException;
 use PHPHtmlParser\Exceptions\CircularException;
@@ -45,10 +47,24 @@ class InvoiceController extends CrudController
         $model = Invoice::select('*');
 
         $response = DataTables::of($model)
+            ->addColumn('emission_at', function($model){
+                return formatGetData($model->emission_at);
+            })
+            ->addColumn('taxes', function($model){
+                return getFormatReal($model->taxes);
+            })
+            ->addColumn('discount', function($model){
+                return getFormatReal($model->discount);
+            })
+            ->addColumn('total_paid', function($model){
+                return getFormatReal($model->total_paid);
+            })
+            ->addColumn('total_products', function($model){
+                return getFormatReal($model->total_products);
+            })
             ->addColumn('actions', function ($model){
                 return getBtnAction([
-                    ['type'=>'edit',    'url' => routeTenant('invoice.edit',['id' => $model->id])],
-                    ['type'=>'delete',  'url' => routeTenant('invoice.destroy',['id' => $model->id]), 'id' => $model->id]
+                    ['type'=>'delete',  'url' => routeTenant('invoice.destroy',[$model->id]), 'id' => $model->id]
                 ]);
             })
             ->rawColumns(['actions'])
@@ -66,14 +82,19 @@ class InvoiceController extends CrudController
 
     /**
      * @param InvoiceQrCodeRequest $request
-     * @throws ChildNotFoundException
-     * @throws CircularException
-     * @throws CurlException
-     * @throws NotLoadedException
-     * @throws StrictException
+     * @return RedirectResponse
      */
     public function storeByQrCode(InvoiceQrCodeRequest $request)
     {
-        return $this->service->createInvoiceByQrCode($request->validated()['url_qr_code']);
+        try {
+            DB::beginTransaction();
+            $this->service->createInvoiceByQrCode($request->validated()['url_qr_code']);
+            DB::commit();
+            $this->successMessage('Nota salva com sucesso');
+        }catch (Exception $e){
+            DB::rollBack();
+            $this->errorMessage($e->getMessage());
+        }
+        return redirect()->routeTenant('invoice.create.qr_code');
     }
 }

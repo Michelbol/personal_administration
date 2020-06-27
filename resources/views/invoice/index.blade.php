@@ -15,11 +15,7 @@
                 <th>Número</th>
                 <th>Serie</th>
                 <th>Data da Emissão</th>
-                <th>Protocolo de Autorização</th>
-                <th>Data da Autorização</th>
-                <th>Chave de Acesso</th>
                 <th>CPF</th>
-                <th>QrCode</th>
                 <th>Impostos</th>
                 <th>Desconto</th>
                 <th>Total dos Produtos</th>
@@ -39,17 +35,13 @@
     $('#table_invoice').DataTable({
         processing: true,
         serverSide: true,
-        ajax: '{!! routeTenant('supplier.get') !!}',
+        ajax: '{!! routeTenant('invoice.get') !!}',
         columns: [
             { data: 'id', name: 'id' },
             { data: 'number', name: 'number' },
             { data: 'series', name: 'series' },
             { data: 'emission_at', name: 'emission_at' },
-            { data: 'authorization_protocol', name: 'authorization_protocol' },
-            { data: 'authorization_protocol_at', name: 'authorization_protocol_at' },
-            { data: 'access_key', name: 'access_key' },
             { data: 'document', name: 'document' },
-            { data: 'qr_code', name: 'qr_code' },
             { data: 'taxes', name: 'taxes' },
             { data: 'discount', name: 'discount' },
             { data: 'total_products', name: 'total_products' },
@@ -57,7 +49,7 @@
             { data: 'actions', name: 'actions' }
         ],
         columnDefs:[
-            { className: 'text-center', targets: [13] }
+            { className: 'text-center', targets: [9] }
         ]
     });
 </script>

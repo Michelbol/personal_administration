@@ -21,15 +21,15 @@ class TenantScopes implements Scope
     /**
      * Apply the scope to a given Eloquent query builder.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $builder
-     * @param  \Illuminate\Database\Eloquent\Model $model
+     * @param Builder $builder
+     * @param Model $model
      * @return void
      */
     public function apply(Builder $builder, Model $model)
     {
         $tenant = new TenantManager();
         if($tenant->getTenant()){
-            $builder->where('tenant_id', $tenant->getTenant()->id);
+            $builder->where($model->getTable().'.tenant_id', $tenant->getTenant()->id);
         }
 
     }

@@ -24,6 +24,7 @@ use Illuminate\Support\Carbon;
  * @property float $total_products
  * @property float $total_paid
  * @property int $tenant_id
+ * @property int $supplier_id
  * @property Carbon $authorization_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -46,6 +47,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Invoice whereTotalProducts($value)
  * @method static Builder|Invoice whereUpdatedAt($value)
  * @method static Builder|Invoice whereTenantId($value)
+ * @method static Builder|Invoice whereSupplierId($value)
  * @mixin Eloquent
  */
 class Invoice extends Model
@@ -53,6 +55,7 @@ class Invoice extends Model
     use TenantModels;
 
     protected $fillable = [
+        'supplier_id',
         'number',
         'series',
         'emission_at',
@@ -68,10 +71,11 @@ class Invoice extends Model
     ];
 
     protected $casts = [
-        'taxes' => 'decimal',
-        'discount' => 'decimal',
-        'total_products' => 'decimal',
-        'total_paid' => 'decimal',
+        'taxes' => 'float',
+        'discount' => 'float',
+        'total_products' => 'float',
+        'total_paid' => 'float',
+        'supplier_id' => 'int'
     ];
 
     protected $dates = [
