@@ -19,6 +19,7 @@
             <thead>
             <tr>
                 <th>Fornecedor</th>
+                <th>Marca</th>
                 <th>Código</th>
                 <th>Unidade</th>
                 <th>Actions</th>

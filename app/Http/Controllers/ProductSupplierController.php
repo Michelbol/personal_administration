@@ -41,13 +41,15 @@ class ProductSupplierController extends CrudController
     {
         $model = ProductSupplier
             ::whereProductId($id)
-            ->join('suppliers as s', 's.id', 'product_suppliers.supplier_id');
+            ->join('suppliers as s', 's.id', 'product_suppliers.supplier_id')
+            ->leftJoin('brands as b', 'b.id', 'product_suppliers.brand_id')
+            ->select('product_suppliers.*', 's.fantasy_name', 'b.name as brand_name');
 
         $response = DataTables::of($model)
             ->addColumn('actions', function ($model) {
                 return getBtnAction([
                     ['type' => 'edit', 'url' => '#', 'id' => $model->id],
-                    ['type' => 'delete', 'url' => routeTenant('bank_account_posting.destroy', [$model->id]), 'id' => $model->id]
+                    ['type' => 'delete', 'url' => routeTenant('product_supplier.destroy', [$model->id]), 'id' => $model->id]
                 ]);
             })
             ->rawColumns(['actions', 'isFixed'])

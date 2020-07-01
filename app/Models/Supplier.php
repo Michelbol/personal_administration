@@ -61,7 +61,8 @@ class Supplier extends Model
     public function setCnpjAttribute($value)
     {
         if(strpos('-', $value)){
-            $this->attributes['cnpj'] = cleanNumber($value);
+            $value = cleanNumber($value);
         }
+        $this->attributes['cnpj'] = $value;
     }
 }

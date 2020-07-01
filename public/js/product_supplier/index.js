@@ -10,6 +10,7 @@ let datatable = $('#table_product_supplier').DataTable({
     },
     columns: [
         { data: 'fantasy_name', name: 'fantasy_name' },
+        { data: 'brand_name', name: 'brand_name' },
         { data: 'code', name: 'code' },
         { data: 'un', name: 'un' },
         { data: 'actions', name: 'actions' }
@@ -33,6 +34,7 @@ $('#product_supplier_modal').on('hide.bs.modal', function(){
 function fillModal(productSupplier){
     $('#id').val(productSupplier.id);
     $('#supplier_id').val(productSupplier.supplier_id);
+    $('#brand_id').val(productSupplier.brand_id);
     $('#product_id').val(productSupplier.product_id);
     $('#code').val(productSupplier.code);
     $('#un').val(productSupplier.un);
@@ -44,6 +46,7 @@ function fillModal(productSupplier){
 function cleanModal(){
     $('#id').val('');
     $('#supplier_id').val('');
+    $('#brand_id').val('');
     $('#code').val('');
     $('#product_id').val('');
     $('#un').val('');

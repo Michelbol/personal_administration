@@ -50,9 +50,9 @@ class InvoiceProduct extends Model
     ];
 
     protected $casts = [
-        'quantity' => 'decimal',
-        'unitary_value' => 'decimal',
-        'total_value' => 'decimal',
+        'quantity' => 'float',
+        'unitary_value' => 'float',
+        'total_value' => 'float',
         'invoice_id' => 'int',
     ];
 }

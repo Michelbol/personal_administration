@@ -30,6 +30,12 @@ class CreateProductSuppliersTable extends Migration
                 ->foreign('supplier_id')
                 ->references('id')
                 ->on('suppliers');
+
+            $table->unsignedBigInteger('brand_id')->nullable();
+            $table
+                ->foreign('brand_id')
+                ->references('id')
+                ->on('brands');
         });
     }
 

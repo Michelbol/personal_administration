@@ -25,12 +25,6 @@ class CreateProductsTable extends Migration
                 ->foreign('tenant_id')
                 ->references('id')
                 ->on('tenants');
-
-            $table->unsignedBigInteger('brand_id')->nullable();
-            $table
-                ->foreign('brand_id')
-                ->references('id')
-                ->on('brands');
         });
     }
 

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CarRequest;
 use App\Http\Requests\InvoiceQrCodeRequest;
 use App\Models\Invoice;
+use App\Models\InvoiceProduct;
+use App\Models\Supplier;
 use App\Services\InvoiceService;
 use DB;
 use Exception;
@@ -59,7 +61,8 @@ class InvoiceController extends CrudController
             })
             ->addColumn('actions', function ($model){
                 return getBtnAction([
-                    ['type'=>'delete',  'url' => routeTenant('invoice.destroy',[$model->id]), 'id' => $model->id]
+                    ['type'=>'other-a', 'name' => 'Visualizar', 'url' => routeTenant('invoice.show',[$model->id])],
+                    ['type'=>'delete', 'url' => routeTenant('invoice.destroy',[$model->id]), 'id' => $model->id]
                 ]);
             })
             ->rawColumns(['actions'])
@@ -92,5 +95,19 @@ class InvoiceController extends CrudController
             $this->errorMessage($e->getMessage());
         }
         return redirect()->routeTenant('invoice.create.qr_code');
+    }
+
+    public function show($tenant, string $id)
+    {
+        $data = [
+            'invoice' => Invoice::find($id),
+            'invoiceProducts' => InvoiceProduct
+                ::whereInvoiceId($id)
+                ->join('products as p', 'p.id', 'invoice_products.product_id')
+                ->select('invoice_products.*', 'p.name as product_name')
+                ->get(),
+            'suppliers' => Supplier::all()
+        ];
+        return view('invoice.show', $data);
     }
 }

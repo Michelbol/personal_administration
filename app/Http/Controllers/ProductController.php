@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Brand;
 use App\Http\Requests\CarRequest;
 use App\Http\Requests\ProductRequest;
 use App\Models\Product;
@@ -63,10 +64,12 @@ class ProductController extends CrudController
         $product = $this->model::findOrFail($id);
         $productSuppliers = ProductSupplier::whereProductId($id)->with('supplier')->get();
         $suppliers = Supplier::all();
+        $brands = Brand::all();
         $data = [
             'product' => $product,
             'productSuppliers' => $productSuppliers,
-            'suppliers' => $suppliers
+            'suppliers' => $suppliers,
+            'brands' => $brands
         ];
         return view("product.edit", $data);
     }
