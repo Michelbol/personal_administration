@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use App\Scopes\TenantModels;
-use Illuminate\Support\Carbon;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\UserTenant

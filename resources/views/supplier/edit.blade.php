@@ -2,15 +2,15 @@
 
 @section('content')
     <div class="container">
-        <h3>Editar Carro</h3>
+        <h3>Editar Fornecedor</h3>
 
-        <form action="{{ routeTenant('car.update', ['id' => $car->id]) }}" method="POST">
+        <form action="{{ routeTenant('supplier.update', ['supplier' => $supplier->id]) }}" method="POST">
             {{ csrf_field() }}
             <input type="hidden" name="_method" value="PUT">
-            @include('car._form')
+            @include('supplier._form')
             <div class="float-right">
                 <button class="btn btn-primary" type="submit">Atualizar</button>
-                <a href="{{ routeTenant('car.index') }}" class="btn btn-info">Cancelar</a>
+                <a href="{{ routeTenant('supplier.index') }}" class="btn btn-info">Cancelar</a>
             </div>
         </form>
     </div>

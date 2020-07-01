@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use App\Utilitarios;
 use App\Models\Enum\FuelEnum;
 use App\Scopes\TenantModels;
-use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Model;
+use App\Utilitarios;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 /**

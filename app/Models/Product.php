@@ -6,6 +6,7 @@ use App\Scopes\TenantModels;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
 /**
@@ -28,7 +29,7 @@ use Illuminate\Support\Carbon;
  */
 class Product extends Model
 {
-    use TenantModels;
+    use TenantModels, SoftDeletes;
 
     protected $fillable = [
         'name'

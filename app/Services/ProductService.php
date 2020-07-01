@@ -4,13 +4,13 @@
 namespace App\Services;
 
 use App\Models\Invoice;
+use App\Models\Product;
 use App\Models\Supplier;
 use App\Repositories\ProductRepository;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use PHPHtmlParser\Dom;
-use App\Models\Product;
 use PHPHtmlParser\Exceptions\ChildNotFoundException;
 use PHPHtmlParser\Exceptions\NotLoadedException;
 

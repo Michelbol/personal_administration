@@ -18,11 +18,19 @@ class CreateProductsTable extends Migration
             $table->string('name');
             $table->timestamps();
 
+            $table->softDeletes();
+
             $table->unsignedBigInteger('tenant_id');
             $table
                 ->foreign('tenant_id')
                 ->references('id')
                 ->on('tenants');
+
+            $table->unsignedBigInteger('brand_id')->nullable();
+            $table
+                ->foreign('brand_id')
+                ->references('id')
+                ->on('brands');
         });
     }
 

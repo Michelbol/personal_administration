@@ -3,7 +3,6 @@
 
 namespace App\Services;
 
-use App\Models\Car;
 use App\Models\Expenses;
 
 class ExpenseService extends CRUDService

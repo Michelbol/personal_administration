@@ -47,4 +47,9 @@ class ProductSupplierService extends CRUDService
             $this->create($data);
         }
     }
+
+    public function find($id)
+    {
+        return $this->findById($id);
+    }
 }

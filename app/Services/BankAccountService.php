@@ -3,11 +3,11 @@
 
 namespace App\Services;
 
+use App\Models\BankAccount;
+use App\Utilitarios;
+use Carbon\Carbon;
 use DB;
 use Exception;
-use App\Utilitarios;
-use App\Models\BankAccount;
-use Carbon\Carbon;
 
 class BankAccountService extends CRUDService
 {

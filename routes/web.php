@@ -37,6 +37,8 @@ Route::prefix("{{$tenantParam}}")
             Route::get('/supplier/get', 'SupplierController@get')->name('supplier.get');
             //=========================================Product===========================================================//
             Route::get('/product/get', 'ProductController@get')->name('product.get');
+            //=========================================Product Supplier===========================================================//
+            Route::get('/product_supplier/get/{product_id}', 'ProductSupplierController@get')->name('product_supplier.get');
             //=========================================Invoice===========================================================//
             Route::get('/invoice/get', 'InvoiceController@get')->name('invoice.get');
             Route::get('/invoice/create/qr_code', 'InvoiceController@createByQrCode')->name('invoice.create.qr_code');
@@ -58,7 +60,7 @@ Route::prefix("{{$tenantParam}}")
             //=========================================BUDGET FINANCIAL POSTING=================================================================//
             Route::get('/budget_financial_posting/get/{id}', 'BudgetFinancialPostingController@get')->name('budget_financial_posting.get');
             //=========================================CAR=================================================================//
-            Route::prefix('car')->name('cars.')->group(function(){
+            Route::prefix('car')->name('car.')->group(function(){
                 Route::get('/',             'CarController@index')       ->name('index');
                 Route::get('/profile/{id}', 'CarController@profile')     ->name('profile');
                 Route::post('/',            'CarController@store')       ->name('store');
@@ -104,6 +106,7 @@ Route::prefix("{{$tenantParam}}")
                 'expense'                   => 'ExpensesController',
                 'supplier'                  => 'SupplierController',
                 'product'                   => 'ProductController',
+                'product_supplier'          => 'ProductSupplierController',
                 'invoice'                   => 'InvoiceController',
             ]);
         });

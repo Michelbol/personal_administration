@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Exception;
 use App\Models\CoverageAnalysis;
+use Exception;
 use Illuminate\Console\Command;
 
 class CoverageAnalisys extends Command

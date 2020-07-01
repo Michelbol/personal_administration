@@ -4,9 +4,10 @@ namespace App\Models;
 
 use App\Scopes\TenantModels;
 use Eloquent;
-use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\BankAccount
@@ -41,7 +42,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @mixin Builder
  * @mixin Model
  * @mixin BankAccount
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\BankAccountPosting[] $bankAccountPostings
+ * @property-read Collection|BankAccountPosting[] $bankAccountPostings
  * @property-read int|null $bank_account_postings_count
  */
 class BankAccount extends Model

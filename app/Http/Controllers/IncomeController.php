@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Income;
 use App\Utilitarios;
+use DB;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use DB;
-use Session;
 use Yajra\DataTables\DataTables;
 
 class IncomeController extends Controller

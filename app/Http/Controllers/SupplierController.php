@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Exception;
 use App\Http\Requests\CarRequest;
+use App\Http\Requests\SupplierRequest;
 use App\Models\Supplier;
 use App\Services\SupplierService;
+use Exception;
 use Yajra\DataTables\DataTables;
 
 class SupplierController extends CrudController
@@ -16,7 +17,7 @@ class SupplierController extends CrudController
 
     protected $msgDestroy = 'Fornecedor deletado com sucesso';
 
-    protected $requestValidator = CarRequest::class;
+    protected $requestValidator = SupplierRequest::class;
 
     public function __construct(SupplierService $service = null, Supplier $model = null)
     {

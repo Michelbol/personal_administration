@@ -17,7 +17,7 @@
                 Carro
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="{{ routeTenant('cars.index') }}">Carros</a>
+                <a class="dropdown-item" href="{{ routeTenant('car.index') }}">Carros</a>
             </div>
         </div>
         <div class="btn-group mr-2">

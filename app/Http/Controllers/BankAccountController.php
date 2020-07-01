@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use \Exception;
-use Carbon\Carbon;
-use Illuminate\View\View;
 use App\Models\BankAccount;
-use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
 use App\Services\BankAccountService;
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Yajra\DataTables\DataTables;
 
 class BankAccountController extends CrudController
 {

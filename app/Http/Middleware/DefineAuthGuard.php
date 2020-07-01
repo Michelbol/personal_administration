@@ -10,7 +10,7 @@ namespace App\Http\Middleware;
 
 
 use App\Tenant\TenantManager;
-use \Closure;
+use Closure;
 use Illuminate\Http\Request;
 
 class DefineAuthGuard

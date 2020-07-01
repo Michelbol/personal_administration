@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Enum\FuelEnum;
-use \Exception;
 use App\Models\Car;
-use App\Utilitarios;
 use App\Models\CarSupply;
+use App\Models\Enum\FuelEnum;
+use App\Utilitarios;
+use Exception;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 

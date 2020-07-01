@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Model;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\CreditCardBillPosting
@@ -24,7 +25,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @method static Builder|CreditCardBillPosting whereDescription($value)
  * @method static Builder|CreditCardBillPosting whereId($value)
  * @method static Builder|CreditCardBillPosting whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class CreditCardBillPosting extends Model
 {

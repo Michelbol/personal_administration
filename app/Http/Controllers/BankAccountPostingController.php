@@ -2,28 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bank;
+use App\Models\BankAccount;
+use App\Models\BankAccountPosting;
+use App\Models\Expenses;
+use App\Models\Income;
+use App\Models\KeyFileTypeBankAccountPosting;
+use App\Models\TypeBankAccountPosting;
+use App\Ofx;
 use App\Services\BankAccountPostingService;
+use App\Utilitarios;
+use Carbon\Carbon;
+use DB;
+use Exception;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
-use App\Ofx;
-use \Exception;
-use Carbon\Carbon;
-use App\Utilitarios;
-use App\Models\Bank;
-use App\Models\Income;
-use App\Models\Expenses;
-use App\Models\BankAccount;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\View\View;
 use Yajra\DataTables\DataTables;
-use App\Models\BankAccountPosting;
-use DB;
-use Illuminate\Http\RedirectResponse;
-use App\Models\TypeBankAccountPosting;
-use Illuminate\Database\Eloquent\Builder;
-use App\Models\KeyFileTypeBankAccountPosting;
 
 class BankAccountPostingController extends CrudController
 {

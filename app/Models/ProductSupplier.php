@@ -42,4 +42,9 @@ class ProductSupplier extends Model
         'product_id' => 'int',
         'supplier_id' => 'int',
     ];
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
+    }
 }

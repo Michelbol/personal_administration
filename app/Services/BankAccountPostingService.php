@@ -6,7 +6,6 @@ namespace App\Services;
 use App\Models\BankAccountPosting;
 use Carbon\Carbon;
 use Exception;
-use App\Models\BankAccount;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 

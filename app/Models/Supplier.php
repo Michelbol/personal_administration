@@ -57,4 +57,11 @@ class Supplier extends Model
         'state',
         'tenant_id'
     ];
+
+    public function setCnpjAttribute($value)
+    {
+        if(strpos('-', $value)){
+            $this->attributes['cnpj'] = cleanNumber($value);
+        }
+    }
 }

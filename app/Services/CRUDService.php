@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\Bank;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;

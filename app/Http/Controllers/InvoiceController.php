@@ -12,11 +12,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use PHPHtmlParser\Exceptions\ChildNotFoundException;
-use PHPHtmlParser\Exceptions\CircularException;
-use PHPHtmlParser\Exceptions\CurlException;
-use PHPHtmlParser\Exceptions\NotLoadedException;
-use PHPHtmlParser\Exceptions\StrictException;
 use Yajra\DataTables\DataTables;
 
 class InvoiceController extends CrudController
@@ -83,6 +78,7 @@ class InvoiceController extends CrudController
     /**
      * @param InvoiceQrCodeRequest $request
      * @return RedirectResponse
+     * @throws Exception
      */
     public function storeByQrCode(InvoiceQrCodeRequest $request)
     {

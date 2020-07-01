@@ -3,7 +3,6 @@
 
 namespace App\Models\Enum;
 
-use \Exception;
 use ReflectionClass;
 use ReflectionException;
 

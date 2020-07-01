@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\CRUDService;
+use Exception;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Validation\UnauthorizedException;
-use Str;
-use Exception;
-use Illuminate\View\View;
 use Illuminate\Http\Request;
-use App\Services\CRUDService;
 use Illuminate\Http\Response;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Contracts\View\Factory;
+use Illuminate\Validation\UnauthorizedException;
+use Illuminate\View\View;
+use Str;
 
 class CrudController extends Controller
 {
@@ -108,7 +108,7 @@ class CrudController extends Controller
             }
             $this->service->create($request->all());
             $this->successMessage($this->msgStore);
-            return redirect()->routeTenant($this->snakeModel."s.index");
+            return redirect()->routeTenant($this->snakeModel.".index");
         }catch (Exception $e){
             $this->errorMessage($e->getMessage());
             return redirect()->back()->withInput($request->all());
@@ -150,7 +150,7 @@ class CrudController extends Controller
             }
             $this->service->update($id, $request->all());
             $this->successMessage($this->msgUpdate);
-            return redirect()->routeTenant($this->snakeModel."s.index");
+            return redirect()->routeTenant($this->snakeModel.".index");
         }catch (Exception $e){
             $this->errorMessage($e->getMessage());
             return redirect()->back()->withInput($request->all());
@@ -171,7 +171,7 @@ class CrudController extends Controller
             $this->service->delete($id);
 
             $this->successMessage($this->msgDestroy);
-            return redirect()->routeTenant($this->snakeModel."s.index");
+            return redirect()->routeTenant($this->snakeModel.".index");
         }catch (Exception $e){
             $this->errorMessage($e->getMessage());
             return redirect()->back()->withInput($request->all());
