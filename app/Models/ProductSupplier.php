@@ -17,6 +17,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property int $product_id
  * @property int $supplier_id
+ * @property int|null $brand_id
+ * @property-read Supplier $supplier
  * @method static Builder|ProductSupplier newModelQuery()
  * @method static Builder|ProductSupplier newQuery()
  * @method static Builder|ProductSupplier query()
@@ -27,6 +29,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|ProductSupplier whereSupplierId($value)
  * @method static Builder|ProductSupplier whereUn($value)
  * @method static Builder|ProductSupplier whereUpdatedAt($value)
+ * @method static Builder|ProductSupplier whereBrandId($value)
  * @mixin Eloquent
  */
 class ProductSupplier extends Model
@@ -41,6 +44,7 @@ class ProductSupplier extends Model
     protected $casts = [
         'product_id' => 'int',
         'supplier_id' => 'int',
+        'brand_id' => 'int',
     ];
 
     public function supplier()

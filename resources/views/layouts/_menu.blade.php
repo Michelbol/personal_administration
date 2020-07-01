@@ -28,6 +28,7 @@
                 <a class="dropdown-item" href="{{ routeTenant('product.index') }}">Produtos</a>
                 <a class="dropdown-item" href="{{ routeTenant('supplier.index') }}">Fornecedores</a>
                 <a class="dropdown-item" href="{{ routeTenant('invoice.index') }}">Notas Fiscais</a>
+                <a class="dropdown-item" href="{{ routeTenant('brand.index') }}">Marcas</a>
             </div>
         </div>
     @endauth

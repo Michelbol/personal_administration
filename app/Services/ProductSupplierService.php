@@ -34,6 +34,7 @@ class ProductSupplierService extends CRUDService
         $model->un = $data['un'];
         $model->product_id = $data['product_id'];
         $model->supplier_id = $data['supplier_id'];
+        $model->brand_id = $data['brand_id'] ?? null;
     }
 
     /**

@@ -35,6 +35,8 @@ Route::prefix("{{$tenantParam}}")
             Route::get('/bank_account/get', 'BankAccountController@get')->name('bank_account.get');
             //=========================================Supplier===========================================================//
             Route::get('/supplier/get', 'SupplierController@get')->name('supplier.get');
+            //=========================================Supplier===========================================================//
+            Route::get('/brand/get', 'BrandController@get')->name('brand.get');
             //=========================================Product===========================================================//
             Route::get('/product/get', 'ProductController@get')->name('product.get');
             //=========================================Product Supplier===========================================================//
@@ -108,6 +110,7 @@ Route::prefix("{{$tenantParam}}")
                 'product'                   => 'ProductController',
                 'product_supplier'          => 'ProductSupplierController',
                 'invoice'                   => 'InvoiceController',
+                'brand'                     => 'BrandController',
             ]);
         });
     });

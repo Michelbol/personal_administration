@@ -48,7 +48,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary" onclick="$('#form_product_supplier').submit()">Salvars</button>
+                <button type="button" class="btn btn-primary" onclick="$('#form_product_supplier').submit()">Salvar</button>
             </div>
         </div>
     </div>
