@@ -4,7 +4,7 @@
     <div class="container">
         <h3>Notas</h3>
 
-        <a href="{{ routeTenant('invoice.create') }}" class="btn btn-info">Nova Nota</a>
+{{--        <a href="{{ routeTenant('invoice.create') }}" class="btn btn-info">Nova Nota</a>--}}
         <a href="{{ routeTenant('invoice.create.qr_code') }}" class="btn btn-info">Incluir Por QrCode</a>
         <br><br>
 

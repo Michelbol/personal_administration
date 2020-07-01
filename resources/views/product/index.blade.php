@@ -4,7 +4,7 @@
     <div class="container">
         <h3>Produtos</h3>
 
-        <a href="{{ routeTenant('product.create') }}" class="btn btn-info">Novo produto</a>
+{{--        <a href="{{ routeTenant('product.create') }}" class="btn btn-info">Novo produto</a>--}}
         <br><br>
 
         <table id="table_product" class="table table-bordered table-striped" width="100%">

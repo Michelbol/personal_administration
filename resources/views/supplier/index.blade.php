@@ -4,7 +4,7 @@
     <div class="container">
         <h3>Fornecedores</h3>
 
-        <a href="{{ routeTenant('supplier.create') }}" class="btn btn-info">Novo Fornecedor</a>
+{{--        <a href="{{ routeTenant('supplier.create') }}" class="btn btn-info">Novo Fornecedor</a>--}}
         <br><br>
 
         <table id="table_supplier" class="table table-bordered table-striped" width="100%">

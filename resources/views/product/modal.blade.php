@@ -15,17 +15,14 @@
                         <div class="row">
                             <input type="hidden" id="product_id" name="product_id" value="{{ $product->id }}">
                             <input type="hidden" id="id" name="id" value="">
-                            <div class="col-4 form-group">
+                            <div class="col-2 form-group">
                                 <label for="code">Código</label>
                                 <input type="text" class="form-control" id="code" name="code" maxlength="15-">
                             </div>
-                            <div class="col-4 form-group">
+                            <div class="col-2 form-group">
                                 <label for="un">Unidade</label>
                                 <input type="text" class="form-control" id="un" name="un">
                             </div>
-                        </div>
-                        <hr>
-                        <div class="row">
                             <div class="col-4 form-group">
                                 <label for="supplier_id">Fornecedor</label>
                                 <select name="supplier_id" id="supplier_id" class="form-control">
@@ -50,8 +47,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="$('#form_product_supplier').submit()">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" onclick="$('#form_product_supplier').submit()">Salvars</button>
             </div>
         </div>
     </div>

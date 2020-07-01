@@ -51,8 +51,8 @@
     <table class="table table-striped table-bordered">
         <thead>
         <tr>
-            <th>Produto No Sistema</th>
-            <th>Nome</th>
+            <th>Produto no Sistema</th>
+            <th>Nome na Nota</th>
             <th>Un</th>
             <th>Código</th>
             <th>Quantidade</th>
