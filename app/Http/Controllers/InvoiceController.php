@@ -6,6 +6,7 @@ use App\Http\Requests\CarRequest;
 use App\Http\Requests\InvoiceQrCodeRequest;
 use App\Models\Invoice;
 use App\Models\InvoiceProduct;
+use App\Models\Product;
 use App\Models\Supplier;
 use App\Services\InvoiceService;
 use DB;
@@ -13,6 +14,7 @@ use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Yajra\DataTables\DataTables;
 
@@ -61,6 +63,7 @@ class InvoiceController extends CrudController
             })
             ->addColumn('actions', function ($model){
                 return getBtnAction([
+                    ['type'=>'edit', 'url' => routeTenant('invoice.edit',[$model->id])],
                     ['type'=>'other-a', 'name' => 'Visualizar', 'url' => routeTenant('invoice.show',[$model->id])],
                     ['type'=>'delete', 'url' => routeTenant('invoice.destroy',[$model->id]), 'id' => $model->id]
                 ]);
@@ -109,5 +112,17 @@ class InvoiceController extends CrudController
             'suppliers' => Supplier::all()
         ];
         return view('invoice.show', $data);
+    }
+
+    public function edit($tenant, $id, Request $request)
+    {
+        $data = [
+            'invoice' => Invoice::with('supplier')->find($id),
+            'invoiceProducts' => InvoiceProduct
+                ::whereInvoiceId($id)
+                ->get(),
+            'products' => Product::all()
+        ];
+        return view('invoice.edit', $data);
     }
 }

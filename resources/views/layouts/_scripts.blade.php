@@ -12,5 +12,8 @@
 {{--<script src="{{ asset('js/app.js') }}" defer></script>--}}
 <script type="text/javascript" src="{{ asset('/js/utils.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+<script>
+    $.ajaxSetup({headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'}});
+</script>
 @yield('scripts')
 @stack('scripts')

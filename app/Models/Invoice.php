@@ -82,4 +82,9 @@ class Invoice extends Model
         'emission_at',
         'authorization_at',
     ];
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
+    }
 }

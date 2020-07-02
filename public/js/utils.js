@@ -89,3 +89,11 @@ function URLBASE(){
     let url_split = url_full.split('/');
     return url_split[0]+'//'+url_split[1]+url_split[2]+'/'+url_split[3];
 }
+
+function startLoading(element){
+    $(element).append('<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div></div>');
+}
+
+function endLoading($ELEMENT){
+    $ELEMENT.find('div.spinner-border').remove();
+}

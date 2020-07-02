@@ -47,6 +47,7 @@ class InvoiceProduct extends Model
         'unitary_value',
         'total_value',
         'invoice_id',
+        'product_id',
     ];
 
     protected $casts = [
@@ -54,5 +55,6 @@ class InvoiceProduct extends Model
         'unitary_value' => 'float',
         'total_value' => 'float',
         'invoice_id' => 'int',
+        'product_id' => 'int',
     ];
 }
