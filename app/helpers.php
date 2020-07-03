@@ -145,7 +145,7 @@ if(!function_exists('formatReal')) {
     function formatReal($value)
     {
         if ($value) {
-            $value = preg_replace('[^0-9\.,]','', $value);
+            $value = preg_replace('/[^0-9\.,]/','', $value);
             $value = removeSpaces($value);
             if (strpos($value, ',')) {
                 $aux = str_replace(".", "", $value);

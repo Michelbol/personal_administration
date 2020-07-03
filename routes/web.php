@@ -31,6 +31,10 @@ Route::prefix("{{$tenantParam}}")
         Route::get('/home', 'HomeController@index')->name('home');
 
         Route::middleware('auth:web_tenant')->group(function () {
+            //=========================================FIPE===========================================================//
+            Route::get('fipe/models/{id}', 'FipeController@models')->name('fipe.models');
+            Route::get('fipe/years/{brand_id}/{model_id}', 'FipeController@years')->name('fipe.years');
+            Route::get('fipe/price/{brand_id}/{model_id}/{year_id}', 'FipeController@price')->name('fipe.price');
             //=========================================BANK ACCOUNT===========================================================//
             Route::get('/bank_account/get', 'BankAccountController@get')->name('bank_account.get');
             //=========================================Supplier===========================================================//

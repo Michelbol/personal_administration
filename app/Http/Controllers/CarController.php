@@ -5,11 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CarRequest;
 use App\Models\Car;
 use App\Models\CarSupply;
+use App\Models\FipeHistory;
 use App\Services\CarService;
+use App\Services\FipeService;
 use App\Utilitarios;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Yajra\DataTables\DataTables;
 
 class CarController extends CrudController
@@ -25,6 +29,39 @@ class CarController extends CrudController
     public function __construct(CarService $service = null, Car $model = null)
     {
         parent::__construct($service, $model);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @param $tenant
+     * @return Factory|View
+     */
+    public function create($tenant)
+    {
+        $brands = (new FipeService())->getBrands();
+        $data = [
+            'brands' => $brands
+        ];
+        return view("car.create", $data);
+    }
+
+    /**
+     * @param $tenant
+     * @param $id
+     * @param Request $request
+     * @return Factory|View
+     */
+    public function edit($tenant, $id, Request $request){
+        $car = Car::findOrFail($id);
+        $brands = (new FipeService())->getBrands();
+        $histories = FipeHistory::whereCarId($car->id)->orderBy('consultation_date')->get();
+        $data = [
+            'car' => $car,
+            'brands' => $brands,
+            'histories' => $histories,
+        ];
+        return view("car.edit", $data);
     }
 
     /**

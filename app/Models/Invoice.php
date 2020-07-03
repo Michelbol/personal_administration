@@ -28,6 +28,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon $authorization_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Supplier $supplier
  * @method static Builder|Invoice newModelQuery()
  * @method static Builder|Invoice newQuery()
  * @method static Builder|Invoice query()

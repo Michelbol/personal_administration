@@ -13,17 +13,19 @@ use Illuminate\Support\Carbon;
 /**
  * App\Models\Car
  *
- * @method static Builder|Car newModelQuery()
- * @method static Builder|Car newQuery()
- * @method static Builder|Car query()
  * @mixin Eloquent
  * @property int $id
  * @property string $license_plate
  * @property string|null $model
+ * @property string|null $brand
+ * @property string|null $year
  * @property string|null $annual_licensing
  * @property string|null $annual_insurance
+ * @property int $tenant_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Collection|CarSupply[] $carSupplies
+ * @property-read int|null $car_supplies_count
  * @method static Builder|Car whereAnnualInsurance($value)
  * @method static Builder|Car whereAnnualLicensing($value)
  * @method static Builder|Car whereCreatedAt($value)
@@ -31,10 +33,12 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Car whereLicensePlate($value)
  * @method static Builder|Car whereModel($value)
  * @method static Builder|Car whereUpdatedAt($value)
- * @property-read Collection|CarSupply[] $carSupplies
- * @property-read int|null $car_supplies_count
- * @property int $tenant_id
  * @method static Builder|Car whereTenantId($value)
+ * @method static Builder|Car whereBrand($value)
+ * @method static Builder|Car whereYear($value)
+ * @method static Builder|Car newModelQuery()
+ * @method static Builder|Car newQuery()
+ * @method static Builder|Car query()
  */
 class Car extends Model
 {
@@ -43,6 +47,8 @@ class Car extends Model
     protected $fillable = [
         'id',
         'model',
+        'brand',
+        'year',
         'license_plate',
         'annual_licensing',
         'annual_insurance'

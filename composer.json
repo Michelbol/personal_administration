@@ -15,7 +15,8 @@
         "laravel/telescope": "^2.1",
         "laravel/tinker": "^1.0",
         "paquettg/php-html-parser": "^2.2",
-        "yajra/laravel-datatables": "1.5"
+        "yajra/laravel-datatables": "1.5",
+        "ext-json": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.2",

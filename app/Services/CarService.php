@@ -19,6 +19,8 @@ class CarService extends CRUDService
     public function fill(&$model, $data)
     {
         $model->model = $data['model'];
+        $model->year = $data['year'];
+        $model->brand = $data['brand'];
         $model->license_plate = $data['license_plate'];
         $model->annual_licensing = $data['annual_licensing'];
         $model->annual_insurance = $data['annual_insurance'];
