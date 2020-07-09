@@ -3,7 +3,6 @@
 namespace App\Console;
 
 use App\Console\Commands\MakeFipeHistories;
-use App\Models\FipeHistory;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 

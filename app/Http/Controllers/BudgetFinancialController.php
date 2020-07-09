@@ -23,8 +23,16 @@ use Session;
 
 class BudgetFinancialController extends CrudController
 {
+    /**
+     * @var BankAccountPosting
+     */
     protected $bankAccountPosting;
+
+    /**
+     * @var BudgetFinancialPosting
+     */
     protected $budgetFinancialPosting;
+
     /**
      * @var BudgetFinancialService
      */
@@ -146,6 +154,9 @@ class BudgetFinancialController extends CrudController
             $month = 12;
             $year = $budgetFinancial->year-1;
         }
+        /**
+         * @var BudgetFinancial $budgetFinancialLastMonth
+         */
         $budgetFinancialLastMonth = BudgetFinancial
             ::where('month', $month)
             ->where('year', $year)

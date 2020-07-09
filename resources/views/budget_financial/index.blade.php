@@ -25,25 +25,26 @@
         </form>
 
         <div class="row" style="margin-top: 10px">
-        @if(isset($budgedFinancials))
-            @foreach($budgedFinancials as $budgedFinancial)
+
+        @if(isset($budgetsFinancial))
+            @foreach($budgetsFinancial as $budgetFinancial)
                 @php
-                    $expenseSum = $budgedFinancial->budgetFinancialPostingsExpenses()->sum('amount');
-                    $incomeSum = $budgedFinancial->budgetFinancialPostingsIncomes()->sum('amount');
+                    $expenseSum = $budgetFinancial->budgetFinancialPostingsExpenses()->sum('amount');
+                    $incomeSum = $budgetFinancial->budgetFinancialPostingsIncomes()->sum('amount');
                 @endphp
                 <div class="col-md-3">
                     <div class="card" style="width: 18rem;">
                         <div class="card-title">
                             <p class="card-header">
-                                {!! $budgedFinancial->month($budgedFinancial->month).($budgedFinancial->isFinalized ?
+                                {!! $budgetFinancial->month($budgetFinancial->month).($budgetFinancial->isFinalized ?
                                 ' - Finalizado <i class="text-success fas fa-check-circle"></i>' : '')  !!} </p>
                         </div>
                         <div class="card-body">
-                            <div class="collapse" id="balance-collapse-{{ $budgedFinancial->id }}">
+                            <div class="collapse" id="balance-collapse-{{ $budgetFinancial->id }}">
                                 <table align="center">
                                     <tr>
                                         <td>1. Saldo Inicial:</td>
-                                        <td>R$: {{ \App\Utilitarios::getFormatReal($budgedFinancial->initial_balance) }}</td>
+                                        <td>R$: {{ \App\Utilitarios::getFormatReal($budgetFinancial->initial_balance) }}</td>
                                     </tr>
                                     <tr>
                                         <td>2. Total Receitas:</td>
@@ -62,13 +63,13 @@
                                 </tr>
                                 <tr>
                                     <td>Total:(1+4)</td>
-                                    <td>R$: {{ \App\Utilitarios::getFormatReal($budgedFinancial->initial_balance + $incomeSum - $expenseSum) }}</td>
+                                    <td>R$: {{ \App\Utilitarios::getFormatReal($budgetFinancial->initial_balance + $incomeSum - $expenseSum) }}</td>
                                 </tr>
                             </table>
                             <div class="" align="center">
                                 <div class="input-group-btn" align="center">
-                                    <a align="center" class="btn btn-info" href="#balance-collapse-{{ $budgedFinancial->id }}" data-toggle="collapse">Detalhes</a>
-                                    <a align="center" href="{{ routeTenant('budget_financial.edit', [$budgedFinancial->id]) }}" class="btn btn-primary">{!! $budgedFinancial->isFinalized ? 'Finalizado' : 'Planejar' !!}</a>
+                                    <a align="center" class="btn btn-info" href="#balance-collapse-{{ $budgetFinancial->id }}" data-toggle="collapse">Detalhes</a>
+                                    <a align="center" href="{{ routeTenant('budget_financial.edit', [$budgetFinancial->id]) }}" class="btn btn-primary">{!! $budgetFinancial->isFinalized ? 'Finalizado' : 'Planejar' !!}</a>
                                 </div>
                             </div>
                         </div>
