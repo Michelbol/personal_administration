@@ -61,7 +61,7 @@
                     },
                     {
                         label: ['Saldo'],
-                        data: initialBalance,
+                        data: balance,
                         backgroundColor: [
                             'rgba(255, 159, 64, 0.2)'
                         ],
