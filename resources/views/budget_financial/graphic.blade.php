@@ -6,6 +6,7 @@
     <script>
         let expense =        [{!! collect($budgetsFinancial->pluck('sum_expense'))->implode(',') !!}];
         let income =         [{!! collect($budgetsFinancial->pluck('sum_income'))->implode(',') !!}];
+        let monthlyBalance = [{!! collect($budgetsFinancial->pluck('monthly_balance'))->implode(',') !!}];
         let balance =        [{!! collect($budgetsFinancial->pluck('balance'))->implode(',') !!}];
         let initialBalance = [{!! collect($budgetsFinancial->pluck('initial_balance'))->implode(',') !!}];
         let ctx = document.getElementById('myChart').getContext('2d');
@@ -37,8 +38,8 @@
                         borderWidth: 1
                     },
                     {
-                        label: ['Saldo'],
-                        data: balance,
+                        label: ['Saldo Mensal'],
+                        data: monthlyBalance,
                         backgroundColor: [
                             'rgba(255, 206, 86, 0.2)',
                         ],
@@ -55,6 +56,17 @@
                         ],
                         borderColor: [
                             'rgba(153, 102, 255, 1)',
+                        ],
+                        borderWidth: 1
+                    },
+                    {
+                        label: ['Saldo'],
+                        data: initialBalance,
+                        backgroundColor: [
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 159, 64, 1)'
                         ],
                         borderWidth: 1
                     }

@@ -66,7 +66,8 @@ class BudgetFinancialService extends CRUDService
                 '@sum_income := (select sum(amount) from budget_financial_postings where budget_financial_id = budget_financials.id and income_id > 0) as sum_income,
                  @sum_expense := (select sum(amount) from budget_financial_postings where budget_financial_id = budget_financials.id and expense_id > 0) as sum_expense,
                  budget_financials.*,
-                 @sum_income - @sum_expense as balance'
+                 @sum_income - @sum_expense as monthly_balance,
+                 @sum_income - @sum_expense + budget_financials.initial_balance as balance'
             )
             ->get();
     }
