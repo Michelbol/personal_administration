@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class BudgetFinancialService extends CRUDService
 {
@@ -61,6 +62,12 @@ class BudgetFinancialService extends CRUDService
     {
         return $this
             ->queryBudgetsFinancial($year, $userId)
+            ->selectRaw(
+                '@sum_income := (select sum(amount) from budget_financial_postings where budget_financial_id = budget_financials.id and income_id > 0) as sum_income,
+                 @sum_expense := (select sum(amount) from budget_financial_postings where budget_financial_id = budget_financials.id and expense_id > 0) as sum_expense,
+                 budget_financials.*,
+                 @sum_income - @sum_expense as balance'
+            )
             ->get();
     }
 

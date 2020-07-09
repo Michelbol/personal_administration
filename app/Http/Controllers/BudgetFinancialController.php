@@ -6,6 +6,7 @@ use App\Models\BankAccountPosting;
 use App\Models\BudgetFinancial;
 use App\Models\BudgetFinancialPosting;
 use App\Models\Enum\SessionEnum;
+use App\Models\Enum\VisualizationBudgetFinancial;
 use App\Models\Expenses;
 use App\Models\Income;
 use App\Models\UserTenant;
@@ -58,6 +59,7 @@ class BudgetFinancialController extends CrudController
     public function index($tenant, Request $request)
     {
         $data = $request->all();
+        $visualizationView = $request->get('visualization_view', VisualizationBudgetFinancial::TABLE);
         $selected_user = Auth::user();
         $now = Carbon::now();
         if(isset($data['user_id'])){
@@ -92,6 +94,7 @@ class BudgetFinancialController extends CrudController
                     );
             }
         }
+
         $users = UserTenant::all();
 
         return view('budget_financial.index',
@@ -99,7 +102,8 @@ class BudgetFinancialController extends CrudController
                 'budgedFinancialYear',
                 'budgetsFinancial',
                 'users',
-                'selected_user'
+                'selected_user',
+                'visualizationView'
             )
         );
     }
