@@ -85,7 +85,7 @@ class BudgetFinancialController extends CrudController
                 );
             $this->service->closeBudgetsInPast($budgedFinancialYear, $selected_user->id);
             while($budgetsFinancial->count() === 0){
-                $this->service->createBudgetCurrentYear(Carbon::now()->year, $selected_user->id);
+                $this->service->createBudgetCurrentYear($budgedFinancialYear, $selected_user->id);
                 $budgetsFinancial = $this
                     ->service
                     ->getBudgetsFinancial(

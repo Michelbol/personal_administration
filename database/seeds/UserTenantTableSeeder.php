@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Tenant;
 use App\Models\UserTenant;
 use Illuminate\Database\Seeder;
 
@@ -12,20 +13,35 @@ class UserTenantTableSeeder extends Seeder
      */
     public function run()
     {
-        if(UserTenant::where('email', 'michel.bolzon123@gmail.com')->count() === 0){
+        $souza = Tenant::whereName('Souza')->first();
+        $this->createUser(
+            'Michel Bolzon Souza Dos Reis',
+            'michel.bolzon123@gmail.com',
+            '1525605',
+            $souza
+        );
+        $this->createUser(
+            'Larissa Zakaluk de Souza',
+            'larizakaluk@gmail.com',
+            '123456',
+            $souza
+        );
+        $this->createUser(
+            'Renan Zakaluk de Souza',
+            'renanzakaluk@hotmail.com',
+            '123456',
+            Tenant::whereName('Zakaluk')->first()
+        );
+    }
+
+    public function createUser(string $name, string $email, string $password, Tenant $tenant)
+    {
+        if(UserTenant::where('email', 'michel.bolzon123@gmail.com')->count() === 0) {
             UserTenant::create([
-                'name' => 'Michel Bolzon Souza Dos Reis',
-                'email' => 'michel.bolzon123@gmail.com',
-                'password' => bcrypt('1525605'),
-                'tenant_id' => 1
-            ]);
-        }
-        if(UserTenant::where('email', 'larizakaluk@gmail.com')->count() === 0){
-            UserTenant::create([
-                'name' => 'Larissa Zakaluk de Souza',
-                'email' => 'larizakaluk@gmail.com',
-                'password' => bcrypt('123456'),
-                'tenant_id' => 1
+                'name' => $name,
+                'email' => $email,
+                'password' => bcrypt($password),
+                'tenant_id' => $tenant->id
             ]);
         }
     }

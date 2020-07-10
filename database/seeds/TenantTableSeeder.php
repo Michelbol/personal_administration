@@ -16,5 +16,9 @@ class TenantTableSeeder extends Seeder
             'name' => 'Souza',
             'sub_domain' => 'souza'
         ]);
+        Tenant::create([
+            'name' => 'Zakaluk',
+            'sub_domain' => 'zakaluk'
+        ]);
     }
 }

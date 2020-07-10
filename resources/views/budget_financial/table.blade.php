@@ -1,8 +1,4 @@
 @foreach($budgetsFinancial as $budgetFinancial)
-    @php
-        $expenseSum = $budgetFinancial->budgetFinancialPostingsExpenses()->sum('amount');
-        $incomeSum = $budgetFinancial->budgetFinancialPostingsIncomes()->sum('amount');
-    @endphp
     <div class="col-md-3">
         <div class="card" style="width: 18rem;">
             <div class="card-title">
@@ -19,22 +15,22 @@
                         </tr>
                         <tr>
                             <td>2. Total Receitas:</td>
-                            <td>R$: {{ \App\Utilitarios::getFormatReal($incomeSum) }}</td>
+                            <td>R$: {{ \App\Utilitarios::getFormatReal($budgetFinancial->sum_income) }}</td>
                         </tr>
                         <tr>
                             <td>3. Total Despesas:</td>
-                            <td>R$: -{{ \App\Utilitarios::getFormatReal($expenseSum) }}</td>
+                            <td>R$: -{{ \App\Utilitarios::getFormatReal($budgetFinancial->sum_expense) }}</td>
                         </tr>
                     </table>
                 </div>
                 <table align="center">
                     <tr>
                         <td>4. Saldo(2-3):</td>
-                        <td>R$: {{ \App\Utilitarios::getFormatReal($incomeSum - $expenseSum) }}</td>
+                        <td>R$: {{ \App\Utilitarios::getFormatReal($budgetFinancial->sum_income - $budgetFinancial->sum_expense) }}</td>
                     </tr>
                     <tr>
                         <td>Total:(1+4)</td>
-                        <td>R$: {{ \App\Utilitarios::getFormatReal($budgetFinancial->initial_balance + $incomeSum - $expenseSum) }}</td>
+                        <td>R$: {{ \App\Utilitarios::getFormatReal($budgetFinancial->initial_balance + $budgetFinancial->sum_income - $budgetFinancial->sum_expense) }}</td>
                     </tr>
                 </table>
                 <div class="" align="center">
