@@ -195,10 +195,13 @@ class BankAccountPostingController extends CrudController
         $filesTxt = $request->file('arquivostxt');
         if (isset($filesTxt)) {
             try{
+                DB::beginTransaction();
                 foreach ($filesTxt as $fileTxt) {
                     $this->readFileTxt(file($fileTxt));
                 }
+                DB::commit();
             }catch (Exception $exception){
+                DB::rollBack();
                 $this->errorMessage($exception->getMessage());
                 return redirect()->back();
             }
@@ -206,10 +209,13 @@ class BankAccountPostingController extends CrudController
         $filesOfx = $request->file('arquivosofx');
         if (isset($filesOfx)) {
             try{
+                DB::beginTransaction();
                 foreach ($filesOfx as $fileOfx) {
                     $this->readFileOfx($fileOfx);
                 }
+                DB::commit();
             }catch (Exception $exception){
+                DB::rollBack();
                 $this->errorMessage($exception->getMessage());
                 return redirect()->back();
             }
