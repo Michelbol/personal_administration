@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Enum\FuelEnum;
 use App\Scopes\TenantModels;
 use App\Utilitarios;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -32,7 +33,7 @@ use Illuminate\Support\Facades\DB;
  * @method static Builder|CarSupply whereLiters($value)
  * @method static Builder|CarSupply whereTotalPaid($value)
  * @method static Builder|CarSupply whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  * @property int $fuel
  * @property string|null $gas_station
  * @property int|null $tenant_id
@@ -40,7 +41,7 @@ use Illuminate\Support\Facades\DB;
  * @method static Builder|CarSupply whereGasStation($value)
  * @method static Builder|CarSupply whereTenantId($value)
  * @property float|null $traveled_kilometers
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\CarSupply whereTraveledKilometers($value)
+ * @method static Builder|CarSupply whereTraveledKilometers($value)
  */
 class CarSupply extends Model
 {

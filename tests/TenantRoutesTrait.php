@@ -3,11 +3,12 @@
 namespace Tests;
 
 use App\Models\Tenant;
-use App\Models\UserTenant;
 use Illuminate\Foundation\Testing\TestResponse;
 
 trait TenantRoutesTrait
 {
+    protected $tenant;
+
     /**
      * @param $uri
      * @param array $headers
@@ -15,7 +16,7 @@ trait TenantRoutesTrait
      */
     public function get($uri, array $headers = [])
     {
-        $tenant = Tenant::first();
+        $tenant = $this->getTenant();
 
         $server = $this->transformHeadersToServerVars($headers);
 
@@ -31,7 +32,7 @@ trait TenantRoutesTrait
      */
     public function post($uri, array $data = [], array $headers = [])
     {
-        $tenant = Tenant::first();
+        $tenant = $this->getTenant();
 
         $server = $this->transformHeadersToServerVars($headers);
 
@@ -48,7 +49,7 @@ trait TenantRoutesTrait
      */
     public function put($uri, array $data = [], array $headers = [])
     {
-        $tenant = Tenant::first();
+        $tenant = $this->getTenant();
 
         $server = $this->transformHeadersToServerVars($headers);
 
@@ -65,10 +66,15 @@ trait TenantRoutesTrait
      */
     public function delete($uri, array $data = [], array $headers = [])
     {
-        $tenant = Tenant::first();
+        $tenant = $this->getTenant();
 
         $server = $this->transformHeadersToServerVars($headers);
 
         return $this->call('DELETE', "$tenant->sub_domain/$uri", $data, [], [], $server);
+    }
+
+    public function getTenant()
+    {
+        return Tenant::whereSubDomain('souza')->first();
     }
 }

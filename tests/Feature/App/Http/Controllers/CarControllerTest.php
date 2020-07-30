@@ -5,7 +5,6 @@ namespace Tests\Feature\App\Http\Controllers;
 use App\Models\Car;
 use App\Models\CarSupply;
 use App\Models\Enum\SessionEnum;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\SeedingTrait;
 use Tests\TenantRoutesTrait;
@@ -21,8 +20,8 @@ class CarControllerTest extends TestCase
      */
     public function testProfile()
     {
-        $this->setUser();
-        $car = factory(Car::class)->create();
+        $tenant = $this->setUser()->get('tenant');
+        $car = factory(Car::class)->create(['tenant_id' => $tenant->id]);
         factory(CarSupply::class)
             ->create
             (
@@ -40,8 +39,8 @@ class CarControllerTest extends TestCase
 
     public function testGet()
     {
-        $this->setUser();
-        factory(Car::class)->create();
+        $tenant = $this->setUser()->get('tenant');
+        factory(Car::class)->create(['tenant_id' => $tenant->id]);
         $response = $this->get("car/get");
 
         $response
@@ -72,8 +71,8 @@ class CarControllerTest extends TestCase
 
     public function testEdit()
     {
-        $this->setUser();
-        $car = factory(Car::class)->create();
+        $tenant = $this->setUser()->get('tenant');
+        $car = factory(Car::class)->create(['tenant_id' => $tenant->id]);
         $response = $this->get("car/$car->id/edit");
 
         $response
@@ -85,7 +84,7 @@ class CarControllerTest extends TestCase
     {
         $object = $this->setUser();
         $tenant = $object->get('tenant');
-        $car = factory(Car::class)->create();
+        $car = factory(Car::class)->create(['tenant_id' => $tenant->id]);
         $data = factory(Car::class)->make()->toArray();
         $response = $this->put("car/$car->id", $data);
 
@@ -108,7 +107,7 @@ class CarControllerTest extends TestCase
     {
         $object = $this->setUser();
         $tenant = $object->get('tenant');
-        $car = factory(Car::class)->create();
+        $car = factory(Car::class)->create(['tenant_id' => $tenant->id]);
         $response = $this->delete("car/$car->id");
 
         $response
@@ -116,8 +115,8 @@ class CarControllerTest extends TestCase
             ->assertRedirect("$tenant->sub_domain/car")
             ->assertSessionHas('message', ['msg' => 'Carro deletado com sucesso', 'type' => SessionEnum::success]);
 
-        $car = factory(Car::class)->create();
-        factory(CarSupply::class)->create(['car_id' => $car->id]);
+        $car = factory(Car::class)->create(['tenant_id' => $tenant->id]);
+        factory(CarSupply::class)->create(['car_id' => $car->id, 'tenant_id' => $tenant->id]);
         $response = $this->delete("car/$car->id");
 
         $response

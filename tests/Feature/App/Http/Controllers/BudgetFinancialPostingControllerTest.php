@@ -7,7 +7,6 @@ use App\Models\BudgetFinancialPosting;
 use App\Models\Enum\SessionEnum;
 use App\Models\Expenses;
 use App\Models\Income;
-use App\Utilitarios;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\SeedingTrait;
@@ -25,11 +24,11 @@ class BudgetFinancialPostingControllerTest extends TestCase
      */
     public function testStore()
     {
-        $subDomain = $this
+        $tenant = $this
             ->setUser()
-            ->get('tenant')
-            ->sub_domain;
-        $budgetFinancial = factory(BudgetFinancial::class)->create();
+            ->get('tenant');
+        $subDomain = $tenant->sub_domain;
+        $budgetFinancial = factory(BudgetFinancial::class)->create(['tenant_id' => $tenant->id]);
         $budgetFinancialPosting = factory(BudgetFinancialPosting::class)
             ->make(['budget_financial_id' => $budgetFinancial->id])
             ->toArray();
@@ -41,6 +40,7 @@ class BudgetFinancialPostingControllerTest extends TestCase
             ->toArray()['name'];
         $response = $this->post('budget_financial_posting', $budgetFinancialPosting);
 
+
         $response->assertStatus(302)
             ->assertRedirect("$subDomain/budget_financial/$budgetFinancial->id/edit")
             ->assertSessionHas('message', ['msg' => 'Lançamento Salvo com sucesso', 'type' => SessionEnum::success]);
@@ -48,9 +48,11 @@ class BudgetFinancialPostingControllerTest extends TestCase
 
     public function testUpdate()
     {
-        $subDomain = $this->setUser()->get('tenant')->sub_domain;
-
-        $budgetFinancial = factory(BudgetFinancial::class)->create();
+        $tenant = $this
+            ->setUser()
+            ->get('tenant');
+        $subDomain = $tenant->sub_domain;
+        $budgetFinancial = factory(BudgetFinancial::class)->create(['tenant_id' => $tenant->id]);
         $budgetFinancialPosting = factory(BudgetFinancialPosting::class)
             ->create(['budget_financial_id' => $budgetFinancial->id])
             ->toArray();
@@ -77,9 +79,11 @@ class BudgetFinancialPostingControllerTest extends TestCase
 
     public function testDestroy()
     {
-        $subDomain = $this->setUser()->get('tenant')->sub_domain;
-
-        $budgetFinancial = factory(BudgetFinancial::class)->create();
+        $tenant = $this
+            ->setUser()
+            ->get('tenant');
+        $subDomain = $tenant->sub_domain;
+        $budgetFinancial = factory(BudgetFinancial::class)->create(['tenant_id' => $tenant->id]);
         $budgetFinancialPosting = factory(BudgetFinancialPosting::class)->create(['budget_financial_id' => $budgetFinancial->id]);
 
         $response = $this->delete("budget_financial_posting/$budgetFinancialPosting->id");
@@ -94,7 +98,7 @@ class BudgetFinancialPostingControllerTest extends TestCase
         $this->setUser();
 
         $budgetFinancial = factory(BudgetFinancial::class)->create();
-        $budgetFinancialPosting = factory(BudgetFinancialPosting::class)->create(['budget_financial_id' => $budgetFinancial->id]);
+        factory(BudgetFinancialPosting::class)->create(['budget_financial_id' => $budgetFinancial->id]);
 
         $response = $this->get("budget_financial_posting/get/$budgetFinancial->id");
 

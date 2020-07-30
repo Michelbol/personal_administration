@@ -36,7 +36,7 @@ class UserTenantTableSeeder extends Seeder
 
     public function createUser(string $name, string $email, string $password, Tenant $tenant)
     {
-        if(UserTenant::where('email', 'michel.bolzon123@gmail.com')->count() === 0) {
+        if(UserTenant::where('email', $email)->count() === 0) {
             UserTenant::create([
                 'name' => $name,
                 'email' => $email,

@@ -53,8 +53,8 @@ class IncomeControllerTest extends TestCase
 
     public function testEdit()
     {
-        $this->setUser();
-        $income = factory(Income::class)->create();
+        $tenant = $this->setUser()->get('tenant');
+        $income = factory(Income::class)->create(['tenant_id' => $tenant->id]);
         $response = $this->get("income/$income->id/edit");
 
         $response
@@ -67,7 +67,7 @@ class IncomeControllerTest extends TestCase
     {
         $object = $this->setUser();
         $tenant = $object->get('tenant');
-        $income = factory(Income::class)->create();
+        $income = factory(Income::class)->create(['tenant_id' => $tenant->id]);
         $data = $income->toArray();
         $data['name'] = Str::random();
         $response = $this->put("income/$income->id", $data);
@@ -82,7 +82,7 @@ class IncomeControllerTest extends TestCase
     {
         $object = $this->setUser();
         $tenant = $object->get('tenant');
-        $income = factory(Income::class)->create();
+        $income = factory(Income::class)->create(['tenant_id' => $tenant->id]);
         $response = $this->delete("income/$income->id");
 
         $response
@@ -93,8 +93,8 @@ class IncomeControllerTest extends TestCase
 
     public function testGet()
     {
-        $this->setUser();
-        factory(Income::class)->create();
+        $tenant = $this->setUser()->get('tenant');
+        factory(Income::class)->create(['tenant_id' => $tenant->id]);
         $response = $this->get("income/get");
 
         $response

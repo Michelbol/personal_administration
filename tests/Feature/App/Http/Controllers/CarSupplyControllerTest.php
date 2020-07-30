@@ -21,8 +21,8 @@ class CarSupplyControllerTest extends TestCase
      */
     public function testIndex()
     {
-        $this->setUser();
-        $car = factory(Car::class)->create();
+        $tenant = $this->setUser()->get('tenant');
+        $car = factory(Car::class)->create(['tenant_id' => $tenant->id]);
         $response = $this->get("car_supply/$car->id");
 
         $response
@@ -32,8 +32,8 @@ class CarSupplyControllerTest extends TestCase
 
     public function testCreate()
     {
-        $this->setUser();
-        $car = factory(Car::class)->create();
+        $tenant = $this->setUser()->get('tenant');
+        $car = factory(Car::class)->create(['tenant_id' => $tenant->id]);
         $response = $this->get("car_supply/create/$car->id");
 
         $response
@@ -45,7 +45,7 @@ class CarSupplyControllerTest extends TestCase
     {
         $object = $this->setUser();
         $tenant = $object->get('tenant');
-        factory(Car::class)->create();
+        factory(Car::class)->create(['tenant_id' => $tenant->id]);
         $carSupply = factory(CarSupply::class)->make();
         $response = $this->post("car_supply", $carSupply->toArray());
 
@@ -57,9 +57,9 @@ class CarSupplyControllerTest extends TestCase
 
     public function testEdit()
     {
-        $this->setUser();
-        factory(Car::class)->create();
-        $carSupply = factory(CarSupply::class)->create();
+        $tenant = $this->setUser()->get('tenant');
+        factory(Car::class)->create(['tenant_id' => $tenant->id]);
+        $carSupply = factory(CarSupply::class)->create(['tenant_id' => $tenant->id]);
         $response = $this->get("car_supply/$carSupply->id/edit");
 
         $response
@@ -71,8 +71,8 @@ class CarSupplyControllerTest extends TestCase
     {
         $object = $this->setUser();
         $tenant = $object->get('tenant');
-        factory(Car::class)->create();
-        $carSupply = factory(CarSupply::class)->create();
+        factory(Car::class)->create(['tenant_id' => $tenant->id]);
+        $carSupply = factory(CarSupply::class)->create(['tenant_id' => $tenant->id]);
         $data = $carSupply->toArray();
         $data['gas_station'] = Str::random();
         $response = $this->put("car_supply/$carSupply->id", $data);
@@ -87,8 +87,8 @@ class CarSupplyControllerTest extends TestCase
     {
         $object = $this->setUser();
         $tenant = $object->get('tenant');
-        factory(Car::class)->create();
-        $carSupply = factory(CarSupply::class)->create();
+        factory(Car::class)->create(['tenant_id' => $tenant->id]);
+        $carSupply = factory(CarSupply::class)->create(['tenant_id' => $tenant->id]);
         $response = $this->delete("car_supply/$carSupply->id");
 
         $response->assertStatus(302)
@@ -100,8 +100,8 @@ class CarSupplyControllerTest extends TestCase
     {
         $object = $this->setUser();
         $tenant = $object->get('tenant');
-        factory(Car::class)->create();
-        $carSupply = factory(CarSupply::class)->create();
+        factory(Car::class)->create(['tenant_id' => $tenant->id]);
+        $carSupply = factory(CarSupply::class)->create(['tenant_id' => $tenant->id]);
         $response = $this->get("car_supply/get/$carSupply->id");
 
         $response->assertStatus(200);

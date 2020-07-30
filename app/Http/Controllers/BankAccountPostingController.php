@@ -115,6 +115,7 @@ class BankAccountPostingController extends CrudController
          * @var $bankAccountPosting BankAccountPosting
          */
         $data = $request->all();
+        $data['amount'] = formatReal($data['amount']);
         $data['account_balance'] = $this->service->calcBalance($data);
         $bankAccountPosting = $this->service->update(BankAccountPosting::find($id), $data);
 
@@ -354,10 +355,15 @@ class BankAccountPostingController extends CrudController
             $header[2] === '"Nr_Doc"' &&
             $header[3] === '"Historico"' &&
             $header[4] === '"Valor"' &&
-            str_replace("\n", '', $header[5]) === '"Deb_Cred"') {
+            $this->clearString($header[5]) === '"Deb_Cred"') {
         } else {
             throw new Exception('Arquivo inválido');
         }
+    }
+
+    public function clearString(string $str)
+    {
+        return str_replace("\r", '', str_replace("\n", '', $str));
     }
 
     /**
@@ -396,7 +402,7 @@ class BankAccountPostingController extends CrudController
         $bankAccountPosting->bank_account_id = $bankAccount->id;
         $bankAccountPosting->document = $data[2];
         $bankAccountPosting->amount = $data[4];
-        $bankAccountPosting->type = str_replace("\n", '', $data[5]);
+        $bankAccountPosting->type = $this->clearString($data[5]);
         return $this->calcAccountBalance($bankAccountPosting);
     }
 

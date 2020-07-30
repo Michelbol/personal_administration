@@ -12,13 +12,17 @@ class TenantTableSeeder extends Seeder
      */
     public function run()
     {
-        Tenant::create([
-            'name' => 'Souza',
-            'sub_domain' => 'souza'
-        ]);
-        Tenant::create([
-            'name' => 'Zakaluk',
-            'sub_domain' => 'zakaluk'
-        ]);
+        $this->createTenant('Souza', 'souza');
+        $this->createTenant('Zakaluk', 'zakaluk');
+    }
+
+    public function createTenant(string $name,string $subdomain)
+    {
+        if(Tenant::whereName($name)->whereSubDomain($subdomain)->count() === 0){
+            Tenant::create([
+                'name' => $name,
+                'sub_domain' => $subdomain
+            ]);
+        }
     }
 }
