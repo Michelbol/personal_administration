@@ -20,6 +20,10 @@ use Illuminate\Support\Facades\DB;
  * @property float|null $liters
  * @property float|null $total_paid
  * @property string $date
+ * @property int $fuel
+ * @property string|null $gas_station
+ * @property int|null $tenant_id
+ * @property float|null $traveled_kilometers
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @method static Builder|CarSupply newModelQuery()
@@ -33,15 +37,11 @@ use Illuminate\Support\Facades\DB;
  * @method static Builder|CarSupply whereLiters($value)
  * @method static Builder|CarSupply whereTotalPaid($value)
  * @method static Builder|CarSupply whereUpdatedAt($value)
- * @mixin Eloquent
- * @property int $fuel
- * @property string|null $gas_station
- * @property int|null $tenant_id
+ * @method static Builder|CarSupply whereTraveledKilometers($value)
  * @method static Builder|CarSupply whereFuel($value)
  * @method static Builder|CarSupply whereGasStation($value)
  * @method static Builder|CarSupply whereTenantId($value)
- * @property float|null $traveled_kilometers
- * @method static Builder|CarSupply whereTraveledKilometers($value)
+ * @mixin Eloquent
  */
 class CarSupply extends Model
 {
