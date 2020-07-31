@@ -10,6 +10,7 @@ use App\Services\CarService;
 use App\Services\FipeService;
 use App\Utilitarios;
 use Carbon\Carbon;
+use DB;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
@@ -55,13 +56,19 @@ class CarController extends CrudController
     public function edit($tenant, $id, Request $request){
         $car = Car::findOrFail($id);
         $brands = (new FipeService())->getBrands();
-        $histories = FipeHistory::whereCarId($car->id)->orderBy('consultation_date')->get();
-        $data = [
-            'car' => $car,
-            'brands' => $brands,
-            'histories' => $histories,
+        $histories = FipeHistory
+            ::whereCarId($car->id)
+            ->orderBy('consultation_date')
+            ->select(
+                DB::raw('DATE_FORMAT(consultation_date, "%d/%m/%Y") as format_consultation_date'),
+                'value'
+            )
+            ->get();
+        $histories = [
+            'dates' => $histories->pluck('format_consultation_date'),
+            'values' => $histories->pluck('value'),
         ];
-        return view("car.edit", $data);
+        return view("car.edit", compact('car', 'brands', 'histories'));
     }
 
     /**

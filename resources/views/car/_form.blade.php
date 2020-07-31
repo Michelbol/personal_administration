@@ -51,24 +51,6 @@
         </div>
     </div>
 </div>
-@if(isset($car))
-    <table class="table table-striped table-bordered">
-        <thead>
-        <tr>
-            <td>Data da Consulta</td>
-            <td>Valor</td>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach($histories as $index => $history)
-            <tr>
-                <td>{{ $history->consultation_date->format('d/m/Y h:i:s') }}</td>
-                <td>{{ getFormatReal($history->value) }}</td>
-            </tr>
-        @endforeach
-        </tbody>
-    </table>
-@endif
 
 @push('scripts')
     <script src="{{ asset('js/car/scripts.js') }}"></script>
