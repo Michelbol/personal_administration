@@ -115,7 +115,7 @@ class BankAccountService extends CRUDService
                 ->whereBetween('posting_date', [Carbon::create($year, $i, 1),Carbon::create($year,$i)->endOfMonth()])
                 ->where('bank_account_id', $bankAccountId)
                 ->orderBy('posting_date', 'desc')->first();
-            $balanceMonthly[$i] = isset($balance) ? $balance->account_balance/100 : 0;
+            $balanceMonthly[$i] = isset($balance) ? $balance->account_balance : 0;
         }
         return collect($balanceMonthly)->implode(',');
     }
