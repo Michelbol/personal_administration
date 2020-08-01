@@ -13,12 +13,17 @@
                 <a href="{{ routeTenant('bank_accounts.index') }}" class="btn btn-info">Cancelar</a>
             </div>
         </form>
-        <form action="{{ routeTenant('bank_accounts.edit', ['bank_account' => $id]) }}">
-            <div class="col-md-2">
-                <label for="year">Ano do Orçamento</label>
-                <input type="text" id="year" name="year" class="form-control"
-                       value="{{ $year_search }}">
+        <form action="{{ routeTenant('bank_accounts.edit', [$id]) }}" method="GET">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="period_date">Período do filtro</label>
+                        <input type="text" id="period_date" name="period_date" class="form-control"
+                               value="{{ $startAt. ' - '. $endAt }}">
+                    </div>
+                </div>
             </div>
+            <button type="submit" class="btn btn-info">Pesquisar</button>
         </form>
         <div class="chart-container" style="position: relative; height:40vh; width:80vw">
             <canvas id="myChart"></canvas>
@@ -28,8 +33,8 @@
 
 @push('scripts')
 <script>
-    var interest = [{!! $monthInterest !!}];
-    var balance = [{!! $monthBalance !!}];
+    let interest = [{!! $monthInterest !!}];
+    let balance = [{!! $monthBalance !!}];
 </script>
 <script src="{{ asset('js/bank_account/edit.js') }}"></script>
 @endpush

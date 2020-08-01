@@ -86,38 +86,38 @@ class BankAccountService extends CRUDService
     }
 
     /**
-     * @param $year
+     * @param Carbon $startAt
+     * @param Carbon $endAt
      * @param $bankAccountId
      * @return string
      */
-    public function calcMonthlyInterest($year, $bankAccountId){
-        $interestMonthly = [];
-        for($i = 1; $i <=12; $i++){
-            $interestMonthly[$i] = DB::table('bank_account_postings')
-                ->whereBetween('posting_date', [Carbon::create($year, $i, 1),Carbon::create($year,$i)->endOfMonth()])
-                ->where('type_bank_account_posting_id', 1)
-                ->where('type', 'C')
-                ->where('bank_account_id', $bankAccountId)
-                ->sum('amount');
-        }
-        return collect($interestMonthly)->implode(',');
+    public function calcMonthlyInterest(Carbon $startAt, Carbon $endAt, $bankAccountId){
+        $amount = DB::table('bank_account_postings')
+            ->whereBetween('posting_date', [$startAt, $endAt])
+            ->where('type_bank_account_posting_id', 1)
+            ->where('type', 'C')
+            ->where('bank_account_id', $bankAccountId)
+            ->groupBy(DB::raw('YEAR(posting_date)'), DB::raw('MONTH(posting_date)'))
+            ->select(DB::raw('sum(amount) as amount'))
+            ->get();
+        return $amount->implode('amount', ',');
     }
 
     /**
-     * @param $year
+     * @param Carbon $startAt
+     * @param Carbon $endAt
      * @param $bankAccountId
      * @return string
      */
-    public function calcMonthlyBalance($year, $bankAccountId){
-        $balanceMonthly = [];
-        for($i = 1; $i <=12; $i++){
-            $balance = DB::table('bank_account_postings')
-                ->whereBetween('posting_date', [Carbon::create($year, $i, 1),Carbon::create($year,$i)->endOfMonth()])
-                ->where('bank_account_id', $bankAccountId)
-                ->orderBy('posting_date', 'desc')->first();
-            $balanceMonthly[$i] = isset($balance) ? $balance->account_balance : 0;
-        }
-        return collect($balanceMonthly)->implode(',');
+    public function calcMonthlyBalance(Carbon $startAt, Carbon $endAt, $bankAccountId){
+        $balance = DB::table('bank_account_postings')
+            ->whereBetween('posting_date', [$startAt, $endAt])
+            ->where('bank_account_id', $bankAccountId)
+            ->orderBy('posting_date', 'desc')
+            ->groupBy(DB::raw('YEAR(posting_date)'), DB::raw('MONTH(posting_date)'))
+            ->select(DB::raw('COALESCE(account_balance, 0) as account_balance'))
+            ->get();
+        return $balance->implode('account_balance',',');
     }
 
     /**

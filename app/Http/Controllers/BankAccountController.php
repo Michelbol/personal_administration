@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BankAccountEditRequest;
 use App\Models\BankAccount;
 use App\Services\BankAccountService;
 use Carbon\Carbon;
@@ -34,12 +35,29 @@ class BankAccountController extends CrudController
      */
     public function edit($tenant, $id, Request $request)
     {
+        $startAt = Carbon::now()->startOfYear();
+        $endAt = Carbon::now();
+        if($request->has('period_date') && $request->has('period_date')){
+            $date = explode(' - ', $request->get('period_date'));
+            $startAt = Carbon::createFromFormat('d/m/Y', $date[0]);
+            $endAt = Carbon::createFromFormat('d/m/Y', $date[1]);
+        }
         $bank_account = $this->bankAccount::find($id);
         $last_balance = $this->service->lastBalance($id);
-        $year_search = isset($request->year) ? $request->year : Carbon::now()->year;
-        $monthInterest = $this->service->calcMonthlyInterest($year_search, $id);
-        $monthBalance = $this->service->calcMonthlyBalance($year_search, $id);
-        return view('bank_account.edit',compact('bank_account','id','last_balance', 'monthInterest', 'year_search', 'monthBalance'));
+        $monthInterest = $this->service->calcMonthlyInterest($startAt, $endAt, $id);
+        $monthBalance = $this->service->calcMonthlyBalance($startAt, $endAt, $id);
+        $endAt = $endAt->format('d/m/Y');
+        $startAt = $startAt->format('d/m/Y');
+        return view('bank_account.edit',
+            compact(
+                'bank_account',
+                'id',
+                'last_balance',
+                'monthInterest',
+                'startAt',
+                'endAt',
+                'monthBalance'
+            ));
     }
 
     /**
