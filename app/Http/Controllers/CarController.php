@@ -100,12 +100,24 @@ class CarController extends CrudController
             $endAt = Carbon::createFromFormat('d/m/Y', $date[1]);
         }
         $values = CarSupply::calcMonthlyValues($startAt, $endAt, $id);
+        $globalMedia = CarSupply::calcGlobalMedia($id)->average;
         $liters = $values->pluck('liters')->implode(',');
         $averages = $values->pluck('average')->implode(',');
         $totalPaid = $values->pluck('total_paid')->implode(',');
         $traveledKilometers = $values->pluck('traveled_kilometers')->implode(',');
         $endAt = $endAt->format('d/m/Y');
         $startAt = $startAt->format('d/m/Y');
-        return view('car.profile', compact('totalPaid', 'liters', 'traveledKilometers', 'averages', 'id', 'startAt', 'endAt'));
+        return view(
+            'car.profile',
+            compact(
+                'totalPaid',
+                'liters',
+                'traveledKilometers',
+                'averages',
+                'id',
+                'startAt',
+                'endAt',
+                'globalMedia'
+            ));
     }
 }

@@ -154,6 +154,14 @@ class CarSupply extends Model
             ->get();
     }
 
+    static function calcGlobalMedia($car_id)
+    {
+        return CarSupply
+            ::whereCarId($car_id)
+            ->select(DB::raw('sum(traveled_kilometers)/sum(liters) as average'))
+            ->first();
+    }
+
     function calcTraveledKilometer(){
         if(isset($this->attributes['kilometer'])){
             $lastSupply = CarSupply::where('date', '<', $this->attributes['date'])

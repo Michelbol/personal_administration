@@ -8,6 +8,9 @@
                 <input style="width: 13em" type="text" id="period" name="period" class="form-control" value="{{ $startAt. ' - '. $endAt }}" placeholder="Ano">
             </div>
             <button class="btn btn-info mb-2" type="submit">Mudar o Ano</button>
+            <div class="form-group">
+                <span class="ml-2">Média Geral: {{ $globalMedia }}</span>
+            </div>
         </form>
     </div>
 <div class="container">
