@@ -9,7 +9,8 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Collection;
+use DB;
 
 /**
  * App\Models\CarSupply
@@ -135,50 +136,22 @@ class CarSupply extends Model
     }
 
     /**
-     * @param $year
+     * @param Carbon $startAt
+     * @param Carbon $endAt
      * @param $car_id
-     * @return array
+     * @return Collection
      */
-    static function calcMonthlyTotalPaid($year, $car_id){
-        $totalPaidMonthly = [];
-        for($i = 1; $i <=12; $i++){
-            $totalPaidMonthly[$i] = DB::table('car_supplies')
-                ->whereBetween('date', [Carbon::create($year, $i, 1),Carbon::create($year,$i)->endOfMonth()])
-                ->where('car_id', $car_id)
-                ->sum('total_paid');
-        }
-        return $totalPaidMonthly;
-    }
-    /**
-     * @param $year
-     * @param $car_id
-     * @return array
-     */
-    static function calcMonthlyLiters($year, $car_id){
-        $totalLiters = [];
-        for($i = 1; $i <=12; $i++){
-            $totalLiters[$i] = DB::table('car_supplies')
-                ->whereBetween('date', [Carbon::create($year, $i, 1),Carbon::create($year,$i)->endOfMonth()])
-                ->where('car_id', $car_id)
-                ->sum('liters');
-        }
-        return $totalLiters;
-    }
-    /**
-     * @param $year
-     * @param $car_id
-     * @return array
-     */
-    static function calcMonthlyTraveledKilometers($year, $car_id){
-        $totalTraveledKilometers = [];
-        for($i = 1; $i <=12; $i++){
-            $totalTraveledKilometers[$i] = DB::table('car_supplies')
-                ->whereBetween('date', [Carbon::create($year, $i, 1),Carbon::create($year,$i)->endOfMonth()])
-                ->where('car_id', $car_id)
-                ->sum('traveled_kilometers');
-
-        }
-        return $totalTraveledKilometers;
+    static function calcMonthlyValues(Carbon $startAt, Carbon $endAt, $car_id){
+        return DB::table('car_supplies')
+            ->whereBetween('date', [$startAt, $endAt])
+            ->where('car_id', $car_id)
+            ->groupBy(DB::raw('YEAR(`date`)'), DB::raw('MONTH(`date`)'))
+            ->select(
+                DB::raw('sum(total_paid) as total_paid'),
+                DB::raw('sum(liters) as liters'),
+                DB::raw('sum(traveled_kilometers) as traveled_kilometers'),
+                DB::raw('sum(traveled_kilometers)/sum(liters) as average'))
+            ->get();
     }
 
     function calcTraveledKilometer(){

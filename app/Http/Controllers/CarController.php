@@ -9,7 +9,7 @@ use App\Models\FipeHistory;
 use App\Services\CarService;
 use App\Services\FipeService;
 use App\Utilitarios;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use DB;
 use Exception;
 use Illuminate\Contracts\View\Factory;
@@ -92,22 +92,20 @@ class CarController extends CrudController
     }
 
     public function profile($tenant, $id, Request $request){
-        $year = $request->get('year', Carbon::now()->year);
-        $liters = CarSupply::calcMonthlyLiters($year, $id);
-        $totalPaid = CarSupply::calcMonthlyTotalPaid($year, $id);
-        $traveledKilometers = CarSupply::calcMonthlyTraveledKilometers($year, $id);
-        $averages = [];
-        foreach ($liters as $index => $liter){
-            $averages[$index] = 0;
-            if($liter > 0){
-                $averages[$index] = $traveledKilometers[$index] / $liter;
-            }
+        $startAt = Carbon::now()->startOfYear();
+        $endAt = Carbon::now();
+        if($request->has('period') && $request->has('period')){
+            $date = explode(' - ', $request->get('period'));
+            $startAt = Carbon::createFromFormat('d/m/Y', $date[0]);
+            $endAt = Carbon::createFromFormat('d/m/Y', $date[1]);
         }
-        $liters = collect($liters)->implode(',');
-        $averages = collect($averages)->implode(',');
-        $totalPaid = collect($totalPaid)->implode(',');
-        $traveledKilometers = collect($traveledKilometers)->implode(',');
-
-        return view('car.profile', compact('totalPaid', 'liters', 'traveledKilometers', 'averages', 'year', 'id'));
+        $values = CarSupply::calcMonthlyValues($startAt, $endAt, $id);
+        $liters = $values->pluck('liters')->implode(',');
+        $averages = $values->pluck('average')->implode(',');
+        $totalPaid = $values->pluck('total_paid')->implode(',');
+        $traveledKilometers = $values->pluck('traveled_kilometers')->implode(',');
+        $endAt = $endAt->format('d/m/Y');
+        $startAt = $startAt->format('d/m/Y');
+        return view('car.profile', compact('totalPaid', 'liters', 'traveledKilometers', 'averages', 'id', 'startAt', 'endAt'));
     }
 }
