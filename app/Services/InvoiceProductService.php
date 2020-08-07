@@ -5,6 +5,7 @@ namespace App\Services;
 
 use App\Models\Invoice;
 use App\Models\InvoiceProduct;
+use App\Models\Product;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 
@@ -43,6 +44,8 @@ class InvoiceProductService extends CRUDService
     {
         $invoiceProduct->product_id = $product_id;
         $invoiceProduct->save();
+
+        $this->updateProductSupplier($invoiceProduct, Product::find($product_id));
     }
 
     /**
@@ -52,17 +55,26 @@ class InvoiceProductService extends CRUDService
      */
     public function createProductByInvoiceProduct(InvoiceProduct $invoiceProduct)
     {
-         $product = (new ProductService())
+        /**
+         * @var $product Product
+         */
+        $product = (new ProductService())
             ->create(
                 ['name' => $invoiceProduct->name]
             );
-         $this->updateProductId($invoiceProduct, $product->id);
+        $this->updateProductId($invoiceProduct, $product->id);
+        $this->updateProductSupplier($invoiceProduct, $product);
+
+        return $invoiceProduct;
+    }
+
+    public function updateProductSupplier(InvoiceProduct $invoiceProduct, Product $product)
+    {
         (new ProductSupplierService())->countOrCreate([
             'code' => $invoiceProduct->code,
             'un' => $invoiceProduct->un,
             'product_id' => $product->id,
             'supplier_id' => Invoice::select('supplier_id')->find($invoiceProduct->invoice_id)->supplier_id,
         ]);
-        return $invoiceProduct;
     }
 }
