@@ -35,6 +35,7 @@
 
                             <div class="col-4 form-group">
                                 <label for="brand_id">Marca</label>
+                                <br>
                                 <select name="brand_id" id="brand_id" class="form-control">
                                     <option value="">Informe uma Marca</option>
                                     @foreach($brands as $brand)

@@ -1,6 +1,9 @@
 $(document).ready(function(){
-    $('#supplier_id').select2();
-    $('#brand_id').select2();
+    let options = {
+        dropdownParent: $('#product_supplier_modal')
+    }
+    $('#supplier_id').select2(options);
+    $('#brand_id').select2(options);
 });
 let datatable = $('#table_product_supplier').DataTable({
     processing: true,
