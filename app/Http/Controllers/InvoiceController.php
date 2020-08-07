@@ -43,7 +43,9 @@ class InvoiceController extends CrudController
      * @throws Exception
      */
     public function get(){
-        $model = Invoice::select('*');
+        $model = Invoice
+            ::select(['invoices.*', 's.fantasy_name'])
+            ->join('suppliers as s', 's.id', 'invoices.supplier_id');
 
         $response = DataTables::of($model)
             ->addColumn('emission_at', function($model){

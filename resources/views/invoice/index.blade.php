@@ -13,7 +13,7 @@
             <tr>
                 <th>ID</th>
                 <th>Número</th>
-                <th>Serie</th>
+                <th>Fornecedor</th>
                 <th>Data da Emissão</th>
                 <th>CPF</th>
                 <th>Impostos</th>
@@ -39,7 +39,7 @@
         columns: [
             { data: 'id', name: 'id' },
             { data: 'number', name: 'number' },
-            { data: 'series', name: 'series' },
+            { data: 'fantasy_name', name: 'fantasy_name' },
             { data: 'emission_at', name: 'emission_at' },
             { data: 'document', name: 'document' },
             { data: 'taxes', name: 'taxes' },
