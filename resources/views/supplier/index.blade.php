@@ -48,8 +48,12 @@
             { data: 'actions', name: 'actions' }
         ],
         columnDefs:[
-            { className: 'text-center', targets: [9] }
-        ]
+            { className: 'text-center', targets: [9] },
+            { className: 'cnpj_table', targets: [3] },
+        ],
+        "drawCallback": function() {
+            configMasks();
+        }
     });
 </script>
 @endpush
