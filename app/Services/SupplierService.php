@@ -24,7 +24,7 @@ class SupplierService extends CRUDService
     public function fill(&$model, $data)
     {
         $model->company_name = $data['company_name'];
-        $model->fantasy_name = $data['fantasy_name'] ?? null;
+        $model->fantasy_name = $data['fantasy_name'] ?? ($model->fantasy_name ?? null);
         $model->cnpj = cleanNumber($data['cnpj']);
         $model->address = $data['address'];
         $model->address_number = $data['address_number'];
