@@ -17,6 +17,8 @@ class ProductSupplierRepository
         return ProductSupplier
             ::whereCode($code)
             ->whereSupplierId($supplierId)
+            ->where('p.deleted_at', null)
+            ->join('products as p', 'p.id', 'product_suppliers.product_id')
             ->count();
     }
 }
