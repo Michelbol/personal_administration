@@ -52,10 +52,10 @@ class ProductService extends CRUDService
     /**
      * @param Dom $dom
      * @param Supplier $supplier
+     * @param Invoice $invoice
      * @return array
      * @throws ChildNotFoundException
      * @throws NotLoadedException
-     * @throws Exception
      */
     public function findOrCreateProductsByDom(Dom $dom, Supplier $supplier, Invoice $invoice)
     {
@@ -64,22 +64,22 @@ class ProductService extends CRUDService
          * @var Product $product
          */
         $trs = $dom->find('#tabResult tr');
-        $products = collect();
         foreach ($trs as $tr){
             $name = $tr->find($this::classHtml['name'])->text;
             $code = $this->getProductCode($tr->find($this::classHtml['cod'])->text);
             $product = $this->searchProduct($name, $code, $supplier);
             $un = removeSpaces($tr->find($this::classHtml['un'])->text);
+            $product_id = null;
             if(!isset($product)){
                 $product = $this->create(['name' => $name]);
+                (new ProductSupplierService())->countOrCreate([
+                    'code' => $code,
+                    'un' => $un,
+                    'product_id' => $product->id,
+                    'supplier_id' => $supplier->id,
+                ]);
+                $product_id = $product->id;
             }
-            (new ProductSupplierService())->countOrCreate([
-                'code' => $code,
-                'un' => $un,
-                'product_id' => $product->id,
-                'supplier_id' => $supplier->id,
-            ]);
-            $products->add($product);
 
             $invoiceProducts[] = [
                 'name' => $name,
@@ -89,7 +89,7 @@ class ProductService extends CRUDService
                 'unitary_value' => (float) formatReal($tr->find($this::classHtml['unitary_value'])->text),
                 'total_value' => (float) formatReal($tr->find($this::classHtml['total_value'])->text),
                 'invoice_id' => $invoice->id,
-                'product_id' => $product->id
+                'product_id' => $product_id
             ];
         }
         if(isset($invoiceProducts)){
