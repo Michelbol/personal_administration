@@ -40,8 +40,8 @@ $('#product_supplier_modal').on('hide.bs.modal', function(){
 
 function fillModal(productSupplier){
     $('#id').val(productSupplier.id);
-    $('#supplier_id').val(productSupplier.supplier_id);
-    $('#brand_id').val(productSupplier.brand_id);
+    $('#supplier_id').val(productSupplier.supplier_id).change();
+    $('#brand_id').val(productSupplier.brand_id).change();
     $('#product_id').val(productSupplier.product_id);
     $('#code').val(productSupplier.code);
     $('#un').val(productSupplier.un);
