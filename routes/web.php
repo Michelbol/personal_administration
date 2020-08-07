@@ -51,6 +51,7 @@ Route::prefix("{{$tenantParam}}")
             Route::post('/invoice/qr_code', 'InvoiceController@storeByQrCode')->name('invoice.store.qr_code');
             //=========================================Invoice Product===========================================================//
             Route::put('/invoice_product/{id}', 'InvoiceProductController@update')->name('invoice_product.update');
+            Route::get('/invoice_product/{invoice_product}/create/product', 'InvoiceProductController@createProductByInvoiceProduct')->name('invoice_product.create.product');
             //=========================================BANK ACCOUNT POSTING===================================================//
             Route::get('/bank_account_posting/{id}', 'BankAccountPostingController@indexPostingByBank')->name('bank_account_posting.index');
             Route::get('/bank_account_posting/show/{id}', 'BankAccountPostingController@show')->name('bank_account_posting.show');

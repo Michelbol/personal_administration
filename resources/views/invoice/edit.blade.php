@@ -48,7 +48,11 @@
                         <td>
                             <div class="select-product">
                                 <label for="product_id" class="d-none"></label>
-                                <select name="product_id" id="product_id" data-id="{{ $invoiceProduct->id }}" class="form-control product">
+                                <select
+                                    name="product_id"
+                                    data-id="{{ $invoiceProduct->id }}"
+                                    class="form-control product {{ !isset($invoiceProduct->product_id) ? 'd-none' : '' }}"
+                                >
                                     @foreach($products as $product)
                                         <option
                                             value="{{ $product->id }}"
@@ -56,6 +60,13 @@
                                         >{{ $product->name }}</option>
                                     @endforeach
                                 </select>
+                                @if(!isset($invoiceProduct->product_id))
+                                    <p class="text-center mb-0">
+                                        <a href="{{ routeTenant('invoice_product.create.product', [$invoiceProduct->id]) }}" class="add_new_product">Cadastrar</a>
+                                        -
+                                        <a href="#" data-id="{{ $invoiceProduct->id }}" class="select_an_product">Selecionar Existente</a>
+                                    </p>
+                                @endif
                             </div>
                         </td>
                         <td>{{ $invoiceProduct->name }}</td>
@@ -72,36 +83,5 @@
     </div>
 @endsection
 @push('scripts')
-    <script>
-        function hideProductAndStartLoading($SELECT){
-            $SELECT.closest('.select-product').addClass('d-none');
-            startLoading($SELECT.closest('td'));
-        }
-        function showProductAndStartLoading($SELECT){
-            $SELECT.closest('.select-product').removeClass('d-none');
-            endLoading($SELECT.closest('td'));
-        }
-
-        function updateProduct(){
-            let $SELECT = $(this);
-            let productId = $SELECT.val();
-            let invoiceProduct = $SELECT.data('id');
-            hideProductAndStartLoading($SELECT);
-            let request = $.ajax({
-                url: URLBASE()+`/invoice_product/${invoiceProduct}`,
-                method: "PUT",
-                data: {
-                    'product_id': productId
-                }
-            });
-            request.done(function () {
-                showProductAndStartLoading($SELECT);
-            });
-        }
-
-        $('.product').on('change', updateProduct)
-
-
-
-    </script>
+    <script src="{{ asset('js/invoices/edit.js') }}"></script>
 @endpush

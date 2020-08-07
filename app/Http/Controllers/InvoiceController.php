@@ -90,14 +90,15 @@ class InvoiceController extends CrudController
     {
         try {
             DB::beginTransaction();
-            $this->service->createInvoiceByQrCode($request->validated()['url_qr_code']);
+            $invoice = $this->service->createInvoiceByQrCode($request->validated()['url_qr_code']);
             DB::commit();
             $this->successMessage('Nota salva com sucesso');
+            return redirect()->routeTenant('invoice.edit', [$invoice->id]);
         }catch (Exception $e){
             DB::rollBack();
             $this->errorMessage($e->getMessage());
+            return redirect()->routeTenant('invoice.create.qr_code');
         }
-        return redirect()->routeTenant('invoice.create.qr_code');
     }
 
     public function show($tenant, string $id)

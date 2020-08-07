@@ -5,9 +5,11 @@ namespace App\Services;
 
 
 use App\Models\Invoice;
+use App\Models\InvoiceProduct;
 use App\Models\Supplier;
 use App\Repositories\InvoiceRepository;
 use Carbon\Carbon;
+use DB;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use PHPHtmlParser\Dom;
@@ -105,5 +107,20 @@ class InvoiceService extends CRUDService
             'total_paid' => (float) formatReal($dom->find('#totalNota #linhaTotal')[2]->getChildren()[3]->text),
         ];
         return $this->create($data);
+    }
+
+    /**
+     * @param Model | string $model
+     *
+     * @throws Exception
+     */
+    public function delete($model)
+    {
+        DB::beginTransaction();
+        $model = $this->findById($model);
+        $products = InvoiceProduct::whereInvoiceId($model->id)->get();
+        InvoiceProduct::destroy($products->pluck('id'));
+        $model->delete();
+        DB::commit();
     }
 }
