@@ -52,10 +52,10 @@ class ProductService extends CRUDService
     /**
      * @param Dom $dom
      * @param Supplier $supplier
-     * @param Invoice $invoice
      * @return array
      * @throws ChildNotFoundException
      * @throws NotLoadedException
+     * @throws Exception
      */
     public function findOrCreateProductsByDom(Dom $dom, Supplier $supplier, Invoice $invoice)
     {
@@ -65,13 +65,12 @@ class ProductService extends CRUDService
          */
         $trs = $dom->find('#tabResult tr');
         foreach ($trs as $tr){
+            $product_id = null;
             $name = $tr->find($this::classHtml['name'])->text;
             $code = $this->getProductCode($tr->find($this::classHtml['cod'])->text);
             $product = $this->searchProduct($name, $code, $supplier);
             $un = removeSpaces($tr->find($this::classHtml['un'])->text);
-            $product_id = null;
-            if(!isset($product)){
-                $product = $this->create(['name' => $name]);
+            if(isset($product)){
                 (new ProductSupplierService())->countOrCreate([
                     'code' => $code,
                     'un' => $un,
