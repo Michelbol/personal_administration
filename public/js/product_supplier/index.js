@@ -1,3 +1,7 @@
+$(document).ready(function(){
+    $('#supplier_id').select2();
+    $('#brand_id').select2();
+});
 let datatable = $('#table_product_supplier').DataTable({
     processing: true,
     serverSide: true,
