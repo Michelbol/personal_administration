@@ -159,6 +159,7 @@ class CarSupply extends Model
         return CarSupply
             ::whereCarId($car_id)
             ->select(DB::raw('sum(traveled_kilometers)/sum(liters) as average'))
+            ->whereNotNull('traveled_kilometers')
             ->first();
     }
 
