@@ -99,16 +99,16 @@ class ProductSupplierService extends CRUDService
             $product_supplier_id = null;
             $name = $tr->find($this::classHtml['name'])->text;
             $code = $this->getProductCode($tr->find($this::classHtml['cod'])->text);
-            $product = $this->searchProduct($name, $code, $supplier);
+            $productSupplier = $this->searchProductSupplier($code, $supplier);
             $un = removeSpaces($tr->find($this::classHtml['un'])->text);
-            if(isset($product)){
+            if(!isset($productSupplier)){
+                $product = (new ProductService())->create(['name' => $name]);
                 $productSupplier = (new ProductSupplierService())->countOrCreate([
                     'code' => $code,
                     'un' => $un,
                     'product_id' => $product->id,
                     'supplier_id' => $supplier->id,
                 ]);
-                $product_supplier_id = $productSupplier->id;
             }
 
             $invoiceProducts[] = [
@@ -119,7 +119,7 @@ class ProductSupplierService extends CRUDService
                 'unitary_value' => (float) formatReal($tr->find($this::classHtml['unitary_value'])->text),
                 'total_value' => (float) formatReal($tr->find($this::classHtml['total_value'])->text),
                 'invoice_id' => $invoice->id,
-                'product_supplier_id' => $product_supplier_id
+                'product_supplier_id' => $productSupplier->id
             ];
         }
         if(isset($invoiceProducts)){
