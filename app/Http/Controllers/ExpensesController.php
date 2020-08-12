@@ -109,7 +109,7 @@ class ExpensesController extends Controller
      * @throws Exception
      */
     public function get(Request $request){
-        $model = Expenses::select(['id', 'name', 'amount', 'isFixed', 'due_date']);
+        $model = Expenses::select(['id', 'name', 'amount', 'isFixed', 'due_date'])->orderByDesc('isFixed');
 
         $response = DataTables::of($model)
 //                ->filter(function (Builder $query) use ($request){
