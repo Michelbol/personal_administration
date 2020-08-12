@@ -13,7 +13,11 @@ class DropProductIdColumnIntoInvoiceProductsTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::table('invoice_products', function (Blueprint $table) {
+            $table->dropForeign('invoice_products_product_id_foreign');
+            $table->dropIndex('invoice_products_product_id_foreign');
+            $table->dropColumn('product_id');
+        });
     }
 
     /**
@@ -23,6 +27,11 @@ class DropProductIdColumnIntoInvoiceProductsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('invoice_products', function (Blueprint $table) {
+            $table->unsignedBigInteger('product_id');
+            $table->foreign('product_id')
+                ->references('id')
+                ->on('products');
+        });
     }
 }

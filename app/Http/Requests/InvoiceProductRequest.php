@@ -24,7 +24,7 @@ class InvoiceProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'product_id' => 'required'
+            'product_supplier_id' => 'required'
         ];
     }
 }

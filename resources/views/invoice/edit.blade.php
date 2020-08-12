@@ -47,20 +47,21 @@
                     <tr>
                         <td>
                             <div class="select-product">
-                                <label for="product_id" class="d-none"></label>
+                                <label for="product_supplier_id" class="d-none"></label>
                                 <select
-                                    name="product_id"
+                                    name="product_supplier_id"
                                     data-id="{{ $invoiceProduct->id }}"
-                                    class="form-control product {{ !isset($invoiceProduct->product_id) ? 'd-none' : '' }}"
+                                    class="form-control product {{ !isset($invoiceProduct->product_supplier_id) ? 'd-none' : '' }}"
                                 >
+                                    <option value="">Selecione uma opção</option>
                                     @foreach($products as $product)
                                         <option
                                             value="{{ $product->id }}"
-                                            {{ $invoiceProduct->product_id === $product->id ? 'selected' : '' }}
+                                            {{ $invoiceProduct->product_supplier_id === $product->id ? 'selected' : '' }}
                                         >{{ $product->name }}</option>
                                     @endforeach
                                 </select>
-                                @if(!isset($invoiceProduct->product_id))
+                                @if(!isset($invoiceProduct->product_supplier_id))
                                     <p class="text-center mb-0">
                                         <a href="{{ routeTenant('invoice_product.create.product', [$invoiceProduct->id]) }}" class="add_new_product">Cadastrar</a>
                                         -

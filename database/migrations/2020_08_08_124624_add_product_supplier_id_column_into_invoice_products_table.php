@@ -13,7 +13,12 @@ class AddProductSupplierIdColumnIntoInvoiceProductsTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::table('invoice_products', function (Blueprint $table) {
+            $table->unsignedBigInteger('product_supplier_id')->nullable();
+            $table->foreign('product_supplier_id')
+                ->references('id')
+                ->on('product_suppliers');
+        });
     }
 
     /**
@@ -23,6 +28,10 @@ class AddProductSupplierIdColumnIntoInvoiceProductsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('invoice_products', function (Blueprint $table) {
+            $table->dropForeign('invoice_products_product_supplier_id_foreign');
+            $table->dropIndex('invoice_products_product_supplier_id_foreign');
+            $table->dropColumn('product_supplier_id');
+        });
     }
 }

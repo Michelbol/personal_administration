@@ -8,10 +8,13 @@ use App\Models\Invoice;
 use App\Models\InvoiceProduct;
 use App\Models\Supplier;
 use App\Repositories\InvoiceRepository;
+use App\Repositories\ProductSupplierRepository;
 use Carbon\Carbon;
 use DB;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use PHPHtmlParser\Dom;
 use PHPHtmlParser\Exceptions\ChildNotFoundException;
 use PHPHtmlParser\Exceptions\CircularException;
@@ -62,7 +65,7 @@ class InvoiceService extends CRUDService
         $dom = $dom->load($qrCode);
         $supplier = (new SupplierService())->findOrCreateSupplierByDom($dom);
         $invoice = $this->createInvoiceByDom($dom, $supplier, $qrCode);
-        $invoiceProducts = (new ProductService())->findOrCreateProductsByDom($dom, $supplier, $invoice);
+        $invoiceProducts = (new ProductSupplierService())->findOrCreateProductsByDom($dom, $supplier, $invoice);
         (new InvoiceProductService())->createMany($invoiceProducts);
         return $invoice;
     }
@@ -110,7 +113,7 @@ class InvoiceService extends CRUDService
     }
 
     /**
-     * @param Model | string $model
+     * @param Model|string|Invoice $model
      *
      * @throws Exception
      */
@@ -122,5 +125,39 @@ class InvoiceService extends CRUDService
         InvoiceProduct::destroy($products->pluck('id'));
         $model->delete();
         DB::commit();
+    }
+
+    /**
+     * @param $invoice
+     * @return Model|string|Invoice
+     */
+    public function find($invoice)
+    {
+        return $this->findById($invoice);
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getOptionsSelectProductSupplier()
+    {
+        return (new ProductSupplierRepository())->selectOptions();
+    }
+
+    /**
+     * @param int $invoiceId
+     * @return InvoiceProduct[]|Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Query\Builder[]|Collection
+     */
+    public function listProducts(int $invoiceId)
+    {
+        return (new InvoiceProductService())->getProducts($invoiceId);
+    }
+
+    /**
+     * @return Supplier[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function getAllSuppliers()
+    {
+        return (new SupplierService())->getAllSuppliers();
     }
 }

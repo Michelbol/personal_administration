@@ -6,8 +6,7 @@ use App\Http\Requests\CarRequest;
 use App\Http\Requests\InvoiceQrCodeRequest;
 use App\Models\Invoice;
 use App\Models\InvoiceProduct;
-use App\Models\Product;
-use App\Models\Supplier;
+use App\Repositories\ProductSupplierRepository;
 use App\Services\InvoiceService;
 use DB;
 use Exception;
@@ -25,16 +24,40 @@ class InvoiceController extends CrudController
      */
     protected $service;
 
+    /**
+     * @var string
+     */
     protected $msgStore = 'Nota incluida com sucesso';
 
+    /**
+     * @var string
+     */
     protected $msgUpdate = 'Nota atualizada com sucesso';
 
+    /**
+     * @var string
+     */
     protected $msgDestroy = 'Nota deletada com sucesso';
 
+    /**
+     * @var string
+     */
     protected $requestValidator = CarRequest::class;
 
-    public function __construct(InvoiceService $service = null, Invoice $model = null)
+    /**
+     * @var ProductSupplierRepository
+     */
+    protected $productSupplierRepository;
+
+    /**
+     * InvoiceController constructor.
+     * @param ProductSupplierRepository $productSupplierRepository
+     * @param InvoiceService|null $service
+     * @param Invoice|null $model
+     */
+    public function __construct(ProductSupplierRepository $productSupplierRepository, InvoiceService $service = null, Invoice $model = null)
     {
+        $this->productSupplierRepository = $productSupplierRepository;
         parent::__construct($service, $model);
     }
 
@@ -106,13 +129,9 @@ class InvoiceController extends CrudController
     public function show($tenant, string $id)
     {
         $data = [
-            'invoice' => Invoice::find($id),
-            'invoiceProducts' => InvoiceProduct
-                ::whereInvoiceId($id)
-                ->join('products as p', 'p.id', 'invoice_products.product_id')
-                ->select('invoice_products.*', 'p.name as product_name')
-                ->get(),
-            'suppliers' => Supplier::all()
+            'invoice' => $this->service->find($id),
+            'invoiceProducts' => $this->service->listProducts($id),
+            'suppliers' => $this->service->getAllSuppliers()
         ];
         return view('invoice.show', $data);
     }
@@ -124,7 +143,7 @@ class InvoiceController extends CrudController
             'invoiceProducts' => InvoiceProduct
                 ::whereInvoiceId($id)
                 ->get(),
-            'products' => Product::all()
+            'products' => $this->service->getOptionsSelectProductSupplier()
         ];
         return view('invoice.edit', $data);
     }

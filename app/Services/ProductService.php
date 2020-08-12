@@ -4,6 +4,7 @@
 namespace App\Services;
 
 use App\Models\Invoice;
+use App\Models\InvoiceProduct;
 use App\Models\Product;
 use App\Models\Supplier;
 use App\Repositories\ProductRepository;
@@ -26,15 +27,6 @@ class ProductService extends CRUDService
         $this->repository = new ProductRepository();
     }
 
-    const classHtml = [
-        'name' => '.txtTit2',
-        'cod' => '.RCod',
-        'qtd' => '.Rqtd',
-        'un' => '.RUN',
-        'unitary_value' => '.RvlUnit',
-        'total_value' => '.txtTit3 .valor'
-    ];
-
     /**
      * @var Product
      */
@@ -50,75 +42,12 @@ class ProductService extends CRUDService
     }
 
     /**
-     * @param Dom $dom
-     * @param Supplier $supplier
-     * @return array
-     * @throws ChildNotFoundException
-     * @throws NotLoadedException
+     * @param InvoiceProduct $invoiceProduct
+     * @return Product
      * @throws Exception
      */
-    public function findOrCreateProductsByDom(Dom $dom, Supplier $supplier, Invoice $invoice)
+    public function convertInvoiceProductIntoProduct(InvoiceProduct $invoiceProduct)
     {
-        /**
-         * @var Dom\HtmlNode $tr
-         * @var Product $product
-         */
-        $trs = $dom->find('#tabResult tr');
-        foreach ($trs as $tr){
-            $product_id = null;
-            $name = $tr->find($this::classHtml['name'])->text;
-            $code = $this->getProductCode($tr->find($this::classHtml['cod'])->text);
-            $product = $this->searchProduct($name, $code, $supplier);
-            $un = removeSpaces($tr->find($this::classHtml['un'])->text);
-            if(isset($product)){
-                (new ProductSupplierService())->countOrCreate([
-                    'code' => $code,
-                    'un' => $un,
-                    'product_id' => $product->id,
-                    'supplier_id' => $supplier->id,
-                ]);
-                $product_id = $product->id;
-            }
-
-            $invoiceProducts[] = [
-                'name' => $name,
-                'un' => $un,
-                'code' => $code,
-                'quantity' => (float) formatReal($tr->find($this::classHtml['qtd'])->text),
-                'unitary_value' => (float) formatReal($tr->find($this::classHtml['unitary_value'])->text),
-                'total_value' => (float) formatReal($tr->find($this::classHtml['total_value'])->text),
-                'invoice_id' => $invoice->id,
-                'product_id' => $product_id
-            ];
-        }
-        if(isset($invoiceProducts)){
-            return $invoiceProducts;
-        }
-        return [];
-    }
-
-    /**
-     * @param string $fullCode
-     * @return false|string
-     */
-    public function getProductCode(string $fullCode)
-    {
-        $fullCode = explode('(Código: ', $fullCode);
-        return substr($fullCode[1], 0, -1);
-    }
-
-    /**
-     * @param string $name
-     * @param string $code
-     * @param Supplier $supplier
-     * @return Product|Model|Builder|object|null
-     */
-    public function searchProduct(string $name, string $code, Supplier $supplier)
-    {
-        $product = $this->repository->findOneProductByName($name);
-        if(isset($product)){
-            $product = $this->repository->findOneProductBySupplierAndCode($supplier->id, $code);
-        }
-        return $product;
+        return $this->create(['name' => $invoiceProduct->name]);
     }
 }

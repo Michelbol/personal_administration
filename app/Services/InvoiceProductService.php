@@ -3,9 +3,8 @@
 
 namespace App\Services;
 
-use App\Models\Invoice;
 use App\Models\InvoiceProduct;
-use App\Models\Product;
+use App\Repositories\ProductSupplierRepository;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 
@@ -38,14 +37,12 @@ class InvoiceProductService extends CRUDService
 
     /**
      * @param InvoiceProduct $invoiceProduct
-     * @param int $product_id
+     * @param int $product_supplier_id
      */
-    public function updateProductId(InvoiceProduct $invoiceProduct, int $product_id)
+    public function updateProductSupplierId(InvoiceProduct $invoiceProduct, int $product_supplier_id)
     {
-        $invoiceProduct->product_id = $product_id;
+        $invoiceProduct->product_supplier_id = $product_supplier_id;
         $invoiceProduct->save();
-
-        $this->updateProductSupplier($invoiceProduct, Product::find($product_id));
     }
 
     /**
@@ -55,26 +52,32 @@ class InvoiceProductService extends CRUDService
      */
     public function createProductByInvoiceProduct(InvoiceProduct $invoiceProduct)
     {
-        /**
-         * @var $product Product
-         */
-        $product = (new ProductService())
-            ->create(
-                ['name' => $invoiceProduct->name]
-            );
-        $this->updateProductId($invoiceProduct, $product->id);
-        $this->updateProductSupplier($invoiceProduct, $product);
+
+        $productSupplierService = new ProductSupplierService();
+        $productSupplier = $productSupplierService->searchProductSupplier(
+            $invoiceProduct->code,
+            $invoiceProduct->invoice->supplier
+        );
+        if(!isset($productSupplier)){
+            $product = (new ProductService())->convertInvoiceProductIntoProduct($invoiceProduct);
+            $productSupplier = $productSupplierService->convertInvoiceProductIntoProductSupplier($invoiceProduct, $product);
+        }
+        $this->updateProductSupplierId($invoiceProduct, $productSupplier->id);
 
         return $invoiceProduct;
     }
 
-    public function updateProductSupplier(InvoiceProduct $invoiceProduct, Product $product)
+    public function getProducts(int $invoiceId)
     {
-        (new ProductSupplierService())->countOrCreate([
-            'code' => $invoiceProduct->code,
-            'un' => $invoiceProduct->un,
-            'product_id' => $product->id,
-            'supplier_id' => Invoice::select('supplier_id')->find($invoiceProduct->invoice_id)->supplier_id,
-        ]);
+        return InvoiceProduct
+            ::whereInvoiceId($invoiceId)
+            ->join('product_suppliers as ps', 'ps.id', 'invoice_products.product_supplier_id')
+            ->join('products as p', 'p.id', 'ps.product_id')
+            ->join('suppliers as s', 's.id', 'ps.supplier_id')
+            ->select(
+                'invoice_products.*',
+                (new ProductSupplierRepository())->queryRawProductName('product_name')
+            )
+            ->get();
     }
 }

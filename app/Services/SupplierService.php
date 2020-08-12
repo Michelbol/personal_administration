@@ -6,16 +6,30 @@ namespace App\Services;
 
 use App\Models\Supplier;
 use App\Repositories\InvoiceRepository;
+use App\Repositories\SupplierRepository;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use PHPHtmlParser\Dom;
+use PHPHtmlParser\Exceptions\ChildNotFoundException;
+use PHPHtmlParser\Exceptions\NotLoadedException;
 
 class SupplierService extends CRUDService
 {
     /**
+     * @var SupplierRepository
+     */
+    private $repository;
+
+    /**
      * @var Supplier
      */
     protected $modelClass = Supplier::class;
+
+    public function __construct()
+    {
+        $this->repository = new SupplierRepository();
+    }
 
     /**
      * @param Supplier $model
@@ -33,7 +47,12 @@ class SupplierService extends CRUDService
         $model->state = $data['state'];
     }
 
-
+    /**
+     * @param Dom $dom
+     * @return array
+     * @throws ChildNotFoundException
+     * @throws NotLoadedException
+     */
     public function getSupplierData(Dom $dom)
     {
         $data = [];
@@ -51,6 +70,12 @@ class SupplierService extends CRUDService
         return $data;
     }
 
+    /**
+     * @param Dom $dom
+     * @return string|string[]|null
+     * @throws ChildNotFoundException
+     * @throws NotLoadedException
+     */
     public function getCnpjSupplier(Dom $dom)
     {
         $supplierData = $dom->find("#conteudo .txtCenter .text");
@@ -70,5 +95,13 @@ class SupplierService extends CRUDService
             return $this->create($data);
         }
         return $this->update($supplier, $data);
+    }
+
+    /**
+     * @return Supplier[]|Collection
+     */
+    public function getAllSuppliers()
+    {
+        return $this->repository->getAll();
     }
 }

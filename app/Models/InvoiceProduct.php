@@ -5,6 +5,7 @@ namespace App\Models;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
@@ -18,9 +19,11 @@ use Illuminate\Support\Carbon;
  * @property float $unitary_value
  * @property float $total_value
  * @property int $invoice_id
+ * @property int $product_supplier_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property int $product_id
+ * @property-read Invoice $invoice
+ * @property-read ProductSupplier $productSupplier
  * @method static Builder|InvoiceProduct newModelQuery()
  * @method static Builder|InvoiceProduct newQuery()
  * @method static Builder|InvoiceProduct query()
@@ -28,13 +31,13 @@ use Illuminate\Support\Carbon;
  * @method static Builder|InvoiceProduct whereCreatedAt($value)
  * @method static Builder|InvoiceProduct whereId($value)
  * @method static Builder|InvoiceProduct whereName($value)
- * @method static Builder|InvoiceProduct whereProductId($value)
  * @method static Builder|InvoiceProduct whereQuantity($value)
  * @method static Builder|InvoiceProduct whereTotalValue($value)
  * @method static Builder|InvoiceProduct whereUn($value)
  * @method static Builder|InvoiceProduct whereUnitaryValue($value)
  * @method static Builder|InvoiceProduct whereUpdatedAt($value)
  * @method static Builder|InvoiceProduct whereInvoiceId($value)
+ * @method static Builder|InvoiceProduct whereProductSupplierId($value)
  * @mixin Eloquent
  */
 class InvoiceProduct extends Model
@@ -47,7 +50,7 @@ class InvoiceProduct extends Model
         'unitary_value',
         'total_value',
         'invoice_id',
-        'product_id',
+        'product_supplier_id',
     ];
 
     protected $casts = [
@@ -55,6 +58,22 @@ class InvoiceProduct extends Model
         'unitary_value' => 'float',
         'total_value' => 'float',
         'invoice_id' => 'int',
-        'product_id' => 'int',
+        'product_supplier_id' => 'int',
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function productSupplier()
+    {
+        return $this->belongsTo(ProductSupplier::class);
+    }
 }

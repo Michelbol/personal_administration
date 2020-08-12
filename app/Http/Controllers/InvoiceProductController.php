@@ -32,7 +32,7 @@ class InvoiceProductController extends Controller
     public function update($tenant, $id, InvoiceProductRequest $request)
     {
         $invoiceProduct = InvoiceProduct::find($id);
-        $this->service->updateProductId($invoiceProduct, $request->validated()['product_id']);
+        $this->service->updateProductSupplierId($invoiceProduct, $request->validated()['product_supplier_id']);
 
         return response()->json(['msg' => 'Produto Alterado com Sucesso']);
     }
