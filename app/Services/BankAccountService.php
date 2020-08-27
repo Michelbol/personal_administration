@@ -4,10 +4,12 @@
 namespace App\Services;
 
 use App\Models\BankAccount;
+use App\Repositories\BankAccountRepository;
 use App\Utilitarios;
 use Carbon\Carbon;
 use DB;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 
 class BankAccountService extends CRUDService
 {
@@ -15,6 +17,16 @@ class BankAccountService extends CRUDService
      * @var BankAccount
      */
     protected $modelClass = BankAccount::class;
+
+    /**
+     * @var BankAccountRepository
+     */
+    private $repository;
+
+    public function __construct()
+    {
+        $this->repository = new BankAccountRepository();
+    }
 
     /**
      * @param BankAccount $model
@@ -130,5 +142,38 @@ class BankAccountService extends CRUDService
             ->orderBy('posting_date','desc')
             ->orderBy('id','desc')->first();
         return isset($accountBalancePosting) ? Utilitarios::getFormatReal($accountBalancePosting->account_balance) : '0,00';
+    }
+
+    /**
+     * @return BankAccount[]|Collection
+     */
+    public function getAll()
+    {
+        return $this->repository->getAll();
+    }
+
+    public function getExpensesByBankAccountMonthly(Carbon $startAt, Carbon $endAt, int $bankAccountId)
+    {
+        return $this->repository->getExpensesByBankAccountMonthly($startAt, $endAt, $bankAccountId);
+    }
+
+    public function fixReport($expenses, Carbon $startAt, Carbon $endAt)
+    {
+        $diff = $startAt->diffInMonths($endAt);
+        /**
+         * @var $expense Collection
+         * @var $expenses Collection
+         */
+        foreach ($expenses as $key => $expense){
+            if($expense->count() <= $diff){
+                for($i = 0; $i <= $diff; $i++){
+                    if(!$expense->has($i)){
+                        $expense[$i] = 0;
+                    }
+                }
+                $expenses[$key] = $expense->sortKeys();
+            }
+        }
+        return $expenses;
     }
 }

@@ -6,6 +6,7 @@
 
         <a href="{{ routeTenant('bank_accounts.create') }}" class="btn btn-info">Nova Conta Corrente</a>
         <a href="{{ routeTenant('bank_account_posting.file') }}" class="btn btn-primary">Leitura de Arquivos</a>
+        <a href="{{ routeTenant('bank_account.expense.report') }}" class="btn btn-dark">Análise de Lançamentos</a>
         <br><br>
 
         <table id="table_bank_account" class="table table-bordered table-striped" width="100%">

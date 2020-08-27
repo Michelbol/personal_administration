@@ -37,6 +37,7 @@ Route::prefix("{{$tenantParam}}")
             Route::get('fipe/price/{brand_id}/{model_id}/{year_id}', 'FipeController@price')->name('fipe.price');
             //=========================================BANK ACCOUNT===========================================================//
             Route::get('/bank_account/get', 'BankAccountController@get')->name('bank_account.get');
+            Route::get('/bank_account/expense/report', 'BankAccountController@reportExpense')->name('bank_account.expense.report');
             //=========================================Supplier===========================================================//
             Route::get('/supplier/get', 'SupplierController@get')->name('supplier.get');
             //=========================================Supplier===========================================================//
