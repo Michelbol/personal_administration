@@ -15,6 +15,8 @@
         </form>
         <br>
         <br>
+        <a class="btn btn-primary" href="{{ routeTenant('product.supplier.create', [$product->id]) }}">Adicionar Fornecedor</a>
+        <br>
         <table id="table_product_supplier" class="table table-striped table-bordered" width="100%">
             <thead>
             <tr>

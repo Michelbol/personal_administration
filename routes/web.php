@@ -46,6 +46,9 @@ Route::prefix("{{$tenantParam}}")
             Route::get('/product/get', 'ProductController@get')->name('product.get');
             //=========================================Product Supplier===========================================================//
             Route::get('/product_supplier/get/{product_id}', 'ProductSupplierController@get')->name('product_supplier.get');
+            Route::get('/product/supplier', 'ProductSupplierController@index')->name('product.supplier.index');
+            Route::get('/product/{id}/supplier/create', 'ProductSupplierController@create')->name('product.supplier.create');
+            Route::post('/product/{id}/supplier/store', 'ProductSupplierController@store')->name('product.supplier.store');
             //=========================================Invoice===========================================================//
             Route::get('/invoice/get', 'InvoiceController@get')->name('invoice.get');
             Route::get('/invoice/create/qr_code', 'InvoiceController@createByQrCode')->name('invoice.create.qr_code');

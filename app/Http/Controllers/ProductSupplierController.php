@@ -3,14 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductSupplierRequest;
+use App\Models\Brand;
 use App\Models\ProductSupplier;
+use App\Models\Supplier;
 use App\Services\ProductSupplierService;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\UnauthorizedException;
+use Illuminate\View\View;
 use Yajra\DataTables\DataTables;
 use Exception;
 
@@ -28,6 +32,18 @@ class ProductSupplierController extends CrudController
     public function __construct(ProductSupplierService $service = null, ProductSupplier $model = null)
     {
         parent::__construct($service, $model);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param $tenant
+     * @param Request $request
+     * @return Factory|View
+     */
+    public function index($tenant, Request $request)
+    {
+        return redirect()->routeTenant('product.index');
     }
 
     /**
@@ -103,5 +119,22 @@ class ProductSupplierController extends CrudController
             $this->errorMessage($e->getMessage());
             return redirect()->back()->withInput($request->all());
         }
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @param $tenant
+     * @return Factory|View
+     */
+    public function create($tenant)
+    {
+        $suppliers = Supplier::all();
+        $brands = Brand::all();
+        return view("product_supplier.create",
+            compact(
+                'suppliers',
+                'brands'
+            ));
     }
 }
