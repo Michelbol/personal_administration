@@ -16,3 +16,13 @@ use Illuminate\Http\Request;
 //Route::middleware('auth:api')->get('/user', function (Request $request) {
 //    return $request->user();
 //});
+$tenantParam = config('tenant.route_param');
+
+Route::domain(config('app.url'))->group(function() use($tenantParam){
+    Route::prefix("{{$tenantParam}}")
+        ->middleware('tenant')
+        ->namespace('Api\\')
+        ->group(function() {
+            Route::post('invoice/qr_code', 'InvoiceController@storeByQrCode');
+        });
+});

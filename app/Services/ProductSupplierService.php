@@ -71,8 +71,9 @@ class ProductSupplierService extends CRUDService
     {
         $count = $this->repository->countByCodeAndSupplierId($data['code'], $data['supplier_id']);
         if($count === 0){
-            $this->create($data);
+            return $this->create($data);
         }
+        return $this->repository->findOneCodeAndSupplierId($data['code'], $data['supplier_id']);
     }
 
     public function find($id)
