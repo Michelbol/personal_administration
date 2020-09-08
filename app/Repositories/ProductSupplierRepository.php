@@ -50,6 +50,7 @@ class ProductSupplierRepository
             ->join('products as p', 'p.id', 'ps.product_id')
             ->join('suppliers as s', 's.id', 'ps.supplier_id')
             ->where('p.deleted_at', null)
+            ->orderBy('name')
             ->get(
                 [
                     $this->queryRawProductName(),

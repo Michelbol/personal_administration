@@ -41,7 +41,6 @@ class InvoiceController extends Controller
             return $this->jsonObjectSuccess($invoice);
         }catch (Exception $e){
             DB::rollBack();
-            dd($e->getMessage());
             return $this->jsonError($e->getMessage());
         }
     }
