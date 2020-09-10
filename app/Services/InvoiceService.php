@@ -109,7 +109,7 @@ class InvoiceService extends CRUDService
             'total_paid' => (float) formatReal($dom->find('#totalNota #linhaTotal')[2]->getChildren()[3]->text),
         ];
         $divTotal = $dom->find('#totalNota #linhaTotal');
-        if(count($divTotal) === 7){
+        if(count($divTotal) === 6{
             $data['discount'] = $data['total_paid'];
             $data['total_paid'] = (float) formatReal($dom->find('#totalNota #linhaTotal')[4]->getChildren()[3]->text);
         }
