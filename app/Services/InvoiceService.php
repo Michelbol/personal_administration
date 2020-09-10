@@ -111,7 +111,7 @@ class InvoiceService extends CRUDService
         $divTotal = $dom->find('#totalNota #linhaTotal');
         if(count($divTotal) === 6){
             $data['discount'] = $data['total_paid'];
-            $data['total_products'] = (float) formatReal($dom->find('#totalNota #linhaTotal')[2]->getChildren()[3]->text);
+            $data['total_products'] = (float) formatReal($dom->find('#totalNota #linhaTotal')[1]->getChildren()[3]->text);
             $data['total_paid'] = (float) formatReal($dom->find('#totalNota #linhaTotal')[4]->getChildren()[3]->text);
         }
         return $this->create($data);
