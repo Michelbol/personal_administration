@@ -93,7 +93,6 @@ class InvoiceService extends CRUDService
         if($count > 0){
             throw new Exception('Essa nota já foi inserida.');
         }
-
         $data = [
             'supplier_id' => $supplier->id,
             'number' => removeSpaces($li[6]->text),
@@ -109,6 +108,11 @@ class InvoiceService extends CRUDService
             'total_products' => (float) formatReal($dom->find('.totalNumb.txtMax')->text),
             'total_paid' => (float) formatReal($dom->find('#totalNota #linhaTotal')[2]->getChildren()[3]->text),
         ];
+        $divTotal = $dom->find('#totalNota #linhaTotal');
+        if(count($divTotal) === 7){
+            $data['discount'] = $data['total_paid'];
+            $data['total_paid'] = (float) formatReal($dom->find('#totalNota #linhaTotal')[4]->getChildren()[3]->text);
+        }
         return $this->create($data);
     }
 
