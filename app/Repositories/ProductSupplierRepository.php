@@ -37,7 +37,7 @@ class ProductSupplierRepository
             ->whereSupplierId($supplierId)
             ->where('p.deleted_at', null)
             ->join('products as p', 'p.id', 'product_suppliers.product_id')
-            ->first();
+            ->first('product_suppliers.*');
     }
 
     /**
