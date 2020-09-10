@@ -68,7 +68,8 @@ class InvoiceController extends CrudController
     public function get(){
         $model = Invoice
             ::select(['invoices.*', 's.fantasy_name'])
-            ->join('suppliers as s', 's.id', 'invoices.supplier_id');
+            ->join('suppliers as s', 's.id', 'invoices.supplier_id')
+            ->orderByDesc('invoices.emission_at');
 
         $response = DataTables::of($model)
             ->addColumn('emission_at', function($model){
