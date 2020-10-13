@@ -12,6 +12,7 @@
 */
 
 Route::get('/bios', 'BiosController@index')->name('bios.index');
+Route::post('/queen-game', 'QueenGameController@save')->name('queen.game.save');
 
 $tenantParam = config('tenant.route_param');
 
