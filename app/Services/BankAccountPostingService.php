@@ -26,7 +26,7 @@ class BankAccountPostingService extends CRUDService
     public function create($data)
     {
         if(isset($data['new_income'])){
-            $data['income_id'] = $this->createIncome(['name' => $data['new_incone'], 'amount' => $data['amount']]);
+            $data['income_id'] = $this->createIncome(['name' => $data['new_income'], 'amount' => $data['amount']]);
         }
         if(isset($data['new_expense'])){
             $data['expense_id'] = $this->createExpense(['name' => $data['new_expense'], 'amount' => $data['amount']]);
