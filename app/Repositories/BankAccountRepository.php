@@ -31,7 +31,7 @@ class BankAccountRepository
             ->select(
                 DB::raw('sum(bap.amount) as total_amount'),
                 'e.name',
-                DB::raw('MONTH(posting_date) as month'))
+                DB::raw('MONTH(posting_date)-1 as month'))
             ->get();
     }
 }

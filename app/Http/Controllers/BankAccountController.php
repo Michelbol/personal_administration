@@ -108,13 +108,14 @@ class BankAccountController extends CrudController
     public function reportExpense(ExpenseReportRequest $request)
     {
         $data = $request->validated();
-        $startAt = Carbon::now()->startOfYear();
-        $endAt = Carbon::now();
+        $startAt = now()->startOfYear();
+        $endAt = now()->endOfYear();
+        $year = now()->year;
         $selectedBank = null;
-        if($request->has('period_date')){
-            $date = explode(' - ', $data['period_date']);
-            $startAt = Carbon::createFromFormat('d/m/Y', $date[0]);
-            $endAt = Carbon::createFromFormat('d/m/Y', $date[1]);
+        if($request->has('year')){
+            $year = $request->get('year');
+            $startAt = Carbon::create($year)->startOfYear();
+            $endAt = Carbon::create($year)->endOfYear();
         }
         $bankAccounts = $this->service->getAll();
         $expenses = null;
@@ -139,7 +140,8 @@ class BankAccountController extends CrudController
                 'selectedBank',
                 'endAt',
                 'startAt',
-                'expenses'
+                'expenses',
+                'year'
             )
         );
     }

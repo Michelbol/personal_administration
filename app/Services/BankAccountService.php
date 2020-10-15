@@ -165,14 +165,14 @@ class BankAccountService extends CRUDService
          * @var $expenses Collection
          */
         foreach ($expenses as $key => $expense){
-            if($expense->count() <= $diff){
-                for($i = 0; $i <= $diff; $i++){
-                    if(!$expense->has($i)){
-                        $expense[$i] = 0;
-                    }
+            $count = $diff;
+            while ($count >= 0){
+                if(!$expense->has($count)){
+                    $expense[$count] = 0;
                 }
-                $expenses[$key] = $expense->sortKeys();
+                $count--;
             }
+            $expenses[$key] = $expense->sortKeys();
         }
         return $expenses;
     }
