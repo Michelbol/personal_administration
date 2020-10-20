@@ -4,12 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\InvoiceQrCodeRequest;
-use App\Models\Invoice;
+use App\Jobs\ReadInvoiceByQrCode;
 use App\Services\InvoiceService;
 use DB;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
 {
@@ -35,10 +34,8 @@ class InvoiceController extends Controller
     public function storeByQrCode(InvoiceQrCodeRequest $request)
     {
         try {
-            DB::beginTransaction();
-            $invoice = $this->service->createInvoiceByQrCode($request->validated()['url_qr_code']);
-            DB::commit();
-            return $this->jsonObjectSuccess($invoice);
+            ReadInvoiceByQrCode::dispatch($request->validated()['url_qr_code']);
+            return $this->jsonSuccessCreate();
         }catch (Exception $e){
             DB::rollBack();
             return $this->jsonError($e->getMessage());
