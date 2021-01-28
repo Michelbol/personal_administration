@@ -61,14 +61,14 @@
                         </div>
                         <div class="col-md-12">
                             <p>
-                                Nascido em Maringá, no interior do Paraná, com 25 anos de idade, cursando Informática
+                                Nasceu em Maringá, no Paraná, com 25 anos de idade, cursando Informática
                                 na Universidade Estadual de Maringá (UEM). Um programador apaixonado pela profissão,
-                                e sempre buscando aprender sobre Arquitetura de softwares e boas práticas de programação.
+                                e sempre buscando aprender sobre a Arquitetura de softwares e boas práticas de programação.
                             </p>
 
                             <p>
                                 No trabalho, sou proativo, buscando sempre o que é melhor para a empresa e tenho facilidade
-                                em me adaptar em ambientes de trabalho.
+                                em adaptar-me a ambientes de trabalho.
                             </p>
                         </div>
                     </div>
@@ -93,8 +93,8 @@
                                     <div class="progress-item">
                                         <h3 class="progress-title">Laravel</h3>
                                         <ul>
-                                            <li>Trabalhado 3 anos no desenvolvimento de aplicações Web.</li>
-                                            <li>Trabalhado desde contruções de API REST com front-end Vue/Angular/jquery até construções de aplicações utilizando BLADE.</li>
+                                            <li>Trabalhando a 3 anos no desenvolvimento de aplicações Web.</li>
+                                            <li>Trabalhando desde contruções de API REST com front-end Vue/Angular/jquery até construções de aplicações utilizando BLADE.</li>
                                             <li>Experiência com observabilidade de aplicações laravel utilizando canais no slack ou Laravel Telescope</li>
                                             <li>Construção de aplicações utilizando filas para processamento paralelo.</li>
                                         </ul>
@@ -104,8 +104,8 @@
                                     <div class="progress-item">
                                         <h3 class="progress-title">Mysql</h3>
                                         <ul>
-                                            <li>Trabalhado 3 anos utilizando Mysql.</li>
-                                            <li>Experiência em normalização de tabelas e monitoramento de banco afim de identificar gargalos na estrutura.</li>
+                                            <li>Trabalhando a 3 anos utilizando Mysql.</li>
+                                            <li>Experiência em normalização de tabelas e monitoramento de banco, afim de identificar gargalos na estrutura.</li>
                                         </ul>
                                         <!-- /.progress -->
                                     </div>
@@ -115,7 +115,7 @@
                                     <div class="progress-item">
                                         <h3 class="progress-title">SqlServer</h3>
                                         <ul>
-                                            <li>Trabalhado 2 anos utilizando SqlServer.</li>
+                                            <li>Trabalhando a 2 anos utilizando SqlServer.</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -123,7 +123,7 @@
                                     <div class="progress-item">
                                         <h3 class="progress-title">Google Cloud</h3>
                                         <ul>
-                                            <li>Trabalhado 2 anos com criação de máquinas, Storage, Sql e Api Google Maps</li>
+                                            <li>Trabalhando a 2 anos com criação de máquinas, Storage, Sql e Api Google Maps</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -131,7 +131,7 @@
                                     <div class="progress-item">
                                         <h3 class="progress-title">Linux</h3>
                                         <ul>
-                                            <li>Trabalhado 3 anos com publicação de ambientes PHP(pilha LEMP)</li>
+                                            <li>Trabalhando a 3 anos com publicação de ambientes PHP(pilha LEMP)</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -147,7 +147,7 @@
                                     <div class="progress-item">
                                         <h3 class="progress-title">Vue.js</h3>
                                         <ul>
-                                            <li>1 ano de experiência, trabalhado com construção de Dashboards</li>
+                                            <li>1 ano de experiência, trabalhando com construção de Dashboards</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -155,7 +155,7 @@
                                     <div class="progress-item">
                                         <h3 class="progress-title">Angular</h3>
                                         <ul>
-                                            <li>6 meses de experiência, trabalhado com construção de aplicativos mobile</li>
+                                            <li>6 meses de experiência, trabalhando com construção de aplicativos mobile</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -322,10 +322,6 @@
                                 <h4>Interativa Sistemas</h4>
 
                                 <p>
-                                    Back-end: Desenvolvimento de aplicações web utilizando o framework Laravel.
-                                    <br>
-                                    Front-end: Desenvolvimento de dashboards utilizando jQuery
-                                    <br>
                                     Maringá, PR - Brasil
                                 </p>
                             </div>
