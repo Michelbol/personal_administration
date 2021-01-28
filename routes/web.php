@@ -16,6 +16,9 @@ Route::post('/queen-game', 'QueenGameController@save')->name('queen.game.save');
 
 $tenantParam = config('tenant.route_param');
 
+Route::get('/', 'CurriculumController@curriculum')->name('curriculum');
+Route::post('/contact', 'CurriculumController@contact')->name('contact');
+
 
 Route::domain(config('app.url'))->group(function() use($tenantParam){
 Route::prefix("{{$tenantParam}}")
