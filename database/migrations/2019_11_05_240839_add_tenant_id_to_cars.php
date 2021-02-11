@@ -19,10 +19,7 @@ class AddTenantIdToCars extends Migration
         });
 
         \Illuminate\Support\Facades\DB::statement('update cars set tenant_id = 1');
-
-        Schema::table('cars', function(Blueprint $table){
-            $table->unsignedBigInteger('tenant_id')->nullable(false)->change();
-        });
+        \Illuminate\Support\Facades\DB::statement('alter table cars modify column tenant_id BIGINT unsigned not null;');
     }
 
     /**
