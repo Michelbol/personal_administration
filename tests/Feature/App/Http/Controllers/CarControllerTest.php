@@ -118,13 +118,13 @@ class CarControllerTest extends TestCase
         $car = factory(Car::class)->create(['tenant_id' => $tenant->id]);
         factory(CarSupply::class)->create(['car_id' => $car->id, 'tenant_id' => $tenant->id]);
         $response = $this->delete("car/$car->id");
-
+        $databaseName = config('database.connections')[config('database.default')]['database'];
         $response
             ->assertStatus(302)
             ->assertRedirect("")
             ->assertSessionHas('message',
                 [
-                    'msg' => 'SQLSTATE[23000]: Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`personal_administrator_testing`.`car_supplies`, CONSTRAINT `car_supplies_car_id_foreign` FOREIGN KEY (`car_id`) REFERENCES `cars` (`id`)) (SQL: delete from `cars` where `id` = 2)' ,
+                    'msg' => "SQLSTATE[23000]: Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`$databaseName`.`car_supplies`, CONSTRAINT `car_supplies_car_id_foreign` FOREIGN KEY (`car_id`) REFERENCES `cars` (`id`)) (SQL: delete from `cars` where `id` = 2)" ,
                     'type' => SessionEnum::error
                 ]
             );

@@ -289,7 +289,7 @@ class BankAccountPostingControllerTest extends TestCase
     public function createFile($name, $mime)
     {
         return new UploadedFile(
-            base_path()."\\tests\\Feature\\App\\Http\\Controllers\\$name",
+            base_path()."/tests/Feature/App/Http/Controllers/$name",
             $name,
             $mime,
             null,
