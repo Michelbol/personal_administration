@@ -30,7 +30,7 @@
         <server name="QUEUE_CONNECTION" value="sync"/>
         <server name="SESSION_DRIVER" value="array"/>
     </php>
-    <logging>
-        <log type="coverage-html" target="public/test"/>
-    </logging>
+<!--    <logging>-->
+<!--        <log type="coverage-html" target="public/test"/>-->
+<!--    </logging>-->
 </phpunit>
