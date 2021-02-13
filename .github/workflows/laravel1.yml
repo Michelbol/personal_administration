@@ -24,12 +24,13 @@ jobs:
     - name: Setup MySQL
       uses: mirromutth/mysql-action@v1.1
       with:
-        MYSQL_DATABASE: personal_administrator_testing
-        MYSQL_USER: root
-        MYSQL_PASSWORD: 123123
+        mysql database: personal_administrator_testing
+        mysql user: michel
+        mysql password: 123123
+        mysql root password: 123123
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
         DB_DATABASE: personal_administrator_testing
-        DB_USERNAME: root
+        DB_USERNAME: michel
         DB_PASSWORD: 123123
       run: vendor/bin/phpunit
