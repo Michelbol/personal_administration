@@ -19,7 +19,14 @@ class AddTenantIdToCars extends Migration
         });
 
         \Illuminate\Support\Facades\DB::statement('update cars set tenant_id = 1');
-        \Illuminate\Support\Facades\DB::statement('alter table cars modify column tenant_id BIGINT unsigned not null;');
+        Schema::table('cars', function (Blueprint $table) {
+            $table->dropForeign('cars_tenant_id_foreign');
+            $table->dropIndex('cars_tenant_id_foreign');
+        });
+        \Illuminate\Support\Facades\DB::statement('alter table cars modify tenant_id BIGINT unsigned not null;');
+        Schema::table('cars', function (Blueprint $table) {
+            $table->foreign('tenant_id')->references('id')->on('tenants');
+        });
     }
 
     /**
