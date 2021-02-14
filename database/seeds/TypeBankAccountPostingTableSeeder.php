@@ -13,7 +13,7 @@ class TypeBankAccountPostingTableSeeder extends Seeder
     public function run()
     {
         $this->saveTypeBankAccountPosting('Juros Creditados',1);
-        $this->saveTypeBankAccountPosting('Trasnferências P/ Outra Conta', 3);
+        $this->saveTypeBankAccountPosting('Transferências P/ Outra Conta', 3);
         $this->saveTypeBankAccountPosting('Depósitos', 4);
         $this->saveTypeBankAccountPosting('Pagamentos de Boleto', 5);
         $this->saveTypeBankAccountPosting('Compras Cartão Débito', 6);
