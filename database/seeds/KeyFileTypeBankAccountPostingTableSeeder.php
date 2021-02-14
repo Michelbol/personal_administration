@@ -25,6 +25,7 @@ class KeyFileTypeBankAccountPostingTableSeeder extends Seeder
         $insuranceCompany = 12;
         $fgts = 6;
         $pis = 7;
+        $energyLight = 30;
 
         $this->saveKeyFileTypeBankAccountPosting(1, 'REM BASICA',null, $othersIncome);
         $this->saveKeyFileTypeBankAccountPosting(1, 'CRED JUROS', null, $incomeInterest);
@@ -46,6 +47,7 @@ class KeyFileTypeBankAccountPostingTableSeeder extends Seeder
 
         $this->saveKeyFileTypeBankAccountPosting(5, 'PAG FONE', $tim);
         $this->saveKeyFileTypeBankAccountPosting(5, 'PAG BOLETO', $billet);
+        $this->saveKeyFileTypeBankAccountPosting(5, 'PG LUZ/GAS', $energyLight);
 
         $this->saveKeyFileTypeBankAccountPosting(6, 'COMPRA ELO', $debitCard);
 
