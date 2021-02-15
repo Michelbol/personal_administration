@@ -151,10 +151,13 @@ class BudgetFinancialService extends CRUDService
      * @param int $year
      * @param int $month
      * @param null $userId
+     * @param BudgetFinancial|null $budgetFinancial
      */
-    public function createBudget(int $year, int $month, $userId)
+    public function createBudget(int $year, int $month, $userId, BudgetFinancial $budgetFinancial = null)
     {
-        $budgetFinancial = new BudgetFinancial();
+        if(!isset($budgetFinancial)){
+            $budgetFinancial = new BudgetFinancial();
+        }
         $budgetFinancial->year = $year;
         $budgetFinancial->month = $month;
         $endActualMonth = Carbon::create($year, $month)->daysInMonth;
