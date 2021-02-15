@@ -20,6 +20,7 @@ class ExpenseTableSeeder extends Seeder
         $this->createExpense('Cartão de Débito', 8, false, 3, null, $tenant->id);
         $this->createExpense('Saque', 13, false, 0, 31, $tenant->id);
         $this->createExpense('Seguradora', 12, true, 17.63, 15, $tenant->id);
+        $this->createExpense('Luz', 30, true, 150.00, 8, $tenant->id);
     }
     public function createExpense(string $name, int $id, bool $isFixed, float $amount, $dueDate, int $tenantId)
     {
