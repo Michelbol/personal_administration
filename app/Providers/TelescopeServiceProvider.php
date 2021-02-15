@@ -21,6 +21,9 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
         $this->hideSensitiveRequestDetails();
 
         Telescope::filter(function (IncomingEntry $entry) {
+            if(request()->header('user-agent') === 'GoogleStackdriverMonitoring-UptimeChecks(https://cloud.google.com/monitoring)'){
+                return false;
+            }
             return true;
         });
     }
