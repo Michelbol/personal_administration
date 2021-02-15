@@ -74,6 +74,7 @@ Route::prefix("{{$tenantParam}}")
             Route::post('/budget_financial/updateinitialbalance/{id}', 'BudgetFinancialController@updateInitialBalance')->name('budget_financial.updateinitialbalance');
             Route::get('/budget_financial/last_month/{id}', 'BudgetFinancialController@lastMonth')->name('budget_financial.last_month');
             Route::get('/budget_financial/restart/{id}', 'BudgetFinancialController@budgetFinancialMonthByBankAccount')->name('budget_financial.restart');
+            Route::get('/budget_financial/generate_fixed/{id}', 'BudgetFinancialController@generateFixed')->name('budget_financial.generate_fixed');
             //=========================================BUDGET FINANCIAL POSTING=================================================================//
             Route::get('/budget_financial_posting/get/{id}', 'BudgetFinancialPostingController@get')->name('budget_financial_posting.get');
             //=========================================CAR=================================================================//

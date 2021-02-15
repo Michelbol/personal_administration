@@ -125,28 +125,50 @@ class BudgetFinancialService extends CRUDService
         $budgetFinancial->save();
     }
 
+    /**
+     * @param int $year
+     * @param $userId
+     * @throws \Exception
+     */
     public function createBudgetCurrentYear(int $year, $userId)
     {
         DB::beginTransaction();
         for($month = 1; $month <= 12; $month++){
-            $budgetFinancial = new BudgetFinancial();
-            $budgetFinancial->year = $year;
-            $budgetFinancial->month = $month;
-            $endActualMonth = Carbon::create($year, $month)->daysInMonth;
-            if(Carbon::now()->isAfter(Carbon::create($year,$month, $endActualMonth))){
-                $budgetFinancial->isFinalized = true;
-            }
-            $budgetFinancial->user_id = (isset($selected_user_id) ? $selected_user_id : $userId);
-            $budgetFinancial->initial_balance = 0;
-
-            $budgetFinancial->save();
-
-            $this->createIncomesFixed($budgetFinancial, $year, $month);
-
-            $this->createExpensesFixed($budgetFinancial, $year, $month);
-
+            $this->createBudget($year, $month, $userId);
         }
         DB::commit();
+    }
+
+    /**
+     * @param BudgetFinancial $budgetFinancial
+     */
+    public function deleteBudgetPostings(BudgetFinancial $budgetFinancial)
+    {
+        DB::statement('delete from budget_financial_postings where budget_financial_id = ?', [$budgetFinancial->id]);
+    }
+
+    /**
+     * @param int $year
+     * @param int $month
+     * @param null $userId
+     */
+    public function createBudget(int $year, int $month, $userId)
+    {
+        $budgetFinancial = new BudgetFinancial();
+        $budgetFinancial->year = $year;
+        $budgetFinancial->month = $month;
+        $endActualMonth = Carbon::create($year, $month)->daysInMonth;
+        if(Carbon::now()->isAfter(Carbon::create($year,$month, $endActualMonth))){
+            $budgetFinancial->isFinalized = true;
+        }
+        $budgetFinancial->user_id = $userId;
+        $budgetFinancial->initial_balance = 0;
+
+        $budgetFinancial->save();
+
+        $this->createIncomesFixed($budgetFinancial, $year, $month);
+
+        $this->createExpensesFixed($budgetFinancial, $year, $month);
     }
 
 

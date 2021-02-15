@@ -212,4 +212,17 @@ class BudgetFinancialController extends CrudController
         Session::flash('message', ['msg' => 'Orçamento reiniciado com sucesso!', 'type' => SessionEnum::success]);
         return redirect()->routeTenant('budget_financial.edit', ['budget_financial' => $budgetFinancial->id]);
     }
+
+    public function generateFixed($tenant, $id)
+    {
+        /**
+         * @var $budgetFinancialPosting BudgetFinancialPosting
+         * @var $budgetFinancial BudgetFinancial
+         */
+        $budgetFinancial = BudgetFinancial::findOrFail($id, ['id', 'month', 'year']);
+        $this->service->deleteBudgetPostings($budgetFinancial);
+        $this->service->createBudget($budgetFinancial->year, $budgetFinancial->month, auth()->id());
+        Session::flash('message', ['msg' => 'Orçamento reiniciado com sucesso!', 'type' => SessionEnum::success]);
+        return redirect()->routeTenant('budget_financial.edit', ['budget_financial' => $budgetFinancial->id]);
+    }
 }
