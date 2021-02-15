@@ -13,5 +13,6 @@
                 <a href="{{ routeTenant('expense.index') }}" class="btn btn-info">Cancelar</a>
             </div>
         </form>
+        <h3>Média Geral da Despesa R$: {{ $averageExpense ? formatReal($averageExpense) : formatReal(0) }}</h3>
     </div>
 @endsection

@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BankAccountPosting;
 use App\Models\Expenses;
 use App\Utilitarios;
 use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Session;
@@ -58,13 +61,13 @@ class ExpensesController extends Controller
      *
      * @param  int  $id
      * @param $tenant
-     * @return Response
+     * @return Application|Factory|Response|\Illuminate\View\View
      */
     public function edit($tenant, $id)
     {
         $expense = Expenses::find($id);
-
-        return view('expense.edit', compact('expense'));
+        $averageExpense = BankAccountPosting::whereExpenseId($expense->id)->average('amount');
+        return view('expense.edit', compact('expense', 'averageExpense'));
     }
 
     /**
