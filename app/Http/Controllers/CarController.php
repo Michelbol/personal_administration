@@ -55,7 +55,11 @@ class CarController extends CrudController
      */
     public function edit($tenant, $id, Request $request){
         $car = Car::findOrFail($id);
-        $brands = (new FipeService())->getBrands();
+        try {
+            $brands = (new FipeService())->getBrands();
+        }catch (Exception $exception){
+            $brands = [];
+        }
         $histories = FipeHistory
             ::whereCarId($car->id)
             ->orderBy('consultation_date')
