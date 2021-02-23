@@ -93,6 +93,11 @@ class InvoiceService extends CRUDService
         if($count > 0){
             throw new Exception('Essa nota já foi inserida.');
         }
+        $spanTaxes = $dom->find('.totalNumb.txtObs');
+        $taxes = 0;
+        if($spanTaxes->count() > 0){
+            $taxes = $spanTaxes->text;
+        }
         $data = [
             'supplier_id' => $supplier->id,
             'number' => removeSpaces($li[6]->text),
@@ -103,7 +108,7 @@ class InvoiceService extends CRUDService
             'access_key' => removeSpaces($dom->find('#infos li .chave')->text),
             'document' => cleanNumber($dom->find('#infos li')[2]->text),
             'qr_code' => $qrCode,
-            'taxes' => (float) formatReal($dom->find('.totalNumb.txtObs')->text),
+            'taxes' => (float) formatReal($taxes),
             'discount' => (float) 0,
             'total_products' => (float) formatReal($dom->find('.totalNumb.txtMax')->text),
             'total_paid' => (float) formatReal($dom->find('#totalNota #linhaTotal')[2]->getChildren()[3]->text),
