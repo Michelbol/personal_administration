@@ -18,6 +18,10 @@ $tenantParam = config('tenant.route_param');
 
 Route::get('/', 'CurriculumController@curriculum')->name('curriculum');
 Route::post('/contact', 'CurriculumController@contact')->name('contact');
+Route::prefix('/tribal-wars')->name('tribal.')->group(function(){
+    Route::get('', 'TribalWarsController@index')->name('index');
+    Route::get('collect', 'TribalWarsController@collect')->name('collect');
+});
 
 
 Route::domain(config('app.url'))->group(function() use($tenantParam){
