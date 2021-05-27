@@ -10,3 +10,4 @@
 <link rel="stylesheet" href="{{ asset('plugin/bootstrap/dist/css/bootstrap.min.css') }}"/>
 <link rel="stylesheet" href="{{ asset('plugin/bootstrap/dist/css/bootstrap-grid.min.css') }}"/>
 <link rel="stylesheet" href="{{ asset('plugin/daterangepicker/daterangepicker.css') }}" />
+<link rel="stylesheet" href="{{ asset('css/tribal/icons.css') }}" />

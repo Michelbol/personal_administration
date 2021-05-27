@@ -32,32 +32,53 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-1">
-                <label for="lancer">Lanceiro</label>
+            <div class="col-2">
+                <label for="lancer">
+                    <img src="{{ asset('images/tribal/unit_spear.png') }}" alt="">
+                    Lanceiro
+                </label>
                 <input type="number" class="form-control" name="lancer" id="lancer">
             </div>
-            <div class="col-1">
-                <label for="swordsman">Espadachin</label>
+            <div class="col-2">
+                <label for="swordsman">
+                    <img src="{{ asset('images/tribal/unit_sword.png') }}" alt="">
+                     Espadachin
+                </label>
                 <input type="number" class="form-control" name="swordsman" id="swordsman">
             </div>
-            <div class="col-1">
-                <label for="barbarian">Bárbaro</label>
+            <div class="col-2">
+                <label for="barbarian">
+                    <img src="{{ asset('images/tribal/unit_axe.png') }}" alt="">
+                     Bárbaro
+                </label>
                 <input type="number" class="form-control" name="barbarian" id="barbarian">
             </div>
-            <div class="col-1">
-                <label for="archer">Arqueiro</label>
+            <div class="col-2">
+                <label for="archer">
+                    <img src="{{ asset('images/tribal/unit_archer.png') }}" alt="">
+                     Arqueiro
+                </label>
                 <input type="number" class="form-control" name="archer" id="archer">
             </div>
-            <div class="col-1">
-                <label for="light-cavalry">CL</label>
+            <div class="col-2">
+                <label for="light-cavalry">
+                    <img src="{{ asset('images/tribal/unit_light.png') }}" alt="">
+                     CL
+                </label>
                 <input type="number" class="form-control" name="light-cavalry" id="light-cavalry">
             </div>
             <div class="col-1">
-                <label for="archer-horseback">AC</label>
+                <label for="archer-horseback">
+                    <img src="{{ asset('images/tribal/unit_marcher.png') }}" alt="">
+                     AC
+                </label>
                 <input type="number" class="form-control" name="archer-horseback" id="archer-horseback">
             </div>
             <div class="col-1">
-                <label for="heavy-cavalry">CP</label>
+                <label for="heavy-cavalry">
+                    <img src="{{ asset('images/tribal/unit_heavy.png') }}" alt="">
+                     CP
+                </label>
                 <input type="number" class="form-control" name="heavy-cavalry" id="heavy-cavalry">
             </div>
         </div>
@@ -75,56 +96,56 @@
                     </thead>
                     <tbody>
                     <tr id="lancer-row">
-                        <th class="fix-th" scope="row">Lanceiro</th>
+                        <th class="fix-th" scope="row"><img src="{{ asset('images/tribal/unit_spear.png') }}" alt=""> Lanceiro</th>
                         <td class="collect-little">0</td>
                         <td class="collect-medium">0</td>
                         <td class="collect-big">0</td>
                         <td class="collect-extreme">0</td>
                     </tr>
                     <tr id="swordsman-row">
-                        <th class="fix-th" scope="row">Espadachin</th>
+                        <th class="fix-th" scope="row"><img src="{{ asset('images/tribal/unit_sword.png') }}" alt=""> Espadachin</th>
                         <td class="collect-little">0</td>
                         <td class="collect-medium">0</td>
                         <td class="collect-big">0</td>
                         <td class="collect-extreme">0</td>
                     </tr>
                     <tr id="barbarian-row">
-                        <th class="fix-th" scope="row">Bárbaro</th>
+                        <th class="fix-th" scope="row"><img src="{{ asset('images/tribal/unit_axe.png') }}" alt=""> Bárbaro</th>
                         <td class="collect-little">0</td>
                         <td class="collect-medium">0</td>
                         <td class="collect-big">0</td>
                         <td class="collect-extreme">0</td>
                     </tr>
                     <tr id="archer-row">
-                        <th class="fix-th" scope="row">Arqueiro</th>
+                        <th class="fix-th" scope="row"><img src="{{ asset('images/tribal/unit_archer.png') }}" alt=""> Arqueiro</th>
                         <td class="collect-little">0</td>
                         <td class="collect-medium">0</td>
                         <td class="collect-big">0</td>
                         <td class="collect-extreme">0</td>
                     </tr>
                     <tr id="light-cavalry-row">
-                        <th class="fix-th" scope="row">Cavalaria Leve</th>
+                        <th class="fix-th" scope="row"><img src="{{ asset('images/tribal/unit_light.png') }}" alt=""> Cavalaria Leve</th>
                         <td class="collect-little">0</td>
                         <td class="collect-medium">0</td>
                         <td class="collect-big">0</td>
                         <td class="collect-extreme">0</td>
                     </tr>
                     <tr id="archer-horseback-row">
-                        <th class="fix-th" scope="row">Arqueiro a Cavalo</th>
+                        <th class="fix-th" scope="row"><img src="{{ asset('images/tribal/unit_marcher.png') }}" alt=""> Arqueiro a Cavalo</th>
                         <td class="collect-little">0</td>
                         <td class="collect-medium">0</td>
                         <td class="collect-big">0</td>
                         <td class="collect-extreme">0</td>
                     </tr>
                     <tr id="heavy-cavalry-row">
-                        <th class="fix-th" scope="row">Cavalaria Pesada</th>
+                        <th class="fix-th" scope="row"><img src="{{ asset('images/tribal/unit_heavy.png') }}" alt=""> Cavalaria Pesada</th>
                         <td class="collect-little">0</td>
                         <td class="collect-medium">0</td>
                         <td class="collect-big">0</td>
                         <td class="collect-extreme">0</td>
                     </tr>
                     <tr id="resources-row">
-                        <th class="fix-th" scope="row">Recursos</th>
+                        <th class="fix-th" scope="row"><span class="icon header res"></span> Recursos</th>
                         <td class="collect-little">0</td>
                         <td class="collect-medium">0</td>
                         <td class="collect-big">0</td>

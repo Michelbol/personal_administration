@@ -1,44 +1,102 @@
-let $LITTLE = $('#little');
-let $MEDIUM = $('#medium');
-let $BIG = $('#big');
-let $EXTREME = $('#extreme');
-let $LITTLE_COLUMN = $('.collect-little');
-let $MEDIUM_COLUMN = $('.collect-medium');
-let $BIG_COLUMN = $('.collect-big');
-let $EXTREME_COLUMN = $('.collect-extreme');
-let $LANCER = $('#lancer');
-let $SWORDSMAN = $('#swordsman');
-let $BARBARIAN = $('#barbarian');
-let $ARCHER = $('#archer');
-let $LIGHT_CAVALRY = $('#light-cavalry');
-let $ARCHER_HORSEBACK = $('#archer-horseback');
-let $HEAVY_CAVALRY = $('#heavy-cavalry');
 let operationWeight = 0;
+const resourceTypes = {
+    WOOD: 'wood',
+    STONE: 'stone',
+    IRON: 'iron',
+    RESOURCE: 'res',
+};
+const collectTypesEnum = {
+    LITTLE: 'little',
+    MEDIUM: 'medium',
+    BIG: 'big',
+    EXTREME: 'extreme'
+};
+const unityTypes = [
+    {
+        name: 'lancer',
+        capacity: 25,
+        qtdToCollect: 0,
+        qtdDistributed: 0
+    },
+    {
+        name: 'swordsman',
+        capacity: 15,
+        qtdToCollect: 0,
+        qtdDistributed: 0
+    },
+    {
+        name: 'barbarian',
+        capacity: 10,
+        qtdToCollect: 0,
+        qtdDistributed: 0
+    },
+    {
+        name: 'archer',
+        capacity: 10,
+        qtdToCollect: 0,
+        qtdDistributed: 0
+    },
+    {
+        name: 'light-cavalry',
+        capacity: 80,
+        qtdToCollect: 0,
+        qtdDistributed: 0
+    },
+    {
+        name: 'archer-horseback',
+        capacity: 10,
+        qtdToCollect: 0,
+        qtdDistributed: 0
+    },
+    {
+        name: 'heavy-cavalry',
+        capacity: 50,
+        qtdToCollect: 0,
+        qtdDistributed: 0
+    },
+];
+const collectTypes = [
+    {
+        name: collectTypesEnum.LITTLE,
+        withdrawPercent: 0.1,
+        weight: 15
+    },
+    {
+        name: collectTypesEnum.MEDIUM,
+        withdrawPercent: 0.25,
+        weight: 6
+    },
+    {
+        name: collectTypesEnum.BIG,
+        withdrawPercent: 0.5,
+        weight: 3
+    },
+    {
+        name: collectTypesEnum.EXTREME,
+        withdrawPercent: 0.75,
+        weight: 2
+    },
+];
 
 $(document).ready(function(){
     enableTable();
+    activeChangeCollectCheckbox();
+    activeOnInputUnityTypesInput();
 });
 
 function enableTable(){
-    verifyColumn($LITTLE);
-    verifyColumn($MEDIUM);
-    verifyColumn($BIG);
-    verifyColumn($EXTREME);
+    for (const collectType of collectTypes) {
+        verifyColumn($('#'+collectType.name));
+    }
 }
 
 function updateOperationWeight(){
     operationWeight = 0;
-    if($LITTLE.prop('checked')){
-        operationWeight += parseFloat($LITTLE.val());
-    }
-    if($MEDIUM.prop('checked')){
-        operationWeight += parseFloat($MEDIUM.val());
-    }
-    if($BIG.prop('checked')){
-        operationWeight += parseFloat($BIG.val());
-    }
-    if($EXTREME.prop('checked')){
-        operationWeight += parseFloat($EXTREME.val());
+    for (const collectType of collectTypes) {
+        let $COLLECT = $('#'+collectType.name);
+        if($COLLECT.prop('checked')){
+            operationWeight += parseFloat($COLLECT.val());
+        }
     }
 }
 
@@ -59,123 +117,63 @@ function getInputValueFloat($INPUT){
     return parseFloat($INPUT.val());
 }
 
-function calcSingleCollect($UNITY_TYPE, $COLLECT_TYPE){
-    return Math.round(((getInputValueFloat($COLLECT_TYPE)*getInputValueFloat($UNITY_TYPE))/operationWeight));
+function calcSingleCollect(unity, collect){
+    if(collect.name === collectTypesEnum.EXTREME){
+        return unity.qtdToCollect-unity.qtdDistributed;
+    }
+    return Math.round(collect.weight*unity.qtdToCollect/operationWeight);
+}
+
+function activeChangeCollectCheckbox(){
+    for (const collectType of collectTypes) {
+        let $COLLECT = $('#'+collectType.name);
+        $COLLECT.on('change', function(){
+            verifyColumn($COLLECT);
+        });
+    }
+}
+
+function activeOnInputUnityTypesInput(){
+    for (const unityType of unityTypes) {
+        let $UNITY = $('#'+unityType.name);
+        $UNITY.on('input', function(){
+            calcCollect();
+        });
+    }
 }
 
 function calcCollect(){
-    let isLittleChecked =  $LITTLE.prop('checked');
-    let isMediumChecked =  $MEDIUM.prop('checked');
-    let isBigChecked =  $BIG.prop('checked');
-    let isExtremeChecked =  $EXTREME.prop('checked');
-    if(isLittleChecked){
-        // let resourcesLittle = 0;
-        let qtdLancer = calcSingleCollect($LITTLE,$LANCER);
-        let qtdSwordsman = calcSingleCollect($LITTLE,$SWORDSMAN);
-        let qtdBarbarian = calcSingleCollect($LITTLE,$BARBARIAN);
-        let qtdArcher = calcSingleCollect($LITTLE,$ARCHER);
-        let qtdLightCavalry = calcSingleCollect($LITTLE,$LIGHT_CAVALRY);
-        let qtdArcherHorseback = calcSingleCollect($LITTLE,$ARCHER_HORSEBACK);
-        let qtdHeavyCavalry = calcSingleCollect($LITTLE,$HEAVY_CAVALRY);
-        // resourcesLittle += (qtdLancer*25*0.1);
-        // resourcesLittle += (qtdSwordsman*15*0.1);
-        // resourcesLittle += (qtdBarbarian*10*0.1);
-        // resourcesLittle += (qtdLightCavalry*80*0.1);
-        // resourcesLittle += (qtdArcher*10*0.1);
-        // resourcesLittle += (qtdArcherHorseback*10*0.1);
-        // resourcesLittle += (qtdHeavyCavalry*50*0.1);
-        $('#lancer-row .collect-little').text(qtdLancer);
-        $('#swordsman-row .collect-little').text(qtdSwordsman);
-        $('#barbarian-row .collect-little').text(qtdBarbarian);
-        $('#archer-row .collect-little').text(qtdArcher);
-        $('#light-cavalry-row .collect-little').text(qtdLightCavalry);
-        $('#archer-horseback-row .collect-little').text(qtdArcherHorseback);
-        $('#heavy-cavalry-row .collect-little').text(qtdHeavyCavalry);
-    }
-    if(isMediumChecked){
-        let qtdLancer = calcSingleCollect($MEDIUM,$LANCER);
-        let qtdSwordsman = calcSingleCollect($MEDIUM,$SWORDSMAN);
-        let qtdBarbarian = calcSingleCollect($MEDIUM,$BARBARIAN);
-        let qtdArcher = calcSingleCollect($MEDIUM,$ARCHER);
-        let qtdLightCavalry = calcSingleCollect($MEDIUM,$LIGHT_CAVALRY);
-        let qtdArcherHorseback = calcSingleCollect($MEDIUM,$ARCHER_HORSEBACK);
-        let qtdHeavyCavalry = calcSingleCollect($MEDIUM,$HEAVY_CAVALRY);
-        $('#lancer-row .collect-medium').text(qtdLancer);
-        $('#swordsman-row .collect-medium').text(qtdSwordsman);
-        $('#barbarian-row .collect-medium').text(qtdBarbarian);
-        $('#archer-row .collect-medium').text(qtdArcher);
-        $('#light-cavalry-row .collect-medium').text(qtdLightCavalry);
-        $('#archer-horseback-row .collect-medium').text(qtdArcherHorseback);
-        $('#heavy-cavalry-row .collect-medium').text(qtdHeavyCavalry);
-    }
-    if(isBigChecked){
-        let qtdLancer = calcSingleCollect($BIG,$LANCER);
-        let qtdSwordsman = calcSingleCollect($BIG,$SWORDSMAN);
-        let qtdBarbarian = calcSingleCollect($BIG,$BARBARIAN);
-        let qtdArcher = calcSingleCollect($BIG,$ARCHER);
-        let qtdLightCavalry = calcSingleCollect($BIG,$LIGHT_CAVALRY);
-        let qtdArcherHorseback = calcSingleCollect($BIG,$ARCHER_HORSEBACK);
-        let qtdHeavyCavalry = calcSingleCollect($BIG,$HEAVY_CAVALRY);
-        $('#lancer-row .collect-big').text(qtdLancer);
-        $('#swordsman-row .collect-big').text(qtdSwordsman);
-        $('#barbarian-row .collect-big').text(qtdBarbarian);
-        $('#archer-row .collect-big').text(qtdArcher);
-        $('#light-cavalry-row .collect-big').text(qtdLightCavalry);
-        $('#archer-horseback-row .collect-big').text(qtdArcherHorseback);
-        $('#heavy-cavalry-row .collect-big').text(qtdHeavyCavalry);
-    }
-    if(isExtremeChecked){
-        let qtdLancer = calcSingleCollect($EXTREME,$LANCER);
-        let qtdSwordsman = calcSingleCollect($EXTREME,$SWORDSMAN);
-        let qtdBarbarian = calcSingleCollect($EXTREME,$BARBARIAN);
-        let qtdArcher = calcSingleCollect($EXTREME,$ARCHER);
-        let qtdLightCavalry = calcSingleCollect($EXTREME,$LIGHT_CAVALRY);
-        let qtdArcherHorseback = calcSingleCollect($EXTREME,$ARCHER_HORSEBACK);
-        let qtdHeavyCavalry = calcSingleCollect($EXTREME,$HEAVY_CAVALRY);
-        $('#lancer-row .collect-extreme').text(qtdLancer);
-        $('#swordsman-row .collect-extreme').text(qtdSwordsman);
-        $('#barbarian-row .collect-extreme').text(qtdBarbarian);
-        $('#archer-row .collect-extreme').text(qtdArcher);
-        $('#light-cavalry-row .collect-extreme').text(qtdLightCavalry);
-        $('#archer-horseback-row .collect-extreme').text(qtdArcherHorseback);
-        $('#heavy-cavalry-row .collect-extreme').text(qtdHeavyCavalry);
+    resetUnits();
+    for (const collectType of collectTypes) {
+        if($(`#${collectType.name}`).prop('checked')){
+            let qtdTotalResources = 0;
+            for (const unityType of unityTypes) {
+                unityType.qtdToCollect = getInputValueFloat($(`#${unityType.name}`));
+                let qtdUnity = calcSingleCollect(unityType, collectType);
+                unityType.qtdDistributed += qtdUnity;
+                $(`#${unityType.name}-row .collect-${collectType.name}`).text(qtdUnity);
+                qtdTotalResources += qtdUnity*unityType.capacity*collectType.withdrawPercent;
+            }
+            qtdTotalResources = Math.round(qtdTotalResources);
+            let eachResource = Math.round(qtdTotalResources/3);
+            let diff = (eachResource*3) - qtdTotalResources;
+            $(`#resources-row .collect-${collectType.name}`).html(`
+            ${makeIconResource(resourceTypes.WOOD)} ${eachResource}<br>
+            ${makeIconResource(resourceTypes.STONE)} ${eachResource}<br>
+            ${makeIconResource(resourceTypes.IRON)} ${eachResource+diff}<br>
+            ${makeIconResource(resourceTypes.RESOURCE)} ${qtdTotalResources}
+            `);
+        }
     }
 }
 
-$LITTLE.on('change', function(){
-    verifyColumn($LITTLE);
-});
+function resetUnits(){
+    for (const unityType of unityTypes) {
+        unityType.qtdDistributed = 0;
+        unityType.qtdToCollect = 0;
+    }
+}
 
-$MEDIUM.on('change', function(){
-    verifyColumn($MEDIUM);
-});
-
-$BIG.on('change', function(){
-    verifyColumn($BIG);
-});
-
-$EXTREME.on('change', function(){
-    verifyColumn($EXTREME);
-});
-
-$LANCER.on('input', function(){
-    calcCollect();
-});
-$SWORDSMAN.on('input', function(){
-    calcCollect();
-});
-$BARBARIAN.on('input', function(){
-    calcCollect();
-});
-$ARCHER.on('input', function(){
-    calcCollect();
-});
-$LIGHT_CAVALRY.on('input', function(){
-    calcCollect();
-});
-$ARCHER_HORSEBACK.on('input', function(){
-    calcCollect();
-});
-$HEAVY_CAVALRY.on('input', function(){
-    calcCollect();
-});
+function makeIconResource(type){
+    return `<span class="icon header ${type}"></span>`
+}

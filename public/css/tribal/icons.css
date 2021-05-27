@@ -1,0 +1,24 @@
+.header.wood {
+    background-position: -18px 0px;
+}
+
+.header.stone {
+    background-position: -36px 0px;
+}
+
+.header.iron {
+    background-position: -55px 1px;
+}
+
+.icon.header {
+    background-image: url(https://dsbr.innogamescdn.com/asset/79b8dc4c/graphic/icons/header.png);
+}
+.icon {
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    margin: auto 2px auto 0;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    vertical-align: -4px;
+}
