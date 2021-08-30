@@ -309,7 +309,14 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="content-item">
-                                <small>Mar. de 2019 - o momento</small>
+                                <small>Abr. de 2021 - o momento</small>
+                                <h3>Programador PHP Pleno</h3>
+                                <h4>DB1 Global Software LTDA</h4>
+
+                                <p>Maringá, PR - Brasil</p>
+                            </div>
+                            <div class="content-item">
+                                <small>Mar. de 2019 - Abr. de 2021</small>
                                 <h3>Programador de Software</h3>
                                 <h4>Bitzen Tecnologia LTDA</h4>
 
