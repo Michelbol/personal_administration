@@ -21,6 +21,7 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    {!! htmlScriptTagJsApi() !!}
 </head>
 
 <body id="page-top" data-spy="scroll" data-target=".navbar">
@@ -60,8 +61,8 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <p>
-                                Nasceu em Maringá, no Paraná, com 25 anos de idade, cursando Informática
+                            <p id="description">
+                                Nasceu em Maringá, no Paraná, com {{ $age }} anos de idade, cursando Informática
                                 na Universidade Estadual de Maringá (UEM). Um programador apaixonado pela profissão,
                                 e sempre buscando aprender sobre a Arquitetura de softwares e boas práticas de programação.
                             </p>
@@ -369,8 +370,8 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="content-item">
-                                <small>2015 - 2021</small>
-                                <h3>Cursando, Bacharelado Informática</h3>
+                                <small>2015 - 2022</small>
+                                <h3>Bacharelado Informática</h3>
                                 <h4>Universidade Estadual de Maringá</h4>
 
                                 <p>Maringá, PR - Brasil</p>
@@ -502,7 +503,8 @@
                                         <textarea class="form-control" rows="4" required name="message" id="message-text"
                                                   placeholder="Escreva uma mensagem"></textarea>
                                     </div>
-
+                                    {!! htmlFormSnippet() !!}
+                                    <br>
                                     <button type="submit" class="btn btn-primary">Enviar</button>
                                 </form>
                             </div>

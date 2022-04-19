@@ -16,8 +16,19 @@ class TribalWarsController extends Controller
         return view('tribal.index');
     }
 
+    /**
+     * @return Application|Factory|View
+     */
     public function collect()
     {
         return view('tribal.collect');
+    }
+
+    /**
+     * @return Application|Factory|View
+     */
+    public function manager()
+    {
+        return view('tribal.manager');
     }
 }

@@ -38,6 +38,9 @@ class ContactFormCurriculumRequest extends FormRequest
             'message' => [
                 ValidationEnum::REQUIRED
             ],
+            'g-recaptcha-response' => [
+                ValidationEnum::RECAPTCHA
+            ],
         ];
     }
 }

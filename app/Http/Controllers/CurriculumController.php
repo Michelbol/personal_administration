@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ContactFormCurriculumRequest;
 use App\Mail\FormContactCurriculum;
+use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -18,7 +19,10 @@ class CurriculumController extends Controller
      */
     public function curriculum()
     {
-        return view('curriculum');
+        $now = Carbon::now();
+        $birthDay = Carbon::create(1995, 10, 11);
+        $age = $now->diffInYears($birthDay);
+        return view('curriculum', compact('age'));
     }
 
     /**

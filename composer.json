@@ -18,7 +18,8 @@
         "laravel/tinker": "^1.0",
         "paquettg/php-html-parser": "^2.2",
         "tymon/jwt-auth": "^1.0",
-        "yajra/laravel-datatables": "1.5"
+        "yajra/laravel-datatables": "1.5",
+        "biscolab/laravel-recaptcha": "4.4.*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.2",

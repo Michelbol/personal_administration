@@ -7,4 +7,5 @@ class ValidationEnum extends BasicEnum {
     const URL = 'url';
     const NULLABLE = 'nullable';
     const EMAIL = 'email';
+    const RECAPTCHA = 'recaptcha';
 }

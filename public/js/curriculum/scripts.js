@@ -8,6 +8,8 @@ jQuery(function ($) {
 
     (function () {
         $('#preloader').delay(200).fadeOut('slow');
+
+
     }());
 
 
