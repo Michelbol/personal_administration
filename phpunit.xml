@@ -31,6 +31,6 @@
         <server name="SESSION_DRIVER" value="array"/>
     </php>
     <logging>
-        <log type="coverage-html" target="public/test"/>
+        <log type="coverage-xml" target="coverage.xml"/>
     </logging>
 </phpunit>
