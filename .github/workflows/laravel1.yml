@@ -40,4 +40,5 @@ jobs:
         env:
           DB_CONNECTION: sqlite
           DB_DATABASE: database/database.sqlite
+          DB_FOREIGN_KEYS: false
         run: vendor/bin/phpunit
