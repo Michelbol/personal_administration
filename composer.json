@@ -12,7 +12,7 @@
         "ext-gd": "*",
         "ext-json": "*",
         "fideloper/proxy": "^4.0",
-        "guzzlehttp/guzzle": "^6.5",
+        "guzzlehttp/guzzle": "^7.0",
         "laravel/framework": "^6.20",
         "laravel/telescope": "^2.1",
         "laravel/tinker": "^1.0",
