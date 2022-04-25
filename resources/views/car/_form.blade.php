@@ -16,9 +16,9 @@
                 <option value="">Selecione uma Marca</option>
                 @foreach($brands as $brand)
                     <option
-                        value="{{ $brand->id }}"
-                        {{ $brand->id === (int) $car->brand ? 'selected' : '' }}
-                    >{{ $brand->name }}</option>
+                        value="{{ $brand->codigo }}"
+                        {{ $brand->codigo === (int) $car->brand ? 'selected' : '' }}
+                    >{{ $brand->nome }}</option>
                 @endforeach
             </select>
         </div>

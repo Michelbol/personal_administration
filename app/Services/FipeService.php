@@ -11,7 +11,7 @@ class FipeService
     /**
      * @var string
      */
-    protected $url = 'https://fipeapi.appspot.com/api/1';
+    protected $url = 'https://parallelum.com.br/fipe/api/v1';
     /**
      * @var Client
      */
@@ -27,7 +27,7 @@ class FipeService
      */
     public function getBrands()
     {
-        $response = $this->client->get("$this->url/carros/marcas.json");
+        $response = $this->client->get("$this->url/carros/marcas");
         return json_decode($response->getBody());
     }
 
@@ -37,8 +37,8 @@ class FipeService
      */
     public function getModels(string $brandId)
     {
-        $response = $this->client->get("$this->url/carros/veiculos/$brandId.json");
-        return json_decode($response->getBody());
+        $response = $this->client->get("$this->url/carros/marcas/$brandId/modelos");
+        return json_decode($response->getBody())->modelos;
     }
 
     /**
@@ -48,13 +48,13 @@ class FipeService
      */
     public function getYears(string $brandId, string $modelId)
     {
-        $response = $this->client->get("$this->url/carros/veiculo/$brandId/$modelId.json");
+        $response = $this->client->get("$this->url/carros/marcas/$brandId/modelos/$modelId/anos");
         return json_decode($response->getBody());
     }
 
     public function getPrice(string $brandId, string $modelId, string $year)
     {
-        $response = $this->client->get("$this->url/carros/veiculo/$brandId/$modelId/$year.json");
+        $response = $this->client->get("$this->url/carros/marcas/$brandId/modelos/$modelId/anos/$year");
         return json_decode($response->getBody());
     }
 }

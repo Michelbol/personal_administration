@@ -44,10 +44,13 @@ class MakeFipeHistories extends Command
         $service = new FipeService();
         foreach ($cars as $car){
             $search = $service->getPrice($car->brand, $car->model, $car->year);
+            if(FipeHistory::where('value', formatReal($search->Valor))->exists()){
+                return;
+            }
             $history = new FipeHistory();
             $history->consultation_date = now();
             $history->car_id = $car->id;
-            $history->value = (float) formatReal($search->preco);
+            $history->value = (float) formatReal($search->Valor);
             $history->save();
         }
         return;

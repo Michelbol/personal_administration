@@ -51,7 +51,7 @@ function activeModel(){
     });
     request.done(function (data) {
         for (let i = 0; i < data.length; i++){
-            let option = makeOption(data[i].id, data[i].name);
+            let option = makeOption(data[i].codigo, data[i].nome);
             options += option;
         }
         $MODEL.append(options);
@@ -76,7 +76,7 @@ function activeYears(){
     });
     request.done(function (data) {
         for (let i = 0; i < data.length; i++){
-            let option = makeOption(data[i].id, data[i].name);
+            let option = makeOption(data[i].codigo, data[i].nome);
             options += option;
         }
         $YEAR.append(options);
