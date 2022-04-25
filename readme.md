@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/Michelbol/personal_administration/branch/master/graph/badge.svg?token=BPX29C8YHW)](https://codecov.io/gh/Michelbol/personal_administration)
+
 Software Desenvolvido para auxiliar no controle das finanças e gastos pessoas.
 
 Atualmente conta com:
