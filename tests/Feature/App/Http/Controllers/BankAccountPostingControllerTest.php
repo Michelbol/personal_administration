@@ -56,6 +56,29 @@ class BankAccountPostingControllerTest extends TestCase
             ->assertSessionHas('message', ['msg' => 'Lançamento Salvo com sucesso', 'type' => SessionEnum::success]);
     }
 
+    public function testRecalcSaldo()
+    {
+        /**
+         * @var $data array
+         */
+        $object = $this->setUser();
+        $tenant = $object->get('tenant');
+        factory(BankAccountPosting::class, 5)->create();
+        $data = factory(BankAccountPosting::class)->make()->toArray();
+        $data['posting_date'] = ($data['posting_date'])->format('d/m/Y H:i');
+        $response = $this->post("$tenant->sub_domain/bank_account_posting", $data);
+        $bankAccountPosting = BankAccountPosting
+            ::whereBankAccountId($data['bank_account_id'])
+            ->whereDocument($data['document'])
+            ->whereType($data['type'])
+            ->whereTypeBankAccountPostingId($data['type_bank_account_posting_id'])
+            ->first();
+        $response
+            ->assertStatus(302)
+            ->assertRedirect("$tenant->sub_domain/bank_account_posting/$bankAccountPosting->bank_account_id")
+            ->assertSessionHas('message', ['msg' => 'Lançamento Salvo com sucesso', 'type' => SessionEnum::success]);
+    }
+
     public function testShow()
     {
         $object = $this->setUser();

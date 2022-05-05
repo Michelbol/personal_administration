@@ -5,6 +5,7 @@ namespace App\Services;
 
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 
 class FipeService
 {
@@ -17,13 +18,14 @@ class FipeService
      */
     protected $client;
 
-    public function __construct()
+    public function __construct(Client $client)
     {
-        $this->client = new Client();
+        $this->client = $client;
     }
 
     /**
      * @return mixed
+     * @throws GuzzleException
      */
     public function getBrands()
     {
@@ -34,6 +36,7 @@ class FipeService
     /**
      * @param string $brandId
      * @return mixed
+     * @throws GuzzleException
      */
     public function getModels(string $brandId)
     {
@@ -45,6 +48,7 @@ class FipeService
      * @param string $brandId
      * @param string $modelId
      * @return mixed
+     * @throws GuzzleException
      */
     public function getYears(string $brandId, string $modelId)
     {
@@ -52,6 +56,13 @@ class FipeService
         return json_decode($response->getBody());
     }
 
+    /**
+     * @param string $brandId
+     * @param string $modelId
+     * @param string $year
+     * @return mixed
+     * @throws GuzzleException
+     */
     public function getPrice(string $brandId, string $modelId, string $year)
     {
         $response = $this->client->get("$this->url/carros/marcas/$brandId/modelos/$modelId/anos/$year");

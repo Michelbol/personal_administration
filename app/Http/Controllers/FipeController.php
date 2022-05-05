@@ -3,20 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Services\FipeService;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class FipeController extends Controller
 {
+    private $fipeService;
+
+    public function __construct(FipeService $fipeService)
+    {
+        $this->fipeService = $fipeService;
+    }
+
     /**
      * @param $tenant
      * @param $id
      * @return JsonResponse
+     * @throws GuzzleException
      */
     public function models($tenant, $id)
     {
         return response()->json(
-            (new FipeService())->getModels($id)
+            $this->fipeService->getModels($id)
         );
     }
 
@@ -25,18 +33,19 @@ class FipeController extends Controller
      * @param string $brandId
      * @param string $modelId
      * @return JsonResponse
+     * @throws GuzzleException
      */
     public function years($tenant, string $brandId, string $modelId)
     {
         return response()->json(
-            (new FipeService())->getYears($brandId, $modelId)
+            $this->fipeService->getYears($brandId, $modelId)
         );
     }
 
     public function price($tenant, string $brandId, string $modelId, string $year)
     {
         return response()->json(
-            (new FipeService())->getPrice($brandId, $modelId, $year)
+            $this->fipeService->getPrice($brandId, $modelId, $year)
         );
     }
 }

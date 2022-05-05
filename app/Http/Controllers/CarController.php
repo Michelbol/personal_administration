@@ -20,16 +20,27 @@ use Yajra\DataTables\DataTables;
 class CarController extends CrudController
 {
     protected $msgStore = 'Carro incluido com sucesso';
-
+    /**
+     * @var string
+     */
     protected $msgUpdate = 'Carro atualizado com sucesso';
-
+    /**
+     * @var string
+     */
     protected $msgDestroy = 'Carro deletado com sucesso';
-
+    /**
+     * @var string
+     */
     protected $requestValidator = CarRequest::class;
+    /**
+     * @var FipeService
+     */
+    private $fipeService;
 
-    public function __construct(CarService $service = null, Car $model = null)
+    public function __construct(FipeService $fipeService, CarService $service = null, Car $model = null)
     {
         parent::__construct($service, $model);
+        $this->fipeService = $fipeService;
     }
 
     /**
@@ -40,7 +51,7 @@ class CarController extends CrudController
      */
     public function create($tenant)
     {
-        $brands = (new FipeService())->getBrands();
+        $brands = $this->fipeService->getBrands();
         $data = [
             'brands' => $brands
         ];
@@ -56,7 +67,7 @@ class CarController extends CrudController
     public function edit($tenant, $id, Request $request){
         $car = Car::findOrFail($id);
         try {
-            $brands = (new FipeService())->getBrands();
+            $brands = $this->fipeService->getBrands();
         }catch (Exception $exception){
             $brands = [];
         }

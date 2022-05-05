@@ -5,6 +5,9 @@ namespace Tests\Feature\App\Http\Controllers;
 use App\Models\BankAccount;
 use App\Models\BankAccountPosting;
 use App\Models\BudgetFinancial;
+use App\Models\Enum\SessionEnum;
+use App\Models\Expenses;
+use App\Models\Income;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -145,5 +148,34 @@ class BudgetFinancialControllerTest extends TestCase
         $response
             ->assertStatus(302)
             ->assertRedirect("$subDomain/budget_financial/$budgetFinancial->id/edit");
+    }
+
+    public function testGenerateFixed()
+    {
+        $subDomain = $this->setUser()->get('tenant')->sub_domain;
+
+        $response = $this->get('budget_financial');
+
+        $response
+            ->assertStatus(200)
+            ->assertViewIs('budget_financial.index');
+
+        $budgetFinancial = BudgetFinancial::first();
+
+        $response2 = $this->get("budget_financial/$budgetFinancial->id/edit");
+
+        $response2
+            ->assertStatus(200)
+            ->assertViewIs('budget_financial.edit');
+
+        factory(Income::class, 5)->create(['isFixed' => true]);
+        factory(Expenses::class, 5)->create(['isFixed' => true]);
+
+        $response3 = $this
+            ->get("budget_financial/generate_fixed/$budgetFinancial->id");
+
+        $response3
+            ->assertRedirect("$subDomain/budget_financial/$budgetFinancial->id/edit")
+            ->assertSessionHas('message', ['msg' => 'Orçamento reiniciado com sucesso!', 'type' => SessionEnum::success]);
     }
 }

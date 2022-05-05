@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Car;
 use App\Models\FipeHistory;
 use App\Services\FipeService;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
 
 class MakeFipeHistories extends Command
@@ -22,28 +23,33 @@ class MakeFipeHistories extends Command
      * @var string
      */
     protected $description = 'Will search to all cars into system the value of fipe';
+    /**
+     * @var FipeService
+     */
+    private $fipeService;
 
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(FipeService $fipeService)
     {
         parent::__construct();
+        $this->fipeService = $fipeService;
     }
 
     /**
      * Execute the console command.
      *
      * @return mixed
+     * @throws GuzzleException
      */
     public function handle()
     {
         $cars = Car::whereNotNull(['model', 'brand', 'year'])->get();
-        $service = new FipeService();
         foreach ($cars as $car){
-            $search = $service->getPrice($car->brand, $car->model, $car->year);
+            $search = $this->fipeService->getPrice($car->brand, $car->model, $car->year);
             if(FipeHistory::where('value', formatReal($search->Valor))->exists()){
                 return;
             }

@@ -163,8 +163,8 @@ class BankAccountPostingController extends CrudController
             $itens_recalc = BankAccountPosting
                 ::whereBankAccountId($bank_account_id)
                 ->where('posting_date', '>=', $date)
-                ->orderBy('posting_date', 'asc')
-                ->orderBy('id', 'asc')
+                ->orderBy('posting_date')
+                ->orderBy('id')
                 ->get();
             $balance = $itens_recalc->first()->account_balance;
             $itens_recalc->shift();
