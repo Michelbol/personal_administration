@@ -34,9 +34,9 @@ class FormContactCurriculum extends Mailable
      * @param string $name
      * @param string $email
      * @param string $message
-     * @param string $subject
+     * @param string|null $subject
      */
-    public function __construct(string $name, string $email, string $message, string $subject = 'Sem Assunto')
+    public function __construct(string $name, string $email, string $message, ?string $subject = 'Sem Assunto')
     {
         $this->name = $name;
         $this->email = $email;
