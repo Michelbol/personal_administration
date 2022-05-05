@@ -42,8 +42,8 @@ class CarControllerTest extends TestCase
     public function testCreate()
     {
         $this->setUser();
-        $respose = $this->get('car/create');
-        $respose
+        $response = $this->get('car/create');
+        $response
             ->assertStatus(200)
             ->assertViewIs('car.create');
     }
