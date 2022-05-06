@@ -12,7 +12,6 @@
 */
 
 Route::get('/bios', 'BiosController@index')->name('bios.index');
-Route::post('/queen-game', 'QueenGameController@save')->name('queen.game.save');
 
 $tenantParam = config('tenant.route_param');
 
@@ -39,6 +38,7 @@ Route::prefix("{{$tenantParam}}")
         Route::get('/home', 'HomeController@index')->name('home');
 
         Route::middleware('auth:web_tenant')->group(function () {
+            Route::post('/queen-game', 'QueenGameController@save')->name('queen.game.save');
             //=========================================FIPE===========================================================//
             Route::get('fipe/models/{id}', 'FipeController@models')->name('fipe.models');
             Route::get('fipe/years/{brand_id}/{model_id}', 'FipeController@years')->name('fipe.years');
