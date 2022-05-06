@@ -7,6 +7,7 @@ use App\Models\BankAccountPosting;
 use App\Models\Enum\SessionEnum;
 use App\Models\Enum\TypeBankAccountPostingEnum;
 use App\Models\TypeBankAccountPosting;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -63,9 +64,17 @@ class BankAccountPostingControllerTest extends TestCase
          */
         $object = $this->setUser();
         $tenant = $object->get('tenant');
-        factory(BankAccountPosting::class, 5)->create();
         $data = factory(BankAccountPosting::class)->make()->toArray();
         $data['posting_date'] = ($data['posting_date'])->format('d/m/Y H:i');
+        $dateAfterPostingDate = Carbon::createFromFormat('d/m/Y H:i', $data['posting_date'])->addDay()->format('d/m/Y H:i');
+        factory(BankAccountPosting::class, 2)->create([
+            'posting_date' => $dateAfterPostingDate,
+            'type' => TypeBankAccountPostingEnum::CREDIT
+        ]);
+        factory(BankAccountPosting::class, 2)->create([
+            'posting_date' => $dateAfterPostingDate,
+            'type' => TypeBankAccountPostingEnum::DEBIT
+        ]);
         $response = $this->post("$tenant->sub_domain/bank_account_posting", $data);
         $bankAccountPosting = BankAccountPosting
             ::whereBankAccountId($data['bank_account_id'])
