@@ -66,14 +66,19 @@ class BankAccountPostingControllerTest extends TestCase
         $tenant = $object->get('tenant');
         $data = factory(BankAccountPosting::class)->make()->toArray();
         $data['posting_date'] = ($data['posting_date'])->format('d/m/Y H:i');
-        $dateAfterPostingDate = Carbon::createFromFormat('d/m/Y H:i', $data['posting_date'])->addDay()->format('d/m/Y H:i');
+        $dateAfterPostingDate = Carbon
+            ::createFromFormat('d/m/Y H:i', $data['posting_date'])
+            ->addDay()
+            ->format('d/m/Y H:i');
         factory(BankAccountPosting::class, 2)->create([
             'posting_date' => $dateAfterPostingDate,
-            'type' => TypeBankAccountPostingEnum::CREDIT
+            'bank_account_id' => $data['bank_account_id'],
+            'type' => TypeBankAccountPostingEnum::CREDIT,
         ]);
         factory(BankAccountPosting::class, 2)->create([
             'posting_date' => $dateAfterPostingDate,
-            'type' => TypeBankAccountPostingEnum::DEBIT
+            'bank_account_id' => $data['bank_account_id'],
+            'type' => TypeBankAccountPostingEnum::DEBIT,
         ]);
         $response = $this->post("$tenant->sub_domain/bank_account_posting", $data);
         $bankAccountPosting = BankAccountPosting
