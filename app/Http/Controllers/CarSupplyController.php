@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Car;
 use App\Models\CarSupply;
 use App\Models\Enum\FuelEnum;
-use App\Utilitarios;
 use Exception;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -87,7 +86,7 @@ class CarSupplyController extends Controller
 
         $response = DataTables::of($model)
             ->addColumn('actions', function ($model){
-                return Utilitarios::getBtnAction([
+                return getBtnAction([
                     ['type'=>'edit',    'url' => routeTenant('car_supply.edit',['id' => $model->id])],
                     ['type'=>'delete',  'url' => routeTenant('car_supply.destroy',['id' => $model->id]), 'id' => $model->id]
                 ]);

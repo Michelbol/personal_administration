@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\BankAccountPosting;
 use App\Models\Expenses;
-use App\Utilitarios;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -47,7 +46,7 @@ class ExpensesController extends Controller
         $expense = new Expenses();
         $data = $request->all();
         $expense->name = $data['name'];
-        $expense->amount = Utilitarios::formatReal($data['amount']);
+        $expense->amount = formatReal($data['amount']);
         $expense->isFixed = isset($data['isFixed']);
         $expense->due_date = $data['due_date'];
         $expense->save();
@@ -82,7 +81,7 @@ class ExpensesController extends Controller
         $data = $request->all();
         $expense = Expenses::find($request['id']);
         $expense->name = $data['name'];
-        $expense->amount = Utilitarios::formatReal($data['amount']);
+        $expense->amount = formatReal($data['amount']);
         $expense->isFixed = isset($data['isFixed']);
         $expense->due_date = $data['due_date'];
         $expense->save();
@@ -125,8 +124,8 @@ class ExpensesController extends Controller
 //                    }
 //                    if($request->posting_date !== null){
 //                        $explode = explode('-', $request->posting_date);
-//                        $dt_initial = Utilitarios::formatDataCarbon(trim($explode[0]));
-//                        $dt_final = Utilitarios::formatDataCarbon(trim($explode[1]));
+//                        $dt_initial = formatDataCarbon(trim($explode[0]));
+//                        $dt_final = formatDataCarbon(trim($explode[1]));
 //                        $query->whereBetween('posting_date', [$dt_initial, $dt_final]);
 //                    }
 //                })
@@ -134,10 +133,10 @@ class ExpensesController extends Controller
                 return $model->isFixed === 1 ? '<i class="fas fa-thumbs-up"></i>' : '<i class="far fa-thumbs-down"></i>';
             })
             ->addColumn('amount', function($model){
-                return 'R$: '.Utilitarios::getFormatReal($model->amount);
+                return 'R$: '.getFormatReal($model->amount);
             })
             ->addColumn('actions', function ($model){
-                return Utilitarios::getBtnAction([
+                return getBtnAction([
                     ['type'=>'edit', 'url' => routeTenant('expense.edit',['expense' => $model->id])],
                     ['type'=>'delete', 'url' => routeTenant('expense.destroy',['expense' => $model->id]), 'id' => $model->id]
                 ]);

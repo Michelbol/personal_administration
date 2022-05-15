@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\Enum\FuelEnum;
 use App\Scopes\TenantModels;
-use App\Utilitarios;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -63,51 +62,51 @@ class CarSupply extends Model
     public function setKilometerAttribute($value){
         $this->attributes['kilometer'] = 0;
         if(isset($value)){
-            $this->attributes['kilometer'] = Utilitarios::formatReal($value);
+            $this->attributes['kilometer'] = formatReal($value);
         }
     }
     public function setLitersAttribute($value){
         $this->attributes['liters'] = 0;
         if(isset($value)){
-            $this->attributes['liters'] = Utilitarios::formatReal($value);
+            $this->attributes['liters'] = formatReal($value);
         }
     }
     public function setTotalPaidAttribute($value){
         $this->attributes['total_paid'] = 0;
         if(isset($value)){
-            $this->attributes['total_paid'] = Utilitarios::formatReal($value);
+            $this->attributes['total_paid'] = formatReal($value);
         }
     }
     public function setTraveledKilometersAttribute($value){
         $this->attributes['traveled_kilometers'] = 0;
         if(isset($value)){
-            $this->attributes['traveled_kilometers'] = Utilitarios::formatReal($value);
+            $this->attributes['traveled_kilometers'] = formatReal($value);
         }
     }
 
     public function getKilometerAttribute($value){
         if(isset($value)){
-            return Utilitarios::getFormatReal($value);
+            return getFormatReal($value);
         }
-        return Utilitarios::getFormatReal(0);
+        return getFormatReal(0);
     }
     public function getLitersAttribute($value){
         if(isset($value)){
-            return Utilitarios::getFormatReal($value);
+            return getFormatReal($value);
         }
-        return Utilitarios::getFormatReal(0);
+        return getFormatReal(0);
     }
     public function getTotalPaidAttribute($value){
         if(isset($value)){
-            return Utilitarios::getFormatReal($value);
+            return getFormatReal($value);
         }
-        return Utilitarios::getFormatReal(0);
+        return getFormatReal(0);
     }
     public function getTraveledKilometersAttribute($value){
         if(isset($value)){
-            return Utilitarios::getFormatReal($value);
+            return getFormatReal($value);
         }
-        return Utilitarios::getFormatReal(0);
+        return getFormatReal(0);
     }
 
     public function getFuelAttribute($value){
@@ -131,7 +130,7 @@ class CarSupply extends Model
 
     public function setDateAttribute($value){
         if($value){
-            $this->attributes['date'] = Utilitarios::formatDataCarbon($value);
+            $this->attributes['date'] = formatDataCarbon($value);
         }
     }
 

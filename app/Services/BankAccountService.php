@@ -5,7 +5,6 @@ namespace App\Services;
 
 use App\Models\BankAccount;
 use App\Repositories\BankAccountRepository;
-use App\Utilitarios;
 use Carbon\Carbon;
 use DB;
 use Exception;
@@ -89,7 +88,7 @@ class BankAccountService extends CRUDService
     public function calcAnnualInterest($bankAccountId, $year){
         $firstDayYear = Carbon::create($year)->firstOfYear();
         $endOfYear = Carbon::create($year)->lastOfYear();
-        return Utilitarios::getFormatReal(DB::table('bank_account_postings')
+        return getFormatReal(DB::table('bank_account_postings')
             ->whereBetween('posting_date', [$firstDayYear,$endOfYear])
             ->where('type_bank_account_posting_id', 1)
             ->where('type', 'C')
@@ -141,7 +140,7 @@ class BankAccountService extends CRUDService
             ->where('bank_account_id', $bankAccountId)
             ->orderBy('posting_date','desc')
             ->orderBy('id','desc')->first();
-        return isset($accountBalancePosting) ? Utilitarios::getFormatReal($accountBalancePosting->account_balance) : '0,00';
+        return isset($accountBalancePosting) ? getFormatReal($accountBalancePosting->account_balance) : '0,00';
     }
 
     /**

@@ -11,7 +11,6 @@ use App\Models\KeyFileTypeBankAccountPosting;
 use App\Models\TypeBankAccountPosting;
 use App\Ofx;
 use App\Services\BankAccountPostingService;
-use App\Utilitarios;
 use Carbon\Carbon;
 use DB;
 use Exception;
@@ -476,23 +475,23 @@ class BankAccountPostingController extends CrudController
                 }
                 if ($request->get('posting_date') !== null) {
                     $explode = explode('-', $request->get('posting_date'));
-                    $dt_initial = Utilitarios::formatDataCarbon(trim($explode[0]));
-                    $dt_final = Utilitarios::formatDataCarbon(trim($explode[1]));
+                    $dt_initial = formatDataCarbon(trim($explode[0]));
+                    $dt_final = formatDataCarbon(trim($explode[1]));
                     $query->whereBetween('posting_date', [$dt_initial, $dt_final]);
                 }
             })
             ->addColumn('posting_date', function ($model) {
-                return Utilitarios::formatDataCarbon($model->posting_date)->format('d/m/Y H:i');
+                return formatDataCarbon($model->posting_date)->format('d/m/Y H:i');
             })
             ->addColumn('amount', function ($model) {
-                return 'R$: ' . Utilitarios::getFormatReal($model->amount);
+                return 'R$: ' . getFormatReal($model->amount);
             })
             ->addColumn('type', function ($model) {
                 return $model->type === 'C' ? 'Crédito' : 'Débito';
             })->addColumn('account_balance', function ($model) {
-                return 'R$: ' . Utilitarios::getFormatReal($model->account_balance);
+                return 'R$: ' . getFormatReal($model->account_balance);
             })->addColumn('actions', function ($model) {
-                return Utilitarios::getBtnAction([
+                return getBtnAction([
                     ['type' => 'edit', 'url' => '#', 'id' => $model->id],
                     ['type' => 'delete', 'url' => routeTenant('bank_account_posting.destroy', [$model->id]), 'id' => $model->id]
                 ]);

@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Scopes\TenantModels;
-use App\Utilitarios;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -72,13 +71,13 @@ class Car extends Model
 
     public function setAnnualInsuranceAttribute($value){
         if($value){
-            $this->attributes['annual_insurance'] = Utilitarios::formatDataCarbon($value);
+            $this->attributes['annual_insurance'] = formatDataCarbon($value);
         }
     }
 
     public function setAnnualLicensingAttribute($value){
         if($value){
-            $this->attributes['annual_licensing'] = Utilitarios::formatDataCarbon($value);
+            $this->attributes['annual_licensing'] = formatDataCarbon($value);
         }
     }
 

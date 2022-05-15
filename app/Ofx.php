@@ -24,40 +24,7 @@ class Ofx
         $this->arquivo  =   $arquivo;
         return $this->retorno();
     }
-    public function converterOfxEmXml()
-    {
-        $content = utf8_decode(file_get_contents($this->arquivo));
-        $line = strpos($content, "<OFX>");
-        $ofx = substr($content, $line - 1);
-        $buffer = $ofx;
-        $count = 0;
-        while ($pos = strpos($buffer, '<'))
-        {
-            $count++; $pos2 = strpos($buffer, '>');
-            $element = substr($buffer, $pos + 1, $pos2 - $pos - 1);
-            if (substr($element, 0, 1) == '/')
-                $sla[] = substr($element, 1);
-            else $als[] = $element;
-            $buffer = substr($buffer, $pos2 + 1);
-        }
-        $adif = array_diff($als, $sla);
-        $adif = array_unique($adif);
-        $ofxy = $ofx;
-        foreach ($adif as $dif)
-        {
-            $dpos = 0;
-            while ($dpos = strpos($ofxy, $dif, $dpos + 1))
-            {
-                $npos = strpos($ofxy, '<', $dpos + 1);
-                echo $dif."<br>";
-                $ofxy = substr_replace($ofxy, "</$dif>".chr(10)."<", $npos, 1);
-                $dpos = $npos + strlen($element) + 3;
-            }
-        }
-        $ofxy = str_replace('&', '&', $ofxy);
-        //return new SimpleXMLElement($ofxy);
-        return $ofxy;
-    }
+
     public function closeTags($ofx=null) {
         $buffer = '';
         $source = fopen($ofx, 'r') or die("Unable to open file!");
@@ -77,6 +44,7 @@ class Ofx
         //fclose($file);
         return isset($xmlOut[1])?"<OFX>".$xmlOut[1]:$buffer;
     }
+
     public function retorno()
     {
         $retorno    =   new SimpleXMLElement(utf8_encode($this->closeTags($this->arquivo)));

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\CreditCard;
-use App\Utilitarios;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -42,7 +41,7 @@ class CredCardController extends Controller
     {
         $data = $request->all();
         if(isset($data['limit'])){
-            $data['limit'] = Utilitarios::formatReal($data['limit']);
+            $data['limit'] = formatReal($data['limit']);
         }
         $cred_card = new CreditCard();
         $cred_card->fill($data);
@@ -78,7 +77,7 @@ class CredCardController extends Controller
     public function update(Request $request, $tenant, $id)
     {
         $data = $request->all();
-        $data['limit'] = Utilitarios::formatReal($data['limit']);
+        $data['limit'] = formatReal($data['limit']);
         $cred_card = CreditCard::find($id);
         $cred_card->fill($data);
         $cred_card->save();
@@ -116,10 +115,10 @@ class CredCardController extends Controller
             ->blacklist(['actions'])
 
             ->addColumn('limit', function ($model) {
-                return 'R$: '.Utilitarios::getFormatReal($model->limit);
+                return 'R$: '.getFormatReal($model->limit);
             })
             ->addColumn('actions', function ($model){
-                return Utilitarios::getBtnAction([
+                return getBtnAction([
                     ['type'=>'edit', 'url' => routeTenant('cred_card.edit',['id' => $model->id])],
                     ['type'=>'other-a', 'url' => routeTenant('cred_card.index',['id' => $model->id]), 'name' => 'Faturas'],
                     ['type'=>'delete', 'url' => routeTenant('cred_card.destroy',['id' => $model->id]), 'id' => $model->id]

@@ -11,7 +11,6 @@ use App\Models\Expenses;
 use App\Models\Income;
 use App\Models\UserTenant;
 use App\Services\BudgetFinancialService;
-use App\Utilitarios;
 use Auth;
 use DB;
 use Exception;
@@ -136,7 +135,7 @@ class BudgetFinancialController extends CrudController
         DB::beginTransaction();
         $data = $request->all();
         $budgetFinancial = BudgetFinancial::find($id);
-        $budgetFinancial->update(['initial_balance' => Utilitarios::formatReal($data['initial_balance'])]);
+        $budgetFinancial->update(['initial_balance' => formatReal($data['initial_balance'])]);
         BudgetFinancialPosting::recalcBalance($budgetFinancial);
         DB::commit();
         $this->successMessage('Atualizado Saldo com sucesso');

@@ -6,7 +6,6 @@ use App\Models\BudgetFinancial;
 use App\Models\BudgetFinancialPosting;
 use App\Models\Expenses;
 use App\Models\Income;
-use App\Utilitarios;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -30,13 +29,13 @@ class BudgetFinancialPostingController extends Controller
         $budgetFinancialPosting = new BudgetFinancialPosting();
         $data = $request->all();
 
-        $budgetFinancialPosting->posting_date = Utilitarios::formatDataCarbon($data['posting_date']);
-        $budgetFinancialPosting->amount = Utilitarios::formatReal($data['amount']);
+        $budgetFinancialPosting->posting_date = formatDataCarbon($data['posting_date']);
+        $budgetFinancialPosting->amount = formatReal($data['amount']);
         $budgetFinancialPosting->budget_financial_id = $data['budget_financial_id'];
         if(isset($data['new_expense'])){
             $expense = Expenses::create([
                 'name' => $data['new_expense'],
-                'amount' => Utilitarios::formatReal($data['amount'])
+                'amount' => formatReal($data['amount'])
             ]);
             $data['expense_id'] = $expense->id;
         }
@@ -44,7 +43,7 @@ class BudgetFinancialPostingController extends Controller
         if(isset($data['new_income'])){
             $income = Income::create([
                 'name' => $data['new_income'],
-                'amount' => Utilitarios::formatReal($data['amount'])
+                'amount' => formatReal($data['amount'])
             ]);
             $data['income_id'] = $income->id;
         }
@@ -70,8 +69,8 @@ class BudgetFinancialPostingController extends Controller
         DB::beginTransaction();
         $budgetFinancialPosting = BudgetFinancialPosting::find($id);
         $data = $request->all();
-        $budgetFinancialPosting->posting_date = Utilitarios::formatDataCarbon($data['posting_date']);
-        $budgetFinancialPosting->amount = Utilitarios::formatReal(str_replace('R$: ', '', $data['amount']));
+        $budgetFinancialPosting->posting_date = formatDataCarbon($data['posting_date']);
+        $budgetFinancialPosting->amount = formatReal(str_replace('R$: ', '', $data['amount']));
         if(isset($data['new_expense'])){
             $expense = Expenses::create([
                 'name' => $data['new_expense'],
@@ -139,8 +138,8 @@ class BudgetFinancialPostingController extends Controller
 //                    }
 //                    if($request->posting_date !== null){
 //                        $explode = explode('-', $request->posting_date);
-//                        $dt_initial = Utilitarios::formatDataCarbon(trim($explode[0]));
-//                        $dt_final = Utilitarios::formatDataCarbon(trim($explode[1]));
+//                        $dt_initial = formatDataCarbon(trim($explode[0]));
+//                        $dt_final = formatDataCarbon(trim($explode[1]));
 //                        $query->whereBetween('posting_date', [$dt_initial, $dt_final]);
 //                    }
 //                })
@@ -157,17 +156,17 @@ class BudgetFinancialPostingController extends Controller
                     ($model->income_isFixed === 1 ? $fixed : $not_fixed);
             })
             ->addColumn('posting_date', function($model){
-                return $model->posting_date = Utilitarios::formatDataCarbon($model->posting_date)->format('d/m/Y');
+                return $model->posting_date = formatDataCarbon($model->posting_date)->format('d/m/Y');
             })
             ->addColumn('amount', function($model){
-                return isset($model->expenses_name) ? $model->amount = '-R$: '.Utilitarios::getFormatReal($model->amount) :
-                    $model->amount = 'R$: '.Utilitarios::getFormatReal($model->amount) ;
+                return isset($model->expenses_name) ? $model->amount = '-R$: '.getFormatReal($model->amount) :
+                    $model->amount = 'R$: '.getFormatReal($model->amount) ;
             })
             ->addColumn('account_balance', function($model){
-                return 'R$: '.Utilitarios::getFormatReal($model->account_balance);
+                return 'R$: '.getFormatReal($model->account_balance);
             })
             ->addColumn('actions', function($model){
-                return Utilitarios::getBtnAction([
+                return getBtnAction([
                     ['type'=>'others', 'name' => 'open-modal-budget-financial-posting', 'class' => 'fa fa-edit', 'disabled' => true,'tooltip' => 'Editar'],
                     ['url' => routeTenant('budget_financial_posting.destroy', ['budget_financial_posting' => $model->id]), 'id' => $model->id,'type'=>'delete', 'name' => '<i class="fa fa-times"></i>', 'class' => 'btn', 'disabled' => true,'tooltip' => 'Excluir'],
                 ]);

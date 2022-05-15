@@ -8,7 +8,6 @@ use App\Models\CarSupply;
 use App\Models\FipeHistory;
 use App\Services\CarService;
 use App\Services\FipeService;
-use App\Utilitarios;
 use Illuminate\Support\Carbon;
 use DB;
 use Exception;
@@ -95,7 +94,7 @@ class CarController extends CrudController
 
         $response = DataTables::of($model)
             ->addColumn('actions', function ($model){
-                return Utilitarios::getBtnAction([
+                return getBtnAction([
                     ['type'=>'edit',    'url' => routeTenant('car.edit',['id' => $model->id])],
                     ['type'=>'other-a', 'url' => routeTenant('car_supply.index',['car_id' => $model->id]), 'name' => 'Abastencimentos'],
                     ['type'=>'delete',  'url' => routeTenant('car.destroy',['id' => $model->id]), 'id' => $model->id]
