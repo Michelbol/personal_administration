@@ -4,14 +4,14 @@
 
 use App\Models\Invoice;
 use App\Models\Supplier;
-use App\Models\Tenant;
 use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Factory;
 
 $factory->define(Invoice::class, function (Faker $faker) {
+    $supplier = factory(Supplier::class)->create();
     return [
-        'tenant_id' => Tenant::inRandomOrder()->first()->id,
-        'supplier_id' => factory(Supplier::class)->create()->id,
+        'tenant_id' => $supplier->tenant_id,
+        'supplier_id' => $supplier->id,
         'number' => $faker->text(191),
         'series' => $faker->text(191),
         'emission_at' => $faker->date(),

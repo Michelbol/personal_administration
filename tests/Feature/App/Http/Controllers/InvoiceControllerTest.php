@@ -4,6 +4,7 @@ namespace Tests\Feature\App\Http\Controllers;
 
 use App\Models\Enum\SessionEnum;
 use App\Models\Invoice;
+use App\Models\Supplier;
 use App\Services\InvoiceService;
 use Exception;
 use Faker\Factory;
@@ -40,7 +41,13 @@ class InvoiceControllerTest extends TestCase
     public function testEdit()
     {
         $tenant = $this->setUser()->get('tenant');
-        $invoice = factory(Invoice::class)->create(['tenant_id' => $tenant->id]);
+        $supplier = factory(Supplier::class)->create([
+            'tenant_id' => $tenant->id
+        ]);
+        $invoice = factory(Invoice::class)->create([
+            'tenant_id' => $supplier->tenant_id,
+            'supplier_id' => $supplier->id
+        ]);
         $response = $this->get("invoice/$invoice->id/edit");
 
         $response
