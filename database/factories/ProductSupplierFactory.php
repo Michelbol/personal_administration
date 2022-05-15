@@ -12,7 +12,7 @@ $factory->define(ProductSupplier::class, function (/*Faker $faker*/) {
     return [
         'code' => Str::random(191),
         'un' => Str::random(191),
-        'product_id' => Product::inRandomOrder()->first(),
-        'supplier_id' => Supplier::inRandomOrder()->first(),
+        'product_id' => factory(Product::class)->create()->id,
+        'supplier_id' => factory(Supplier::class)->create()->id,
     ];
 });
