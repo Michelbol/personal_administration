@@ -81,17 +81,6 @@ if(!function_exists('getBtnAction')) {
                                 ' . $botoes[$i]['disabled'] . '>' .
                     '<i class="' . $botoes[$i]['class'] . '"></i>' .
                     '</button>';
-            } else if ($botoes[$i]['type'] == 'print') {
-                $return .= '<a
-                                class="btn btn-default btn--icon ' . $botoes[$i]['nome'] . " " . ($botoes[$i]['disabled'] === false ? 'disabled' : '') . '"
-                                role="button"
-                                href="' . $botoes[$i]['url'] . '"
-                                target="_blank"
-                                style="font-size: 1.2em"
-                                data-toggle="tooltip"
-                                data-original-title="' . $botoes[$i]['tooltip'] . '">' .
-                    '<i class="' . $botoes[$i]['class'] . '"></i>' .
-                    '</a>';
             } else if ($botoes[$i]['type'] == 'other-a') {
                 $return .= '<a href="' . $botoes[$i]['url'] . '" class="btn btn-danger btn-sm">';
                 $return .= $botoes[$i]['name'];

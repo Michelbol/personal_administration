@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Bank;
 use App\Models\BankAccount;
 use App\Models\BankAccountPosting;
+use App\Models\Enum\TypeBankAccountPostingEnum;
 use App\Models\Expenses;
 use App\Models\Income;
 use App\Models\KeyFileTypeBankAccountPosting;
@@ -294,7 +295,7 @@ class BankAccountPostingController extends CrudController
         $bankAccountPosting->bank_account_id = $bankAccount->id;
         $bankAccountPosting->document = $transactions->FITID;
         $bankAccountPosting->amount = ((float)$transactions->TRNAMT < 0) ? -((float)$transactions->TRNAMT) : (float)$transactions->TRNAMT;
-        $bankAccountPosting->type = (string)$transactions->TRNTYPE === ofxCredit ? credit : debit;
+        $bankAccountPosting->type = (string)$transactions->TRNTYPE === Ofx::ofxCredit ? TypeBankAccountPostingEnum::CREDIT : TypeBankAccountPostingEnum::DEBIT;
         $bankAccountPosting->expense_id = $keyFileTypeBankAccountPosting->expense_id;
         $bankAccountPosting->income_id = $keyFileTypeBankAccountPosting->income_id;
         return $this->calcAccountBalance($bankAccountPosting);

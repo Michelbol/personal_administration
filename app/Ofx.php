@@ -12,13 +12,22 @@ use SimpleXMLElement;
 
 class Ofx
 {
+    const ofxCredit = 'CREDIT';
+
     private  $arquivo;
+
     public $bankTranList;
+
     public $dtStar;
+
     public $dtEnd;
+
     public $bankId;
+
     public $acctId;
+
     public $org;
+
     public function __construct($arquivo)
     {
         $this->arquivo  =   $arquivo;
