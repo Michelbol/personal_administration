@@ -50,6 +50,8 @@ class BanksTableSeeder extends Seeder
                 ['Number' => '077', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO INTER S.A'],
                 ['Number' => '102', 'title_color' => null, 'body_color' => null, 'Name' => 'XP INVESTIMENTOS'],
                 ['Number' => '104', 'title_color' => '#0369b9', 'body_color' => '#f3bb5c', 'Name' => 'CAIXA ECONOMICA FEDERAL'],
+            ]);
+            DB::table('banks')->insert([
                 ['Number' => '106', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO ITABANCO S.A.'],
                 ['Number' => '107', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO BBM S.A'],
                 ['Number' => '109', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CREDIBANCO S.A'],
@@ -144,6 +146,8 @@ class BanksTableSeeder extends Seeder
                 ['Number' => '370', 'title_color' => null, 'body_color' => null, 'Name' => 'BEAL - BANCO EUROPEU PARA AMERICA LATINA'],
                 ['Number' => '372', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO ITAMARATI S.A'],
                 ['Number' => '375', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO FENICIA S.A'],
+            ]);
+            DB::table('banks')->insert([
                 ['Number' => '376', 'title_color' => null, 'body_color' => null, 'Name' => 'CHASE MANHATTAN BANK S.A'],
                 ['Number' => '388', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MERCANTIL DE DESCONTOS S/A'],
                 ['Number' => '389', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MERCANTIL DO BRASIL S.A'],
@@ -232,6 +236,8 @@ class BanksTableSeeder extends Seeder
                 ['Number' => '713', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CINDAM S.A'],
                 ['Number' => '715', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO VEGA S.A'],
                 ['Number' => '718', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO OPERADOR S.A'],
+            ]);
+            DB::table('banks')->insert([
                 ['Number' => '719', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO PRIMUS S.A'],
                 ['Number' => '720', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO MAXINVEST S.A'],
                 ['Number' => '721', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO CREDIBEL S.A'],
@@ -269,8 +275,6 @@ class BanksTableSeeder extends Seeder
                 ['Number' => '756', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO COOPERATIVO DO BRASIL S.A.'],
                 ['Number' => '757', 'title_color' => null, 'body_color' => null, 'Name' => 'BANCO KEB DO BRASIL S.A.'],
             ]);
-
-
         }
     }
 }

@@ -34,6 +34,19 @@ class AddColumnsToCarSupplies extends Migration
      */
     public function down()
     {
+
+        if (config('database.default') === 'sqlite') {
+            Schema::table('car_supplies', function (Blueprint $table) {
+                $table->dropColumn('fuel');
+            });
+            Schema::table('car_supplies', function (Blueprint $table) {
+                $table->dropColumn('gas_station');
+            });
+            Schema::table('car_supplies', function (Blueprint $table) {
+                $table->dropColumn('tenant_id');
+            });
+            return;
+        }
         Schema::table('car_supplies', function (Blueprint $table) {
             $table->dropColumn('fuel');
             $table->dropColumn('gas_station');

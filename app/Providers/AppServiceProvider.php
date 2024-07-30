@@ -38,8 +38,8 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
         if ($this->app->environment() !== 'production') {
             DB::listen(function($query){
-                Log::info($query->sql);
-                Log::info($query->bindings);
+                // Log::info($query->sql);
+                // Log::info($query->bindings);
             });
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
             $this->app->register(\Barryvdh\Debugbar\ServiceProvider::class);

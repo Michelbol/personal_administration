@@ -27,11 +27,26 @@ class BankAccountRepository
             ->join('bank_accounts as ba', 'ba.id', 'bap.bank_account_id')
             ->whereBetween('bap.posting_date', [$startAt, $endAt])
             ->where('ba.id', $bankAccountId)
-            ->groupBy('e.id', DB::raw('YEAR(bap.posting_date)'), DB::raw('MONTH(bap.posting_date)'))
+            ->groupBy('e.id', DB::raw($this->generateGetYearInSql('bap.posting_date')), DB::raw($this->generateGetMonthInSql('bap.posting_date')))
             ->select(
                 DB::raw('sum(bap.amount) as total_amount'),
                 'e.name',
-                DB::raw('MONTH(posting_date)-1 as month'))
+                DB::raw($this->generateGetMonthInSql('bap.posting_date').'-1 as month')
+            )
             ->get();
+    }
+
+    private function generateGetYearInSql(string $field) {
+        if (config('database.default') === 'sqlite') {
+            return "strftime('%Y', substr($field,7,4))";
+        }
+        return "YEAR($field)";
+    }
+
+    private function generateGetMonthInSql(string $field) {
+        if (config('database.default') === 'sqlite') {
+            return "strftime('%Y', substr($field,2,3))";
+        }
+        return "MONTH($field)";
     }
 }

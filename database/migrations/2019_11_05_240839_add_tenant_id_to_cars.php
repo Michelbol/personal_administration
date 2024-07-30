@@ -13,6 +13,20 @@ class AddTenantIdToCars extends Migration
      */
     public function up()
     {
+        if (config('database.default') === 'sqlite') {
+            Schema::table('cars', function (Blueprint $table) {
+                $table->unsignedBigInteger('tenant_id')->nullable();
+                $table->foreign('tenant_id')->references('id')->on('tenants');
+            });
+    
+            \Illuminate\Support\Facades\DB::statement('update cars set tenant_id = 1');
+            
+            Schema::table('cars', function (Blueprint $table) {
+                $table->foreign('tenant_id')->references('id')->on('tenants');
+            });
+            return;
+        }
+
         Schema::table('cars', function (Blueprint $table) {
             $table->unsignedBigInteger('tenant_id')->nullable();
             $table->foreign('tenant_id')->references('id')->on('tenants');
@@ -36,6 +50,12 @@ class AddTenantIdToCars extends Migration
      */
     public function down()
     {
+        if (config('database.default') === 'sqlite') {
+            Schema::table('cars', function (Blueprint $table) {
+                $table->dropColumn('tenant_id');
+            });
+            return;
+        }
         Schema::table('cars', function (Blueprint $table) {
             $table->dropForeign('cars_tenant_id_foreign');
             $table->dropIndex('cars_tenant_id_foreign');
