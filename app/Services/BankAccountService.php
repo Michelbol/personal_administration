@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use DB;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Query\Builder;
 
 class BankAccountService extends CRUDService
 {
@@ -103,15 +104,34 @@ class BankAccountService extends CRUDService
      * @return string
      */
     public function calcMonthlyInterest(Carbon $startAt, Carbon $endAt, $bankAccountId){
-        $amount = DB::table('bank_account_postings')
+        $builder = DB::table('bank_account_postings')
             ->whereBetween('posting_date', [$startAt, $endAt])
             ->where('type_bank_account_posting_id', 1)
             ->where('type', 'C')
-            ->where('bank_account_id', $bankAccountId)
-            ->groupBy(DB::raw('YEAR(posting_date)'), DB::raw('MONTH(posting_date)'))
+            ->where('bank_account_id', $bankAccountId);
+            
+        $amount = $this->groupByFieldUsingYearAndMonth('posting_date', $builder)
             ->select(DB::raw('sum(amount) as amount'))
             ->get();
         return $amount->implode('amount', ',');
+    }
+
+    private function generateGetYearInSql(string $field) {
+        if (config('database.default') === 'sqlite') {
+            return "strftime('%Y', substr($field,7,4))";
+        }
+        return "YEAR($field)";
+    }
+
+    private function generateGetMonthInSql(string $field) {
+        if (config('database.default') === 'sqlite') {
+            return "strftime('%Y', substr($field,2,3))";
+        }
+        return "MONTH($field)";
+    }
+
+    private function groupByFieldUsingYearAndMonth(string $field, Builder $builder) {
+        return $builder->groupBy(DB::raw($this->generateGetYearInSql($field)), $this->generateGetMonthInSql($field));
     }
 
     /**
@@ -121,11 +141,12 @@ class BankAccountService extends CRUDService
      * @return string
      */
     public function calcMonthlyBalance(Carbon $startAt, Carbon $endAt, $bankAccountId){
-        $balance = DB::table('bank_account_postings')
+        $builder = DB::table('bank_account_postings')
             ->whereBetween('posting_date', [$startAt, $endAt])
             ->where('bank_account_id', $bankAccountId)
-            ->orderBy('posting_date', 'desc')
-            ->groupBy(DB::raw('YEAR(posting_date)'), DB::raw('MONTH(posting_date)'))
+            ->orderBy('posting_date', 'desc');
+
+        $balance = $this->groupByFieldUsingYearAndMonth('posting_date', $builder)
             ->select(DB::raw('COALESCE(account_balance, 0) as account_balance'))
             ->get();
         return $balance->implode('account_balance',',');

@@ -29,6 +29,19 @@ class AddColumnsToBankAccountPostings extends Migration
      */
     public function down()
     {
+
+        if (config('database.default') === 'sqlite') {
+            Schema::table('bank_account_postings', function (Blueprint $table) {
+                $table->dropColumn('income_id');
+                
+            });
+    
+            Schema::table('bank_account_postings', function (Blueprint $table) {
+                $table->dropColumn('expense_id');
+            });
+            return;
+        }
+
         Schema::table('bank_account_postings', function (Blueprint $table) {
             $table->dropForeign('bank_account_postings_income_id_foreign');
             $table->dropIndex('bank_account_postings_income_id_foreign');
