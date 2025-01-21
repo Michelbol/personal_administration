@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\App\Http\Controllers;
 
+use App\Models\Brand;
 use App\Models\Enum\SessionEnum;
 use App\Models\Product;
 use App\Models\ProductSupplier;
@@ -16,17 +17,21 @@ class ProductSupplierControllerTest extends TestCase
 {
     use DatabaseMigrations, SeedingTrait, TenantRoutesTrait;
 
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
+
+    public function testIndex()
+    {
+        $tenant = $this->setUser()->get('tenant');
+        $response = $this->get("product_supplier");
+
+        $response->assertRedirect("$tenant->sub_domain/product");
+    }
     public function testGet()
     {
         $tenant = $this->setUser()->get('tenant');
         $product = Product::factory()->create(['tenant_id' => $tenant->id]);
+        $brand = Brand::factory()->create();
         Supplier::factory()->create(['tenant_id' => $tenant->id]);
-        ProductSupplier::factory()->create();
+        ProductSupplier::factory()->create(['brand_id' => $brand->id, 'product_id' => $product->id]);
         $response = $this->get("product_supplier/get/$product->id");
 
         $response->assertStatus(200);
@@ -70,6 +75,16 @@ class ProductSupplierControllerTest extends TestCase
             ->assertRedirect("")
             ->assertSessionHas('message', ['msg'=>'O campo code é obrigatório.', 'type' => SessionEnum::error]);
 
+    }
+
+    public function testCreate()
+    {
+        $product = Product::factory()->create(['tenant_id' => $this->setUser()->get('tenant')]);
+        $response = $this->get("product/$product->id/supplier/create");
+
+        $response
+            ->assertStatus(200)
+            ->assertViewIs('product_supplier.create');
     }
 
 }

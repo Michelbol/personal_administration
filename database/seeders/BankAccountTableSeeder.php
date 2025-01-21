@@ -15,36 +15,13 @@ class BankAccountTableSeeder extends Seeder
     public function run()
     {
         if(BankAccount::where('name', 'Nu Bank')->count() === 0){
-            BankAccount::create([
-                'name' => 'Nu Bank',
-                'agency' => '0001',
-                'number_account' => "8229254",
-                'digit_account' => "4",
-                'bank_id' => 96,
-                'tenant_id' => 1
-            ]);
+            DB::unprepared(file_get_contents(base_path('database/seeds/sql/BankAccountSeeders/insert_nu_bank.sql')));
         }
         if(BankAccount::where('name', 'Caixa Kakogawa')->count() === 0) {
-            BankAccount::create([
-                'name' => 'Caixa Kakogawa',
-                'agency' => '3531',
-                'operation' => '013',
-                'number_account' => "5093",
-                'digit_account' => "5",
-                'bank_id' => 33,
-                'tenant_id' => 1
-            ]);
+            DB::unprepared(file_get_contents(base_path('database/seeds/sql/BankAccountSeeders/insert_caixa_kakogawa.sql')));
         }
         if(BankAccount::where('name', 'Caixa Grevilha')->count() === 0) {
-            BankAccount::create([
-                'name' => 'Caixa Grevilha',
-                'agency' => '3123',
-                'operation' => '013',
-                'number_account' => "18747",
-                'digit_account' => "9",
-                'bank_id' => 33,
-                'tenant_id' => 1
-            ]);
+            DB::unprepared(file_get_contents(base_path('database/seeds/sql/BankAccountSeeders/insert_caixa_grevilea.sql')));
         }
     }
 }

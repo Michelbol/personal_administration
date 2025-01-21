@@ -13,11 +13,10 @@ class DropProductIdColumnIntoInvoiceProductsTable extends Migration
      */
     public function up()
     {
-        Schema::table('invoice_products', function (Blueprint $table) {
-            $table->dropColumn('product_id');
-        });
-
         if (config('database.default') === 'sqlite') {
+            Schema::table('invoice_products', function (Blueprint $table) {
+                $table->dropColumn('product_id');
+            });
             return;
         }
         Schema::table('invoice_products', function (Blueprint $table) {
