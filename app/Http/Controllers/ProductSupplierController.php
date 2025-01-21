@@ -13,7 +13,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Validation\UnauthorizedException;
 use Illuminate\View\View;
 use Yajra\DataTables\DataTables;
 use Exception;
@@ -107,9 +106,6 @@ class ProductSupplierController extends CrudController
         try{
             if(isset($this->requestValidator)){
                 $validator = new $this->requestValidator();
-                if(!$validator->authorize()){
-                    throw new UnauthorizedException;
-                }
                 $this->validate($request, $validator->rules(), $validator->messages());
             }
             $this->service->update($id, $request->all());

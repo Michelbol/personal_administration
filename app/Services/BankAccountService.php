@@ -131,7 +131,7 @@ class BankAccountService extends CRUDService
     }
 
     private function groupByFieldUsingYearAndMonth(string $field, Builder $builder) {
-        return $builder->groupBy(DB::raw($this->generateGetYearInSql($field)), $this->generateGetMonthInSql($field));
+        return $builder->groupBy(DB::raw($this->generateGetYearInSql($field)), DB::raw($this->generateGetMonthInSql($field)));
     }
 
     /**

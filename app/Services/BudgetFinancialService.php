@@ -60,6 +60,16 @@ class BudgetFinancialService extends CRUDService
      */
     public function getBudgetsFinancial(int $year, $userId)
     {
+        if (config('database.default') === 'sqlite') {
+            return $this
+            ->queryBudgetsFinancial($year, $userId)
+            ->selectRaw(
+                '(select sum(amount) from budget_financial_postings where budget_financial_id = budget_financials.id and income_id > 0) as sum_income,
+                 (select sum(amount) from budget_financial_postings where budget_financial_id = budget_financials.id and expense_id > 0) as sum_expense,
+                 budget_financials.*'
+            )
+            ->get();
+        }
         return $this
             ->queryBudgetsFinancial($year, $userId)
             ->selectRaw(

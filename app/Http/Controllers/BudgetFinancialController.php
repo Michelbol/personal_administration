@@ -153,7 +153,7 @@ class BudgetFinancialController extends CrudController
         $budgetFinancial = BudgetFinancial::find($id);
         $month = $budgetFinancial->month-1;
         $year = $budgetFinancial->year;
-        if($budgetFinancial->month === 1){
+        if((int)$budgetFinancial->month === 1){
             $month = 12;
             $year = $budgetFinancial->year-1;
         }

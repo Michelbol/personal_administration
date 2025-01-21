@@ -64,6 +64,7 @@ class CarController extends CrudController
      * @return Factory|View
      */
     public function edit($tenant, $id, Request $request){
+       try {
         $car = Car::findOrFail($id);
         try {
             $brands = $this->fipeService->getBrands();
@@ -74,7 +75,7 @@ class CarController extends CrudController
             ::whereCarId($car->id)
             ->orderBy('consultation_date')
             ->select(
-                DB::raw('DATE_FORMAT(consultation_date, "%d/%m/%Y") as format_consultation_date'),
+                $this->sqlFormatDate('consultation_date', '%d/%m/%Y', 'format_consultation_date'),
                 'value'
             )
             ->get();
@@ -83,6 +84,17 @@ class CarController extends CrudController
             'values' => $histories->pluck('value'),
         ];
         return view("car.edit", compact('car', 'brands', 'histories'));
+       } catch (Exception $e) {
+        $this->errorMessage($e->getMessage());
+        return redirect()->routeTenant('car.index');
+       }
+    }
+
+    private function sqlFormatDate(string $field, string $format, string $alias) {
+        if (config('database.default') === 'sqlite') {
+            return DB::raw("STRFTIME('$format', $field) as $alias");
+        }
+        return DB::raw("DATE_FORMAT($field, '$format') as $alias");
     }
 
     /**
