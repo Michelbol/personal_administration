@@ -30,8 +30,8 @@
         <server name="QUEUE_CONNECTION" value="sync"/>
         <server name="SESSION_DRIVER" value="array"/>
     </php>
-<!--    <logging>-->
-        <!-- <log type="coverage-clover" target="coverage.xml"/> -->
+    <logging>
+        <log type="coverage-clover" target="coverage.xml"/>
 <!--        <log type="coverage-html" target="public/test"/>-->
-    <!-- </logging> -->
+    </logging>
 </phpunit>
