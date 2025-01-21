@@ -28,6 +28,8 @@ class AddNewFieldsIntoCar extends Migration
     {
         Schema::table('cars', function (Blueprint $table) {
             $table->dropColumn('brand');
+        });
+        Schema::table('cars', function (Blueprint $table) {
             $table->dropColumn('year');
         });
     }

@@ -28,6 +28,12 @@ class AddProductSupplierIdColumnIntoInvoiceProductsTable extends Migration
      */
     public function down()
     {
+        if (config('database.default') === 'sqlite') {
+            Schema::table('invoice_products', function (Blueprint $table) {
+                $table->dropColumn('product_supplier_id');
+            });
+            return;
+        }
         Schema::table('invoice_products', function (Blueprint $table) {
             $table->dropForeign('invoice_products_product_supplier_id_foreign');
             $table->dropIndex('invoice_products_product_supplier_id_foreign');
