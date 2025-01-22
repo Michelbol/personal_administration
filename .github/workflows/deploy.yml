@@ -38,6 +38,7 @@ jobs:
           script: |
             cd /var/www/tmpdeploy
             sudo touch .env
+            sudo chmod -R 777 .env
             sudo echo ${{ secrets.ENV }} >> .env
             php artisan migrate --force
             php artisan optimize
