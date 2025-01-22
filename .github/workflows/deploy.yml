@@ -36,12 +36,11 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /var/www/tmpdeploy
-            sudo touch .env
-            sudo chmod -R 777 .env
-            sudo echo ${{ secrets.ENV }} >> .env
-            php artisan migrate --force
-            php artisan optimize
+            sudo touch /var/www/tmpdeploy/.env
+            sudo chmod -R 777 /var/www/tmpdeploy/.env
+            sudo echo "${{ secrets.ENV }}" >> /var/www/tmpdeploy/.env
+            php /var/www/tmpdeploy/artisan migrate --force
+            php /var/www/tmpdeploy/artisan optimize
             sudo mv /var/www/tmpdeploy /var/www/testdeploy
             sudo mkdir /var/www/tmpdeploy
             sudo chmod -R 777 /var/www/tmpdeploy
