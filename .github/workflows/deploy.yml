@@ -36,6 +36,6 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /var/www/html/testdeploy
+            cd /var/www/testdeploy
             php artisan migrate --force
             php artisan optimize
