@@ -41,6 +41,7 @@ jobs:
             sudo echo "${{ secrets.ENV }}" >> /var/www/tmpdeploy/.env
             php /var/www/tmpdeploy/artisan migrate --force
             php /var/www/tmpdeploy/artisan optimize
+            sudo rm -Rf /var/www/testdeploy
             sudo mv /var/www/tmpdeploy /var/www/testdeploy
             sudo mkdir /var/www/tmpdeploy
             sudo chmod -R 777 /var/www/tmpdeploy
