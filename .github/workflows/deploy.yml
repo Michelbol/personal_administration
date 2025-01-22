@@ -27,7 +27,7 @@ jobs:
           SOURCE: "."
           REMOTE_HOST: ${{ secrets.VPS_HOST }}
           REMOTE_USER: ${{ secrets.VPS_USER }}
-          TARGET: "/var/www/testdeploy"
+          TARGET: "/var/www/tmpdeploy"
 
       - name: Run Remote/Artisan Commands
         uses: appleboy/ssh-action@v0.1.6
@@ -36,6 +36,11 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /var/www/testdeploy
+            cd /var/www/tmpdeploy
+            sudo touch .env
+            sudo echo ${{ secrets.ENV }}
             php artisan migrate --force
             php artisan optimize
+            sudo mv /var/www/tmpdeploy /var/www/testdeploy
+            sudo mkdir /var/www/tmpdeploy
+            sudo chmod-R 777 /var/www/tmpdeploy
