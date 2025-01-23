@@ -4,6 +4,7 @@
 /public/storage
 /public/coverage
 /public/test
+/public/vendor
 /storage/*.key
 /vendor
 /storage/debugbar

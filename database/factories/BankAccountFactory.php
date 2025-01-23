@@ -3,19 +3,21 @@
 /** @var Factory $factory */
 
 use App\Models\Tenant;
-use Faker\Generator as Faker;
 use App\Models\BankAccount;
-use Illuminate\Database\Eloquent\Factory;
 
-$factory->define(BankAccount::class, function (Faker $faker) {
-    return [
-        'name' => $faker->name,
-        'agency' => $faker->numberBetween(0, 9999),
-        'digit_agency' => $faker->numberBetween(0, 9),
-        'number_account' => $faker->numberBetween(0,9999),
-        'digit_account' => $faker->numberBetween(0, 9),
-        'operation' => $faker->numberBetween(0, 100),
-        'bank_id' => BankAccount::inRandomOrder()->first(),
-        'tenant_id' => Tenant::inRandomOrder()->first(),
-    ];
-});
+class BankAccountFactory extends \Illuminate\Database\Eloquent\Factories\Factory {
+
+    public function definition()
+    {
+        return [
+            'name' => fake()->name,
+            'agency' => fake()->numberBetween(0, 9999),
+            'digit_agency' => fake()->numberBetween(0, 9),
+            'number_account' => fake()->numberBetween(0,9999),
+            'digit_account' => fake()->numberBetween(0, 9),
+            'operation' => fake()->numberBetween(0, 100),
+            'bank_id' => BankAccount::inRandomOrder()->first(),
+            'tenant_id' => Tenant::inRandomOrder()->first(),
+        ];
+    }
+}

@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\Models\Tenant;
 use Illuminate\Database\Seeder;
 
@@ -13,7 +15,6 @@ class TenantTableSeeder extends Seeder
     public function run()
     {
         $this->createTenant('Souza', 'souza');
-        $this->createTenant('Zakaluk', 'zakaluk');
     }
 
     public function createTenant(string $name,string $subdomain)

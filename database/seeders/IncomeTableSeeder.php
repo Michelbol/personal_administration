@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\Models\Income;
 use App\Models\Tenant;
 use Carbon\Carbon;
