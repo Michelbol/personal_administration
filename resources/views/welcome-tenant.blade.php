@@ -65,12 +65,27 @@
     </head>
     <body>
         <div class="flex-center position-ref full-height">
+            @if (Route::has('login'))
+                <div class="top-right links">
+                    @auth
+                        <a href="{{ routeTenant('home') }}">Home</a>
+                    @else
+                        <a href="{{ routeTenant('login') }}">Login</a>
+
+                        @if (Route::has('register'))
+                            <a href="{{ routeTenant('register') }}">Register</a>
+                        @endif
+                    @endauth
+                </div>
+            @endif
+
             <div class="content">
                 <div class="title m-b-md">
-                    Personal Administrator
+                    {{ ucfirst(app(\App\Tenant\TenantManager::class)->routeParam()) }} Personal Administrator
                 </div>
 
-                <div class="links"></div>
+                <div class="links">
+                </div>
             </div>
         </div>
     </body>
