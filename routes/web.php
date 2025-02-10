@@ -11,11 +11,13 @@
 |
 */
 
+use App\Http\Controllers\WelcomeController;
+
 Route::get('/bios', 'BiosController@index')->name('bios.index');
 
 $tenantParam = config('tenant.route_param');
 
-Route::get('/', 'CurriculumController@curriculum')->name('curriculum');
+Route::get('/', [WelcomeController::class, 'index']);
 Route::post('/contact', 'CurriculumController@contact')->name('contact');
 Route::prefix('/tribal-wars')->name('tribal.')->group(function(){
     Route::get('', 'TribalWarsController@index')->name('index');
@@ -27,7 +29,7 @@ Route::domain(config('app.url'))->group(function() use($tenantParam){
 Route::prefix("{{$tenantParam}}")
     ->middleware('tenant')
     ->group(function() {
-        Route::get('/', 'WelcomeController@index')->name('welcome');
+        Route::get('/', [WelcomeController::class, 'indexTenant'])->name('welcome');
 
         Auth::routes([
             'register' => false,
