@@ -1,20 +1,22 @@
 <?php
 
-/** @var Factory $factory */
+namespace Database\Factories;
 
-use App\Models\Car;
 use App\Models\Tenant;
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(Car::class, function (Faker $faker) {
-    return [
-        'model' => $faker->randomAscii,
-        'brand' => $faker->randomAscii,
-        'year' => $faker->numberBetween(2000, 2100),
-        'license_plate' => $faker->randomAscii,
-        'annual_licensing' => $faker->dateTimeBetween('-1 year', 'now')->format('d/m/Y H:i'),
-        'annual_insurance' => $faker->dateTimeBetween('-1 year', 'now')->format('d/m/Y H:i'),
-        'tenant_id' => Tenant::inRandomOrder()->first(),
-    ];
-});
+class CarFactory extends Factory {
+
+    public function definition()
+    {
+        return [
+            'model' => fake()->randomAscii,
+            'brand' => fake()->randomAscii,
+            'year' => fake()->numberBetween(2000, 2100),
+            'license_plate' => fake()->randomAscii,
+            'annual_licensing' => fake()->dateTimeBetween('-1 year', 'now')->format('d/m/Y H:i'),
+            'annual_insurance' => fake()->dateTimeBetween('-1 year', 'now')->format('d/m/Y H:i'),
+            'tenant_id' => Tenant::inRandomOrder()->first(),
+        ];
+    }
+}

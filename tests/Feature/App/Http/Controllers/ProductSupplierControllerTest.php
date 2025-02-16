@@ -24,9 +24,9 @@ class ProductSupplierControllerTest extends TestCase
     public function testGet()
     {
         $tenant = $this->setUser()->get('tenant');
-        $product = factory(Product::class)->create(['tenant_id' => $tenant->id]);
-        factory(Supplier::class)->create(['tenant_id' => $tenant->id]);
-        factory(ProductSupplier::class)->create();
+        $product = Product::factory()->create(['tenant_id' => $tenant->id]);
+        Supplier::factory()->create(['tenant_id' => $tenant->id]);
+        ProductSupplier::factory()->create();
         $response = $this->get("product_supplier/get/$product->id");
 
         $response->assertStatus(200);
@@ -35,9 +35,9 @@ class ProductSupplierControllerTest extends TestCase
     public function testShow()
     {
         $tenant = $this->setUser()->get('tenant');
-        factory(Product::class)->create(['tenant_id' => $tenant->id]);
-        factory(Supplier::class)->create(['tenant_id' => $tenant->id]);
-        $productSupplier = factory(ProductSupplier::class)->create();
+        Product::factory()->create(['tenant_id' => $tenant->id]);
+        Supplier::factory()->create(['tenant_id' => $tenant->id]);
+        $productSupplier = ProductSupplier::factory()->create();
         $response = $this->get("product_supplier/$productSupplier->id");
 
         $response->assertStatus(200);
@@ -49,11 +49,11 @@ class ProductSupplierControllerTest extends TestCase
          * @var Tenant $tenant
          */
         $tenant = $this->setUser()->get('tenant');
-        factory(Product::class)->create(['tenant_id' => $tenant->id]);
-        factory(Supplier::class)->create(['tenant_id' => $tenant->id]);
+        Product::factory()->create(['tenant_id' => $tenant->id]);
+        Supplier::factory()->create(['tenant_id' => $tenant->id]);
 
-        $productSupplier = factory(ProductSupplier::class)->create();
-        $data = factory(ProductSupplier::class)->make()->toArray();
+        $productSupplier = ProductSupplier::factory()->create();
+        $data = ProductSupplier::factory()->make()->toArray();
         unset($data['id']);
         $response = $this->put("product_supplier/$productSupplier->id", $data);
 
@@ -68,7 +68,7 @@ class ProductSupplierControllerTest extends TestCase
         $response
             ->assertStatus(302)
             ->assertRedirect("")
-            ->assertSessionHas('message', ['msg'=>'The given data was invalid.', 'type' => SessionEnum::error]);
+            ->assertSessionHas('message', ['msg'=>'O campo code é obrigatório.', 'type' => SessionEnum::error]);
 
     }
 

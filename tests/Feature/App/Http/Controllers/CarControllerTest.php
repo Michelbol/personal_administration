@@ -23,8 +23,8 @@ class CarControllerTest extends TestCase
     public function testProfile()
     {
         $tenant = $this->setUser()->get('tenant');
-        $car = factory(Car::class)->create(['tenant_id' => $tenant->id]);
-        factory(CarSupply::class)
+        $car = Car::factory()->create(['tenant_id' => $tenant->id]);
+        CarSupply::factory()
             ->create
             (
                 [
@@ -51,8 +51,8 @@ class CarControllerTest extends TestCase
     public function testProfileWithPeriod()
     {
         $tenant = $this->setUser()->get('tenant');
-        $car = factory(Car::class)->create(['tenant_id' => $tenant->id]);
-        factory(CarSupply::class)
+        $car = Car::factory()->create(['tenant_id' => $tenant->id]);
+        CarSupply::factory()
             ->create
             (
                 [
@@ -71,7 +71,7 @@ class CarControllerTest extends TestCase
     public function testGet()
     {
         $tenant = $this->setUser()->get('tenant');
-        factory(Car::class)->create(['tenant_id' => $tenant->id]);
+        Car::factory()->create(['tenant_id' => $tenant->id]);
         $response = $this->get("car/get");
 
         $response
@@ -82,7 +82,7 @@ class CarControllerTest extends TestCase
     {
         $object = $this->setUser();
         $tenant = $object->get('tenant');
-        $car = factory(Car::class)->make();
+        $car = Car::factory()->make();
         $response = $this->post("car/", $car->toArray());
 
         $response
@@ -90,20 +90,20 @@ class CarControllerTest extends TestCase
         ->assertRedirect("$tenant->sub_domain/car")
         ->assertSessionHas('message', ['msg' => 'Carro incluido com sucesso', 'type' => SessionEnum::success]);
 
-        $car = factory(Car::class)->make()->toArray();
+        $car = Car::factory()->make()->toArray();
         unset($car['license_plate']);
         $response = $this->post("car/", $car);
 
         $response
             ->assertStatus(302)
             ->assertRedirect("")
-            ->assertSessionHas('message', ['msg' => 'The given data was invalid.', 'type' => SessionEnum::error]);
+            ->assertSessionHas('message', ['msg' => 'O campo license plate é obrigatório.', 'type' => SessionEnum::error]);
     }
 
     public function testEdit()
     {
         $tenant = $this->setUser()->get('tenant');
-        $car = factory(Car::class)->create(['tenant_id' => $tenant->id]);
+        $car = Car::factory()->create(['tenant_id' => $tenant->id]);
         $response = $this->get("car/$car->id/edit");
 
         $response
@@ -122,7 +122,7 @@ class CarControllerTest extends TestCase
         $this->instance(FipeService::class, $instance);
 
         $tenant = $this->setUser()->get('tenant');
-        $car = factory(Car::class)->create(['tenant_id' => $tenant->id]);
+        $car = Car::factory()->create(['tenant_id' => $tenant->id]);
         $response = $this->get("car/$car->id/edit");
 
         $response
@@ -134,8 +134,8 @@ class CarControllerTest extends TestCase
     {
         $object = $this->setUser();
         $tenant = $object->get('tenant');
-        $car = factory(Car::class)->create(['tenant_id' => $tenant->id]);
-        $data = factory(Car::class)->make()->toArray();
+        $car = Car::factory()->create(['tenant_id' => $tenant->id]);
+        $data = Car::factory()->make()->toArray();
         $response = $this->put("car/$car->id", $data);
 
         $response
@@ -143,21 +143,21 @@ class CarControllerTest extends TestCase
             ->assertSessionHas('message', ['msg' => 'Carro atualizado com sucesso', 'type' => SessionEnum::success])
             ->assertRedirect("$tenant->sub_domain/car");
 
-        $data = factory(Car::class)->make()->toArray();
+        $data = Car::factory()->make()->toArray();
         unset($data['license_plate']);
         $response = $this->put("car/$car->id", $data);
 
         $response
             ->assertStatus(302)
             ->assertRedirect("")
-            ->assertSessionHas('message', ['msg' => 'The given data was invalid.', 'type' => SessionEnum::error]);
+            ->assertSessionHas('message', ['msg' => 'O campo license plate é obrigatório.', 'type' => SessionEnum::error]);
     }
 
     public function testDestroy()
     {
         $object = $this->setUser();
         $tenant = $object->get('tenant');
-        $car = factory(Car::class)->create(['tenant_id' => $tenant->id]);
+        $car = Car::factory()->create(['tenant_id' => $tenant->id]);
         $response = $this->delete("car/$car->id");
 
         $response
@@ -165,8 +165,8 @@ class CarControllerTest extends TestCase
             ->assertRedirect("$tenant->sub_domain/car")
             ->assertSessionHas('message', ['msg' => 'Carro deletado com sucesso', 'type' => SessionEnum::success]);
 
-        $car = factory(Car::class)->create(['tenant_id' => $tenant->id]);
-        factory(CarSupply::class)->create(['car_id' => $car->id, 'tenant_id' => $tenant->id]);
+        $car = Car::factory()->create(['tenant_id' => $tenant->id]);
+        CarSupply::factory()->create(['car_id' => $car->id, 'tenant_id' => $tenant->id]);
         $response = $this->delete("car/$car->id");
         $databaseName = config('database.connections')[config('database.default')]['database'];
         $response

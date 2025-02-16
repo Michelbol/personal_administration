@@ -6,6 +6,7 @@ use App\Models\Enum\FuelEnum;
 use App\Scopes\TenantModels;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -45,7 +46,7 @@ use DB;
  */
 class CarSupply extends Model
 {
-    use TenantModels;
+    use TenantModels, HasFactory;
 
     protected $fillable = [
         'id',

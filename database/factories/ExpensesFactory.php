@@ -1,18 +1,19 @@
 <?php
 
-/** @var Factory $factory */
+namespace Database\Factories;
 
-use App\Models\Expenses;
 use App\Models\Tenant;
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(Expenses::class, function (Faker $faker) {
-    return [
-        'name' => $faker->name,
-        'amount' => $faker->randomFloat(2, 0, 100000),
-        'isFixed' => $faker->boolean,
-        'due_date' => $faker->numberBetween(0, 31),
-        'tenant_id' => Tenant::inRandomOrder()->first(),
-    ];
-});
+class ExpensesFactory extends Factory
+{
+    public function definition() {
+        return [
+            'name' => fake()->name,
+            'amount' => fake()->randomFloat(2, 0, 100000),
+            'isFixed' => fake()->boolean,
+            'due_date' => fake()->numberBetween(0, 31),
+            'tenant_id' => Tenant::inRandomOrder()->first(),
+        ];
+    }
+}

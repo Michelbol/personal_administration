@@ -42,7 +42,7 @@ class ExpensesControllerTest extends TestCase
     {
         $object = $this->setUser();
         $tenant = $object->get('tenant');
-        $expense = factory(Expenses::class)->make()->toArray();
+        $expense = Expenses::factory()->make()->toArray();
         $response = $this->post('expense', $expense);
 
         $response
@@ -54,7 +54,7 @@ class ExpensesControllerTest extends TestCase
     public function testEdit()
     {
         $tenant = $this->setUser()->get('tenant');
-        $expense = factory(Expenses::class)->create(['tenant_id' => $tenant->id]);
+        $expense = Expenses::factory()->create(['tenant_id' => $tenant->id]);
         $response = $this->get("expense/$expense->id/edit");
 
         $response
@@ -67,7 +67,7 @@ class ExpensesControllerTest extends TestCase
     {
         $object = $this->setUser();
         $tenant = $object->get('tenant');
-        $expense = factory(Expenses::class)->create(['tenant_id' => $tenant->id]);
+        $expense = Expenses::factory()->create(['tenant_id' => $tenant->id]);
         $data = $expense->toArray();
         $data['name'] = Str::random();
         $response = $this->put("expense/$expense->id", $data);
@@ -82,7 +82,7 @@ class ExpensesControllerTest extends TestCase
     {
         $object = $this->setUser();
         $tenant = $object->get('tenant');
-        $expense = factory(Expenses::class)->create(['tenant_id' => $tenant->id]);
+        $expense = Expenses::factory()->create(['tenant_id' => $tenant->id]);
         $response = $this->delete("expense/$expense->id");
 
         $response
@@ -94,7 +94,7 @@ class ExpensesControllerTest extends TestCase
     public function testGet()
     {
         $tenant = $this->setUser()->get('tenant');
-        factory(Expenses::class)->create(['tenant_id' => $tenant->id]);
+        Expenses::factory()->create(['tenant_id' => $tenant->id]);
         $response = $this->get("expense/get");
 
         $response

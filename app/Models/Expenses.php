@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Scopes\TenantModels;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -33,7 +34,7 @@ use Illuminate\Support\Carbon;
  */
 class Expenses extends Model
 {
-    use TenantModels;
+    use TenantModels, HasFactory;
 
     protected $fillable = [
         'id',

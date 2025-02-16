@@ -31,7 +31,7 @@ class InvoiceControllerTest extends TestCase
     public function testGet()
     {
         $tenant = $this->setUser()->get('tenant');
-        factory(Invoice::class)->create(['tenant_id' => $tenant->id]);
+        Invoice::factory()->create(['tenant_id' => $tenant->id]);
         $response = $this->get("invoice/get");
 
         $response
@@ -41,10 +41,10 @@ class InvoiceControllerTest extends TestCase
     public function testEdit()
     {
         $tenant = $this->setUser()->get('tenant');
-        $supplier = factory(Supplier::class)->create([
+        $supplier = Supplier::factory()->create([
             'tenant_id' => $tenant->id
         ]);
-        $invoice = factory(Invoice::class)->create([
+        $invoice = Invoice::factory()->create([
             'tenant_id' => $supplier->tenant_id,
             'supplier_id' => $supplier->id
         ]);
@@ -58,7 +58,7 @@ class InvoiceControllerTest extends TestCase
     public function testShow()
     {
         $tenant = $this->setUser()->get('tenant');
-        $invoice = factory(Invoice::class)->create(['tenant_id' => $tenant->id]);
+        $invoice = Invoice::factory()->create(['tenant_id' => $tenant->id]);
         $response = $this->get("invoice/$invoice->id");
 
         $response
@@ -70,7 +70,7 @@ class InvoiceControllerTest extends TestCase
     {
         $tenant = $this->setUser()->get('tenant');
 
-        $invoice = factory(Invoice::class)->create([
+        $invoice = Invoice::factory()->create([
             'tenant_id' => $tenant->id,
         ]);
 

@@ -17,7 +17,7 @@ class QueenGameControllerTest extends TestCase
      */
     public function testSave()
     {
-        $dataQueen = factory(QueenGame::class)->make()->toArray();
+        $dataQueen = QueenGame::factory()->make()->toArray();
         $object = $this->setUser();
         $tenant = $object->get('tenant');
         $response = $this->post("$tenant->sub_domain/queen-game", $dataQueen);

@@ -1,17 +1,19 @@
 <?php
 
-/** @var Factory $factory */
+namespace Database\Factories;
 
 use App\Models\Bank;
-use App\Models\CreditCard;
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(CreditCard::class, function (Faker $faker) {
-    return [
-        'name' => $faker->text(100),
-        'limit' => $faker->randomFloat(),
-        'default_closing_date' => $faker->randomNumber(),
-        'bank_id' => Bank::inRandomOrder()->first(),
-    ];
-});
+class CreditCardFactory extends Factory {
+
+    public function definition()
+    {
+        return [
+            'name' => fake()->text(100),
+            'limit' => fake()->randomFloat(),
+            'default_closing_date' => fake()->randomNumber(),
+            'bank_id' => Bank::inRandomOrder()->first(),
+        ];
+    }
+}

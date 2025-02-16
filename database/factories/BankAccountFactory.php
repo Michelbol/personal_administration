@@ -1,11 +1,14 @@
 <?php
 
+namespace Database\Factories;
+
 /** @var Factory $factory */
 
 use App\Models\Tenant;
 use App\Models\BankAccount;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-class BankAccountFactory extends \Illuminate\Database\Eloquent\Factories\Factory {
+class BankAccountFactory extends Factory {
 
     public function definition()
     {

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Support\Carbon;
@@ -44,6 +45,8 @@ use Illuminate\Support\Carbon;
  */
 class BankAccountPosting extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'document',
         'posting_date',

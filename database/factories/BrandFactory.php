@@ -1,13 +1,15 @@
 <?php
 
-/** @var Factory $factory */
+namespace Database\Factories;
 
-use App\Models\Brand;
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(Brand::class, function (Faker $faker) {
-    return [
-        'name' => $faker->name
-    ];
-});
+class BrandFactory extends Factory
+{
+    public function definition()
+    {
+        return [
+            'name' => fake()->name
+        ];
+    }
+}

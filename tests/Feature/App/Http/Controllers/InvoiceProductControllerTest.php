@@ -2,17 +2,11 @@
 
 namespace Tests\Feature\App\Http\Controllers;
 
-use App\Models\Enum\SessionEnum;
 use App\Models\Invoice;
 use App\Models\InvoiceProduct;
-use App\Models\Product;
 use App\Models\ProductSupplier;
 use App\Models\Supplier;
-use App\Services\InvoiceService;
-use Exception;
-use Faker\Factory;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Mockery;
 use Tests\SeedingTrait;
 use Tests\TenantRoutesTrait;
 use Tests\TestCase;
@@ -24,9 +18,9 @@ class InvoiceProductControllerTest extends TestCase
     public function testUpdate()
     {
         $this->setUser();
-        $productSupplier = factory(ProductSupplier::class, 2)->create();
+        $productSupplier = ProductSupplier::factory(2)->create();
 
-        $invoiceProduct = factory(InvoiceProduct::class)->create([
+        $invoiceProduct = InvoiceProduct::factory()->create([
             'product_supplier_id' => $productSupplier->first()->id
         ]);
 
@@ -43,14 +37,14 @@ class InvoiceProductControllerTest extends TestCase
     public function testCreateProductByInvoiceProduct()
     {
         $tenant = $this->setUser()->get('tenant');
-        $supplier = factory(Supplier::class)->create([
+        $supplier = Supplier::factory()->create([
             'tenant_id' => $tenant->id
         ]);
-        $invoice = factory(Invoice::class)->create([
+        $invoice = Invoice::factory()->create([
             'supplier_id' => $supplier->id,
             'tenant_id' => $tenant->id
         ]);
-        $invoiceProduct = factory(InvoiceProduct::class)->create([
+        $invoiceProduct = InvoiceProduct::factory()->create([
             'invoice_id' => $invoice->id
         ]);
         $response = $this->get("invoice_product/$invoiceProduct->id/create/product");

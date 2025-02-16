@@ -137,12 +137,11 @@ class BudgetFinancialControllerTest extends TestCase
 
         $budgetFinancial = BudgetFinancial::first();
 
-        $bank = factory(BankAccount::class)->create();
-        factory(BankAccountPosting::class)->create(
-            [
-                'bank_account_id' => $bank->id,
-                'posting_date' => Carbon::create($budgetFinancial->year, $budgetFinancial->month)->format('d/m/Y H:i')
-            ]);
+        $bank = BankAccount::factory()->create();
+        BankAccountPosting::factory()->create([
+            'bank_account_id' => $bank->id,
+            'posting_date' => Carbon::create($budgetFinancial->year, $budgetFinancial->month)->format('d/m/Y H:i')
+        ]);
         $response = $this
             ->get("budget_financial/restart/$budgetFinancial->id");
         $response
@@ -168,8 +167,8 @@ class BudgetFinancialControllerTest extends TestCase
             ->assertStatus(200)
             ->assertViewIs('budget_financial.edit');
 
-        factory(Income::class, 5)->create(['isFixed' => true]);
-        factory(Expenses::class, 5)->create(['isFixed' => true]);
+        Income::factory(5)->create(['isFixed' => true]);
+        Expenses::factory(5)->create(['isFixed' => true]);
 
         $response3 = $this
             ->get("budget_financial/generate_fixed/$budgetFinancial->id");

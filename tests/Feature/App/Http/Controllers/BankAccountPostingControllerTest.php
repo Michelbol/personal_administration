@@ -42,7 +42,7 @@ class BankAccountPostingControllerTest extends TestCase
          */
         $object = $this->setUser();
         $tenant = $object->get('tenant');
-        $data = factory(BankAccountPosting::class)->make()->toArray();
+        $data = BankAccountPosting::factory()->make()->toArray();
         $data['posting_date'] = ($data['posting_date'])->format('d/m/Y H:i');
         $response = $this->post("$tenant->sub_domain/bank_account_posting", $data);
         $bankAccountPosting = BankAccountPosting
@@ -64,18 +64,18 @@ class BankAccountPostingControllerTest extends TestCase
          */
         $object = $this->setUser();
         $tenant = $object->get('tenant');
-        $data = factory(BankAccountPosting::class)->make()->toArray();
+        $data = BankAccountPosting::factory()->make()->toArray();
         $data['posting_date'] = ($data['posting_date'])->format('d/m/Y H:i');
         $dateAfterPostingDate = Carbon
             ::createFromFormat('d/m/Y H:i', $data['posting_date'])
             ->addDay()
             ->format('d/m/Y H:i');
-        factory(BankAccountPosting::class, 2)->create([
-            'posting_date' => $dateAfterPostingDate,
-            'bank_account_id' => $data['bank_account_id'],
-            'type' => TypeBankAccountPostingEnum::CREDIT,
+        BankAccountPosting::factory(2)->create([
+                'posting_date' => $dateAfterPostingDate,
+                'bank_account_id' => $data['bank_account_id'],
+                'type' => TypeBankAccountPostingEnum::CREDIT,
         ]);
-        factory(BankAccountPosting::class, 2)->create([
+        BankAccountPosting::factory(2)->create([
             'posting_date' => $dateAfterPostingDate,
             'bank_account_id' => $data['bank_account_id'],
             'type' => TypeBankAccountPostingEnum::DEBIT,
@@ -97,7 +97,7 @@ class BankAccountPostingControllerTest extends TestCase
     {
         $object = $this->setUser();
         $tenant = $object->get('tenant');
-        $bankAccountPosting = factory(BankAccountPosting::class)->create();
+        $bankAccountPosting = BankAccountPosting::factory()->create();
         $response = $this->get("$tenant->sub_domain/bank_account_posting/show/$bankAccountPosting->id");
         $response
             ->assertStatus(200)
@@ -111,7 +111,7 @@ class BankAccountPostingControllerTest extends TestCase
          */
         $object = $this->setUser();
         $tenant = $object->get('tenant');
-        $data = factory(BankAccountPosting::class)->create()->toArray();
+        $data = BankAccountPosting::factory()->create()->toArray();
         $data['posting_date'] = ($data['posting_date'])->format('d/m/Y H:i');
         $response = $this->put("$tenant->sub_domain/bank_account_posting/{$data['id']}", $data);
         $bankAccountPosting = BankAccountPosting
@@ -130,7 +130,7 @@ class BankAccountPostingControllerTest extends TestCase
     {
         $object = $this->setUser();
         $tenant = $object->get('tenant');
-        $data = factory(BankAccountPosting::class)->create()->toArray();
+        $data = BankAccountPosting::factory()->create()->toArray();
         $response = $this->delete("$tenant->sub_domain/bank_account_posting/{$data['id']}");
         $response
             ->assertStatus(302)
@@ -140,7 +140,7 @@ class BankAccountPostingControllerTest extends TestCase
         /**
          * @var $data Collection
          */
-        $data = factory(BankAccountPosting::class, 2)->create();
+        $data = BankAccountPosting::factory(2)->create();
         $data2 = $data->sortByDesc('posting_date')->first();
 
         $response = $this->delete("$tenant->sub_domain/bank_account_posting/{$data2['id']}");
@@ -152,8 +152,8 @@ class BankAccountPostingControllerTest extends TestCase
         /**
          * @var $data Collection
          */
-        $data = factory(BankAccountPosting::class, 5)->create(['type' => TypeBankAccountPostingEnum::CREDIT]);
-        $data->merge(factory(BankAccountPosting::class, 5)->create(['type' => TypeBankAccountPostingEnum::DEBIT]));
+        $data = BankAccountPosting::factory(5)->create(['type' => TypeBankAccountPostingEnum::CREDIT]);
+        $data->merge(BankAccountPosting::factory(5)->create(['type' => TypeBankAccountPostingEnum::DEBIT]));
 
         $data2 = $data->sortBy('posting_date')->last();
 
@@ -296,8 +296,8 @@ class BankAccountPostingControllerTest extends TestCase
     public function testGet()
     {
         $subDomain = $this->setUser()->get('tenant')->sub_domain;
-        $bankAccount = factory(BankAccount::class)->create();
-        factory(BankAccountPosting::class,10)->create(['bank_account_id' => $bankAccount->id]);
+        $bankAccount = BankAccount::factory()->create();
+        BankAccountPosting::factory(10)->create(['bank_account_id' => $bankAccount->id]);
 
         $response = $this->get("$subDomain/bank_account_posting/get/$bankAccount->id?type=0");
 

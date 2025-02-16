@@ -1,22 +1,24 @@
 <?php
 
-/** @var Factory $factory */
+namespace Database\Factories;
 
 use App\Models\Invoice;
-use App\Models\InvoiceProduct;
 use App\Models\ProductSupplier;
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(InvoiceProduct::class, function (Faker $faker) {
-    return [
-        'name' => $faker->name,
-        'un' => $faker->text(5),
-        'code' => (string) $faker->numberBetween(0, 999999999),
-        'quantity' =>  $faker->randomFloat(2),
-        'unitary_value' => $faker->randomFloat(2),
-        'total_value' => $faker->randomFloat(2),
-        'invoice_id' => factory(Invoice::class)->create()->id,
-        'product_supplier_id' => factory(ProductSupplier::class)->create()->id,
-    ];
-});
+class InvoiceProductFactory extends Factory {
+
+    public function definition()
+    {
+        return [
+            'name' => fake()->name,
+            'un' => fake()->text(5),
+            'code' => (string) fake()->numberBetween(0, 999999999),
+            'quantity' =>  fake()->randomFloat(2),
+            'unitary_value' => fake()->randomFloat(2),
+            'total_value' => fake()->randomFloat(2),
+            'invoice_id' => Invoice::factory()->create()->id,
+            'product_supplier_id' => ProductSupplier::factory()->create()->id,
+        ];
+    }
+}
