@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\BankAccountPosting\BankAccountPostingOfxFileReader;
 use App\Models\Bank;
 use App\Models\BankAccount;
 use App\Models\BankAccountPosting;
@@ -32,8 +33,11 @@ class BankAccountPostingController extends CrudController
      */
     protected $service = BankAccountPostingService::class;
 
-    public function __construct(BankAccountPosting $bankAccountPosting,
-                                BankAccountPostingService $service)
+    public function __construct(
+        private BankAccountPostingOfxFileReader $bankAccountPostingOfxFileReader,
+        BankAccountPosting                      $bankAccountPosting,
+        BankAccountPostingService               $service,
+    )
     {
         parent::__construct($service, $bankAccountPosting);
     }
@@ -209,11 +213,7 @@ class BankAccountPostingController extends CrudController
         $filesOfx = $request->file('arquivosofx');
         if (isset($filesOfx)) {
             try{
-                DB::beginTransaction();
-                foreach ($filesOfx as $fileOfx) {
-                    $this->readFileOfx($fileOfx);
-                }
-                DB::commit();
+                $this->bankAccountPostingOfxFileReader->readFiles($filesOfx);
             }catch (Exception $exception){
                 DB::rollBack();
                 $this->errorMessage($exception->getMessage());
@@ -222,100 +222,6 @@ class BankAccountPostingController extends CrudController
         }
         $this->successMessage("Arquivo(s) Lido(s) Com Sucesso");
         return redirect()->routeTenant('bank_account_posting.file');
-    }
-
-    /**
-     * @param $fileOfx
-     * @throws Exception
-     */
-    function readFileOfx($fileOfx)
-    {
-        $type_bank_account_posting_not_saves = [];
-        $ofx = new Ofx($fileOfx);
-        $bankAccount = $this->mountBankAccountOfx($ofx);
-        foreach ($ofx->bankTranList as $transactions) {
-            $typeBankAccountPosting = new TypeBankAccountPosting();
-            $bankAccountPosting = $this->mountBankAccountPostingOfx($transactions, $typeBankAccountPosting, $bankAccount);
-            if ($typeBankAccountPosting->getType((string)$transactions->MEMO) === 0) {
-                array_push($type_bank_account_posting_not_saves, $transactions->MEMO);
-                continue;
-            }
-            if (sizeof($type_bank_account_posting_not_saves) === 0) {
-                $bankAccountPosting->save();
-            }
-        }
-        if (sizeof($type_bank_account_posting_not_saves) !== 0) {
-            throw new Exception('\nExistem tipos não salvos: ' . implode(",", $type_bank_account_posting_not_saves));
-        }
-    }
-
-    /**
-     * @param $ofx
-     * @return BankAccount
-     */
-    function mountBankAccountOfx($ofx)
-    {
-        $bankAccount = new BankAccount();
-        $bank = Bank
-            ::where(
-                'number',
-                'like',
-                '%'.(integer)$ofx->bankId.'%')
-            ->first();
-        $bankAccount->number_account = (string)$ofx->acctId;
-        $number_account = substr((string)$ofx->acctId, 0, 8);
-        $bankAccount = BankAccount
-            ::whereBankId($bank->id)
-            ->where(
-                'number_account',
-                'like',
-                '%'.(integer)$number_account.'%')
-            ->first();
-        return $bankAccount;
-    }
-
-    /**
-     * @param $transactions
-     * @param TypeBankAccountPosting $typeBankAccountPosting
-     * @param BankAccount $bankAccount
-     * @return BankAccountPosting
-     */
-    function mountBankAccountPostingOfx($transactions, TypeBankAccountPosting $typeBankAccountPosting, BankAccount $bankAccount)
-    {
-        $bankAccountPosting = new BankAccountPosting();
-        $keyFileTypeBankAccountPosting = $typeBankAccountPosting->getType((string)$transactions->MEMO);
-        if ($keyFileTypeBankAccountPosting === 0) {
-            $keyFileTypeBankAccountPosting = new KeyFileTypeBankAccountPosting();
-            $keyFileTypeBankAccountPosting->type_id = 0;
-            $keyFileTypeBankAccountPosting->expense_id = 0;
-            $keyFileTypeBankAccountPosting->income_id = 0;
-        }
-        $bankAccountPosting->type_bank_account_posting_id = $keyFileTypeBankAccountPosting->type_id;
-        $bankAccountPosting->posting_date = Carbon::createFromFormat("YmdHis", substr($transactions->DTPOSTED, 0, 14))->format('d/m/Y H:i');
-        $bankAccountPosting->bank_account_id = $bankAccount->id;
-        $bankAccountPosting->document = $transactions->FITID;
-        $bankAccountPosting->amount = ((float)$transactions->TRNAMT < 0) ? -((float)$transactions->TRNAMT) : (float)$transactions->TRNAMT;
-        $bankAccountPosting->type = (string)$transactions->TRNTYPE === Ofx::ofxCredit ? TypeBankAccountPostingEnum::CREDIT : TypeBankAccountPostingEnum::DEBIT;
-        $bankAccountPosting->expense_id = $keyFileTypeBankAccountPosting->expense_id;
-        $bankAccountPosting->income_id = $keyFileTypeBankAccountPosting->income_id;
-        return $this->calcAccountBalance($bankAccountPosting);
-    }
-
-    /**
-     * @param BankAccountPosting $bankAccountPosting
-     * @return BankAccountPosting
-     */
-    public function calcAccountBalance(BankAccountPosting $bankAccountPosting)
-    {
-        $balance = $this->service->lastPosting($bankAccountPosting);
-        if ($balance === null) {
-            $bankAccountPosting->account_balance = $bankAccountPosting->amount;
-        } else {
-            $bankAccountPosting->account_balance = $balance->account_balance +
-                ($bankAccountPosting->type === 'C' ? $bankAccountPosting->amount : (-$bankAccountPosting->amount));
-
-        }
-        return $bankAccountPosting;
     }
 
     /**
@@ -409,7 +315,7 @@ class BankAccountPostingController extends CrudController
         $bankAccountPosting->document = $data[2];
         $bankAccountPosting->amount = $data[4];
         $bankAccountPosting->type = $this->clearString($data[5]);
-        return $this->calcAccountBalance($bankAccountPosting);
+        return $this->service->calcAccountBalance($bankAccountPosting);
     }
 
     /**

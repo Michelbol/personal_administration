@@ -69,7 +69,7 @@ class BankAccountPostingService extends CRUDService
         $data['document'] = self::STR_OPENING_ACCOUNT;
         $data['posting_date'] = Carbon::now();
         $data['amount'] = $data['account_balance'];
-        $data['type'] = credit;
+        $data['type'] = 'credit';
         $data['type_bank_account_posting_id'] = 1;
         $this->fill($model, $data);
         $model->save();
@@ -129,5 +129,18 @@ class BankAccountPostingService extends CRUDService
             ->orderBy('posting_date', 'desc')
             ->orderBy('id', 'desc')
             ->first();
+    }
+
+    public function calcAccountBalance(BankAccountPosting $bankAccountPosting)
+    {
+        $balance = $this->lastPosting($bankAccountPosting);
+        if ($balance === null) {
+            $bankAccountPosting->account_balance = $bankAccountPosting->amount;
+        } else {
+            $bankAccountPosting->account_balance = $balance->account_balance +
+                ($bankAccountPosting->type === 'C' ? $bankAccountPosting->amount : (-$bankAccountPosting->amount));
+
+        }
+        return $bankAccountPosting;
     }
 }
