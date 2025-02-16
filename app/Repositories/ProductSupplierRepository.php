@@ -64,6 +64,11 @@ class ProductSupplierRepository
      */
     public function queryRawProductName($name = 'name')
     {
+        if (config('database.default') === 'sqlite') {
+            return DB::raw(
+                "COALESCE(p.name, '') || ' - ' || COALESCE(s.fantasy_name, '') || ' - ' || COALESCE(ps.un, '') || ' - ' || COALESCE(ps.code, '') as $name"
+            );
+        }
         return DB::raw(
             "CONCAT(COALESCE(p.name, ''),' - ',COALESCE(s.fantasy_name, ''),' - ',COALESCE(ps.un, ''),' - ',COALESCE(ps.code, '')) as $name"
         );

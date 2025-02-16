@@ -5,12 +5,14 @@ namespace Tests\Feature\App\Http\Controllers;
 use App\Models\Car;
 use App\Models\CarSupply;
 use App\Models\Enum\SessionEnum;
+use App\Models\FipeHistory;
 use App\Services\FipeService;
 use Exception;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\SeedingTrait;
 use Tests\TenantRoutesTrait;
 use Tests\TestCase;
+use Mockery;
 
 class CarControllerTest extends TestCase
 {
@@ -41,6 +43,14 @@ class CarControllerTest extends TestCase
 
     public function testCreate()
     {
+        $fipeService = Mockery::mock(FipeService::class)
+        ->shouldReceive('getBrands')
+        ->once()
+        ->andReturn([])
+        ->getMock();
+
+        $this->instance(FipeService::class, $fipeService);
+
         $this->setUser();
         $response = $this->get('car/create');
         $response
@@ -111,7 +121,7 @@ class CarControllerTest extends TestCase
             ->assertViewIs('car.edit');
     }
 
-    public function testEditException()
+    public function testEditExceptionToGetBrands()
     {
         $instance = \Mockery
             ::mock(FipeService::class)
@@ -128,6 +138,15 @@ class CarControllerTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertViewIs('car.edit');
+    }
+
+    public function testEditGenericException()
+    {
+        $tenant = $this->setUser()->get('tenant');
+        $response = $this->get("car/9999/edit");
+
+        $response
+            ->assertRedirect("$tenant->sub_domain/car");
     }
 
     public function testUpdate()
@@ -164,6 +183,15 @@ class CarControllerTest extends TestCase
             ->assertStatus(302)
             ->assertRedirect("$tenant->sub_domain/car")
             ->assertSessionHas('message', ['msg' => 'Carro deletado com sucesso', 'type' => SessionEnum::success]);
+    }
+
+    public function testDestroyCarWithSupply_ShouldThrowException_IfIsNotSqlite() {
+        if (config('database.default') === 'sqlite') {
+            $this->markTestSkipped();
+            return;
+        }
+        $object = $this->setUser();
+        $tenant = $object->get('tenant');
 
         $car = Car::factory()->create(['tenant_id' => $tenant->id]);
         CarSupply::factory()->create(['car_id' => $car->id, 'tenant_id' => $tenant->id]);
@@ -174,7 +202,7 @@ class CarControllerTest extends TestCase
             ->assertRedirect("")
             ->assertSessionHas('message',
                 [
-                    'msg' => "SQLSTATE[23000]: Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`$databaseName`.`car_supplies`, CONSTRAINT `car_supplies_car_id_foreign` FOREIGN KEY (`car_id`) REFERENCES `cars` (`id`)) (SQL: delete from `cars` where `id` = 2)" ,
+                    'msg' => "SQLSTATE[23000]: Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`$databaseName`.`car_supplies`, CONSTRAINT `car_supplies_car_id_foreign` FOREIGN KEY (`car_id`) REFERENCES `cars` (`id`)) (SQL: delete from `cars` where `id` = $car->id)" ,
                     'type' => SessionEnum::error
                 ]
             );

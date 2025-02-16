@@ -13,6 +13,12 @@ class DropProductIdColumnIntoInvoiceProductsTable extends Migration
      */
     public function up()
     {
+        if (config('database.default') === 'sqlite') {
+            Schema::table('invoice_products', function (Blueprint $table) {
+                $table->dropColumn('product_id');
+            });
+            return;
+        }
         Schema::table('invoice_products', function (Blueprint $table) {
             $table->dropForeign('invoice_products_product_id_foreign');
             $table->dropIndex('invoice_products_product_id_foreign');
@@ -27,6 +33,16 @@ class DropProductIdColumnIntoInvoiceProductsTable extends Migration
      */
     public function down()
     {
+        if (config('database.default') === 'sqlite') {
+            Schema::table('invoice_products', function (Blueprint $table) {
+                $table->unsignedBigInteger('product_id')
+                    ->default(0);
+                $table->foreign('product_id')
+                    ->references('id')
+                    ->on('products');
+            });
+            return;
+        }
         Schema::table('invoice_products', function (Blueprint $table) {
             $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')

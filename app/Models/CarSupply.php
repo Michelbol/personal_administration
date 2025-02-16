@@ -145,7 +145,7 @@ class CarSupply extends Model
         return DB::table('car_supplies')
             ->whereBetween('date', [$startAt, $endAt])
             ->where('car_id', $car_id)
-            ->groupBy(DB::raw('YEAR(`date`)'), DB::raw('MONTH(`date`)'))
+            ->groupBy(DB::raw(self::generateGetYearInSql('`date`')), DB::raw(self::generateGetMonthInSql('`date`')))
             ->select(
                 DB::raw('sum(total_paid) as total_paid'),
                 DB::raw('sum(liters) as liters'),
@@ -178,5 +178,19 @@ class CarSupply extends Model
         }
         $this->traveled_kilometers = 0;
         return $this->traveled_kilometers;
+    }
+
+    private static function generateGetYearInSql(string $field) {
+        if (config('database.default') === 'sqlite') {
+            return "strftime('%Y', substr($field,7,4))";
+        }
+        return "YEAR($field)";
+    }
+
+    private static function generateGetMonthInSql(string $field) {
+        if (config('database.default') === 'sqlite') {
+            return "strftime('%Y', substr($field,2,3))";
+        }
+        return "MONTH($field)";
     }
 }
