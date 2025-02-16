@@ -11,12 +11,36 @@ use App\Repositories\TypeBankAccountPostingRepository;
 use App\Services\BankAccountPostingService;
 use Carbon\Carbon;
 
-class BankAccountPostingOfxCaixa
+class BankAccountPostingOfxCaixa implements BankAccountPostingOfx
 {
+    private array $typeBankAccountPostingNotSaved = [];
+
     public function __construct(
         private BankAccountPostingService $bankAccountPostingService,
         private TypeBankAccountPostingRepository $typeBankAccountPostingRepo,
     ){}
+
+
+    public function saveBankAccountPostingFromOfx(Ofx $ofx, BankAccount $bankAccount): void
+    {
+        foreach ($ofx->bankTranList as $transactions) {
+            $keyFileTypeBankAccountPosting = $this->buildKeyFileTypeBankAccountPosting($transactions);
+            $typeBankAccountPosting = $this->typeBankAccountPostingRepo->getTypeByKeyFile((string)$transactions->MEMO);
+            $bankAccountPosting = $this->mountBankAccountPostingOfx($transactions, $bankAccount, $keyFileTypeBankAccountPosting);
+            if (is_null($typeBankAccountPosting)) {
+                $this->typeBankAccountPostingNotSaved[] = $transactions->MEMO;
+                continue;
+            }
+            if (sizeof($this->typeBankAccountPostingNotSaved) === 0) {
+                $bankAccountPosting->save();
+            }
+        }
+    }
+
+    public function retrieveTypeBankAccountPostingNotSaved(): array
+    {
+        return $this->typeBankAccountPostingNotSaved;
+    }
 
     public function mountBankAccountPostingOfx($transactions, BankAccount $bankAccount, KeyFileTypeBankAccountPosting $keyFileTypeBankAccountPosting)
     {
@@ -42,4 +66,5 @@ class BankAccountPostingOfxCaixa
         }
         return $keyFileTypeBankAccountPosting;
     }
+
 }
