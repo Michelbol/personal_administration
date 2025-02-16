@@ -19,7 +19,7 @@ class BankAccountPostingTest extends TestCase
      */
     public function testBankAccount()
     {
-        $bankAccountPosting = factory(BankAccountPosting::class)->create();
+        $bankAccountPosting = BankAccountPosting::factory()->create();
         $this->assertIsObject($bankAccountPosting->bankAccount);
         $this->assertIsObject($bankAccountPosting->typeBankAccountPosting);
     }

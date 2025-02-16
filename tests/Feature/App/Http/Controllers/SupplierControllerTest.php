@@ -20,7 +20,7 @@ class SupplierControllerTest extends TestCase
     public function testGet()
     {
         $tenant = $this->setUser()->get('tenant');
-        factory(Supplier::class)->create(['tenant_id' => $tenant->id]);
+        Supplier::factory()->create(['tenant_id' => $tenant->id]);
         $response = $this->get('supplier/get');
 
         $response->assertStatus(200);

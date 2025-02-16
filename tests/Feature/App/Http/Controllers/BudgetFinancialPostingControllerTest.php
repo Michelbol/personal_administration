@@ -28,14 +28,14 @@ class BudgetFinancialPostingControllerTest extends TestCase
             ->setUser()
             ->get('tenant');
         $subDomain = $tenant->sub_domain;
-        $budgetFinancial = factory(BudgetFinancial::class)->create(['tenant_id' => $tenant->id]);
-        $budgetFinancialPosting = factory(BudgetFinancialPosting::class)
+        $budgetFinancial = BudgetFinancial::factory()->create(['tenant_id' => $tenant->id]);
+        $budgetFinancialPosting = BudgetFinancialPosting::factory()
             ->make(['budget_financial_id' => $budgetFinancial->id])
             ->toArray();
-        $budgetFinancialPosting['new_expense'] = factory(Expenses::class)
+        $budgetFinancialPosting['new_expense'] = Expenses::factory()
             ->make()
             ->toArray()['name'];
-        $budgetFinancialPosting['new_income'] = factory(Income::class)
+        $budgetFinancialPosting['new_income'] = Income::factory()
             ->make()
             ->toArray()['name'];
         $response = $this->post('budget_financial_posting', $budgetFinancialPosting);
@@ -52,8 +52,8 @@ class BudgetFinancialPostingControllerTest extends TestCase
             ->setUser()
             ->get('tenant');
         $subDomain = $tenant->sub_domain;
-        $budgetFinancial = factory(BudgetFinancial::class)->create(['tenant_id' => $tenant->id]);
-        $budgetFinancialPosting = factory(BudgetFinancialPosting::class)
+        $budgetFinancial = BudgetFinancial::factory()->create(['tenant_id' => $tenant->id]);
+        $budgetFinancialPosting = BudgetFinancialPosting::factory()
             ->create(['budget_financial_id' => $budgetFinancial->id])
             ->toArray();
         $budgetFinancialPosting['posting_date'] = Carbon
@@ -63,10 +63,10 @@ class BudgetFinancialPostingControllerTest extends TestCase
             )
             ->format('d/m/Y');
         $budgetFinancialPosting['amount'] = 'R$: '.getFormatReal($budgetFinancialPosting['amount']);
-        $budgetFinancialPosting['new_expense'] = factory(Expenses::class)
+        $budgetFinancialPosting['new_expense'] = Expenses::factory()
             ->make()
             ->toArray()['name'];
-        $budgetFinancialPosting['new_income'] = factory(Income::class)
+        $budgetFinancialPosting['new_income'] = Income::factory()
             ->make()
             ->toArray()['name'];
 
@@ -83,8 +83,8 @@ class BudgetFinancialPostingControllerTest extends TestCase
             ->setUser()
             ->get('tenant');
         $subDomain = $tenant->sub_domain;
-        $budgetFinancial = factory(BudgetFinancial::class)->create(['tenant_id' => $tenant->id]);
-        $budgetFinancialPosting = factory(BudgetFinancialPosting::class)->create(['budget_financial_id' => $budgetFinancial->id]);
+        $budgetFinancial = BudgetFinancial::factory()->create(['tenant_id' => $tenant->id]);
+        $budgetFinancialPosting = BudgetFinancialPosting::factory()->create(['budget_financial_id' => $budgetFinancial->id]);
 
         $response = $this->delete("budget_financial_posting/$budgetFinancialPosting->id");
 
@@ -97,8 +97,8 @@ class BudgetFinancialPostingControllerTest extends TestCase
     {
         $this->setUser();
 
-        $budgetFinancial = factory(BudgetFinancial::class)->create();
-        factory(BudgetFinancialPosting::class)->create(['budget_financial_id' => $budgetFinancial->id]);
+        $budgetFinancial = BudgetFinancial::factory()->create();
+        BudgetFinancialPosting::factory()->create(['budget_financial_id' => $budgetFinancial->id]);
 
         $response = $this->get("budget_financial_posting/get/$budgetFinancial->id");
 

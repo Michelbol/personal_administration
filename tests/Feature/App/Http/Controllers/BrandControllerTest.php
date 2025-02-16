@@ -16,7 +16,7 @@ class BrandControllerTest extends TestCase
     public function testGet()
     {
         $this->setUser();
-        factory(Brand::class)->create();
+        Brand::factory()->create();
         $response = $this->get("brand/get");
 
         $response

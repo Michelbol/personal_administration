@@ -95,8 +95,9 @@ class BankAccountControllerTest extends TestCase
     {
         $tenant = $this->setUser()->get('tenant');
         $bankAccount = BankAccount::first();
-        factory(Expenses::class, 5)->create();
-        factory(BankAccountPosting::class, 10)->create(['bank_account_id' => $bankAccount->id]);
+
+        Expenses::factory(5)->create();
+        BankAccountPosting::factory(10)->create(['bank_account_id' => $bankAccount->id]);
         $response = $this->get("$tenant->sub_domain/bank_account/expense/report?bank_account_id=$bankAccount->id");
 
         $response

@@ -22,6 +22,6 @@ class WelcometControllerTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertViewIs('welcome');
+            ->assertViewIs('welcome-tenant');
     }
 }

@@ -18,7 +18,7 @@ class CarTest extends TestCase
      */
     public function testcarSupplies()
     {
-        $car = factory(Car::class)->create();
+        $car = Car::factory()->create();
         $this->assertIsIterable($car->carSupplies);
     }
 }

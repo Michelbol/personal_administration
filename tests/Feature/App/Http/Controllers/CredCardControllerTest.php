@@ -42,7 +42,7 @@ class CredCardControllerTest extends TestCase
     {
         $object = $this->setUser();
         $tenant = $object->get('tenant');
-        $data = factory(CreditCard::class)->make()->toArray();
+        $data = CreditCard::factory()->make()->toArray();
         $response = $this->post('cred_card', $data);
 
         $response
@@ -54,7 +54,7 @@ class CredCardControllerTest extends TestCase
     public function testEdit()
     {
         $this->setUser();
-        $creditCard = factory(CreditCard::class)->create();
+        $creditCard = CreditCard::factory()->create();
         $response = $this->get("cred_card/$creditCard->id/edit");
 
         $response
@@ -66,7 +66,7 @@ class CredCardControllerTest extends TestCase
     {
         $object = $this->setUser();
         $tenant = $object->get('tenant');
-        $creditCard = factory(CreditCard::class)->create();
+        $creditCard = CreditCard::factory()->create();
         $data = $creditCard->toArray();
         $data['name'] = Str::random();
         $response = $this->put("cred_card/$creditCard->id", $data);
@@ -81,7 +81,7 @@ class CredCardControllerTest extends TestCase
     {
         $object = $this->setUser();
         $tenant = $object->get('tenant');
-        $creditCard = factory(CreditCard::class)->create();
+        $creditCard = CreditCard::factory()->create();
         $response = $this->delete("cred_card/$creditCard->id");
 
         $response
@@ -93,7 +93,7 @@ class CredCardControllerTest extends TestCase
     public function testGet()
     {
         $this->setUser();
-        factory(CreditCard::class)->create();
+        CreditCard::factory()->create();
         $response = $this->get('cred_card/get');
 
         $response->assertStatus(200);

@@ -20,7 +20,7 @@ class ProductControllerTest extends TestCase
     public function testGet()
     {
         $tenant = $this->setUser()->get('tenant');
-        factory(Product::class)->create(['tenant_id' => $tenant->id]);
+        Product::factory()->create(['tenant_id' => $tenant->id]);
         $response = $this->get('product/get');
 
         $response->assertStatus(200);
@@ -29,7 +29,7 @@ class ProductControllerTest extends TestCase
     public function testEdit()
     {
         $tenant = $this->setUser()->get('tenant');
-        $product = factory(Product::class)->create(['tenant_id' => $tenant->id]);
+        $product = Product::factory()->create(['tenant_id' => $tenant->id]);
         $response = $this->get("product/$product->id/edit");
 
         $response

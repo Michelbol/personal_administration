@@ -3,11 +3,7 @@
 namespace Tests\Feature;
 
 use Artisan;
-use App\Models\Tenant;
-use App\Models\UserTenant;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\SeedingTrait;
 use Tests\TestCase;
 
