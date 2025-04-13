@@ -3,6 +3,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Bank;
 use App\Models\BankAccount;
 use App\Models\Expenses;
 use Carbon\Carbon;
@@ -48,5 +49,13 @@ class BankAccountRepository
             return "strftime('%Y', substr($field,2,3))";
         }
         return "MONTH($field)";
+    }
+
+    public function findBankAccountByBankAndAccountNumber(Bank $bank, int $number_account): BankAccount
+    {
+        return BankAccount
+            ::whereBankId($bank->id)
+            ->where('number_account', 'like', "$number_account")
+            ->first();
     }
 }

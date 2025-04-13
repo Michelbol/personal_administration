@@ -32,6 +32,9 @@ use Illuminate\Support\Carbon;
  */
 class Bank extends Model
 {
+    const CAIXA_NUMBER = '104';
+    const NUBANK_NUMBER = '260';
+
     protected $fillable =[
         'name',
         'number',

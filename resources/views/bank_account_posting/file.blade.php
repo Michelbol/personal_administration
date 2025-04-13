@@ -18,5 +18,24 @@
                     </div>
                 </div>
             </form>
+            @if(Session::has('typeBankAccountPostingNotSaved'))
+                <div class="container">
+                    <h5>Foram encontrados alguns erros</h5>
+                    <table class="table table-striped table-bordered" width="100%">
+                        <thead>
+                        <tr>
+                            <th>Errors</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach(Session::get('typeBankAccountPostingNotSaved') as $typeBankAccountPostingNotSaved)
+                            <tr>
+                                <th>{!! $typeBankAccountPostingNotSaved !!}</th>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
         </div>
 @endsection
