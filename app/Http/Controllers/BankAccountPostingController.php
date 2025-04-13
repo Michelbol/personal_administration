@@ -3,15 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\BankAccountPosting\BankAccountPostingOfxFileReader;
-use App\Models\Bank;
+use App\BankAccountPosting\Exception\TypeBankAccountPostingsNotSavedException;
 use App\Models\BankAccount;
 use App\Models\BankAccountPosting;
-use App\Models\Enum\TypeBankAccountPostingEnum;
 use App\Models\Expenses;
 use App\Models\Income;
-use App\Models\KeyFileTypeBankAccountPosting;
 use App\Models\TypeBankAccountPosting;
-use App\Ofx;
 use App\Services\BankAccountPostingService;
 use Carbon\Carbon;
 use DB;
@@ -23,6 +20,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Yajra\DataTables\DataTables;
 
@@ -214,7 +212,12 @@ class BankAccountPostingController extends CrudController
         if (isset($filesOfx)) {
             try{
                 $this->bankAccountPostingOfxFileReader->readFiles($filesOfx);
-            }catch (Exception $exception){
+            } catch (TypeBankAccountPostingsNotSavedException $exception){
+                DB::rollBack();
+                $this->errorMessage($exception->getMessage());
+                Session::flash('typeBankAccountPostingNotSaved', $exception->getTypeBankAccountPostingNotSaved());
+                return redirect()->back();
+            } catch (\Throwable $exception){
                 DB::rollBack();
                 $this->errorMessage($exception->getMessage());
                 return redirect()->back();

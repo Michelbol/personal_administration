@@ -11,7 +11,7 @@ use App\Repositories\TypeBankAccountPostingRepository;
 use App\Services\BankAccountPostingService;
 use Carbon\Carbon;
 
-class BankAccountPostingOfxCaixa implements BankAccountPostingOfx
+class BankAccountPostingOfxParser implements BankAccountPostingOfx
 {
     private array $typeBankAccountPostingNotSaved = [];
 

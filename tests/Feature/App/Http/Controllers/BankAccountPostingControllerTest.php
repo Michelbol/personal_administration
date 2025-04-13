@@ -223,7 +223,8 @@ class BankAccountPostingControllerTest extends TestCase
         $response
             ->assertStatus(302)
             ->assertRedirect("")
-            ->assertSessionHas('message', ['msg'=>'\nExistem tipos não salvos: REM BASICAAA', 'type' => SessionEnum::error]);
+            ->assertSessionHas('message', ['msg'=>'Existem tipos não salvos', 'type' => SessionEnum::error])
+            ->assertSessionHas('typeBankAccountPostingNotSaved', ['REM BASICAAA']);
     }
 
     public function testReadFileStoreWrongTxt()
@@ -280,6 +281,34 @@ class BankAccountPostingControllerTest extends TestCase
             ->assertStatus(302)
             ->assertRedirect("")
             ->assertSessionHas('message', ['msg'=>'Arquivo inválido', 'type' => SessionEnum::error]);
+    }
+
+    public function testReadFileStore_WrongAccount()
+    {
+        $object = $this->setUser();
+        $tenant = $object->get('tenant');
+        $files = [
+            'arquivosofx' => [
+                $this->createFile('2018-06Junho-wrong-account.ofx', 'text/plain'),
+            ]
+        ];
+        $data = [];
+
+        $server = $this->transformHeadersToServerVars($data);
+
+        $response = $this->call(
+            'POST',
+            "$tenant->sub_domain/bank_account_posting/read_file",
+            $data,
+            [],
+            $files,
+            $server
+        );
+
+        $response
+            ->assertStatus(302)
+            ->assertRedirect("")
+            ->assertSessionHas('message', ['msg'=>'App\Repositories\BankAccountRepository::findBankAccountByBankAndAccountNumber(): Return value must be of type App\Models\BankAccount, null returned', 'type' => SessionEnum::error]);
     }
 
     public function testFile()

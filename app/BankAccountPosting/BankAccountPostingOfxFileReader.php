@@ -2,6 +2,7 @@
 
 namespace App\BankAccountPosting;
 
+use App\BankAccountPosting\Exception\TypeBankAccountPostingsNotSavedException;
 use App\Ofx;
 use App\Repositories\BankAccountRepository;
 use App\Repositories\BankRepository;
@@ -14,6 +15,7 @@ class BankAccountPostingOfxFileReader {
     public function __construct(
         private BankAccountRepository $bankAccountRepository,
         private BankRepository $bankRepository,
+        private BankAccountPostingOfxParser $bankAccountPostingOfxParser
     ){}
 
 
@@ -29,12 +31,11 @@ class BankAccountPostingOfxFileReader {
         $ofx = new Ofx($fileOfx);
         $bankAccount = $this->searchForBankAccountFromOfxInfo($ofx);
 
-        $bankAccountPostingOfx = BankAccountPostingOfxResolver::resolve($bankAccount->bank);
-        $bankAccountPostingOfx->saveBankAccountPostingFromOfx($ofx, $bankAccount);
+        $this->bankAccountPostingOfxParser->saveBankAccountPostingFromOfx($ofx, $bankAccount);
 
-        $typeBankAccountPostingNotSaved = $bankAccountPostingOfx->retrieveTypeBankAccountPostingNotSaved();
+        $typeBankAccountPostingNotSaved = $this->bankAccountPostingOfxParser->retrieveTypeBankAccountPostingNotSaved();
         if (sizeof($typeBankAccountPostingNotSaved) !== 0) {
-            throw new \Exception('\nExistem tipos não salvos: ' . implode(",", $typeBankAccountPostingNotSaved));
+            throw new TypeBankAccountPostingsNotSavedException($typeBankAccountPostingNotSaved);
         }
     }
 
